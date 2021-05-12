@@ -95,10 +95,7 @@ class Mqtt {
         }
 
         void sendMqttMessage(String topic, String message, boolean retain = false) {
-            client -> beginMessage(topic);
-            if (retain) {
-                client->messageRetain();
-            }
+            client -> beginMessage(topic, retain);            
             client -> print(message);            
             client -> endMessage();
         }

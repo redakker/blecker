@@ -7,7 +7,7 @@ let resetconfig = false;
 let advancedNetwork = false;
 let rebootCheck;
 
-let BOARD_NAME = "ble_tracker";
+let BOARD_NAME = "blecker";
 
 // AJAX service
 ajax.x = function () {
