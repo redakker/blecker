@@ -48,7 +48,7 @@ This function is off by default. It can be changed on a web administration UI.
   * on the bottom of the window there should be a PlatformIO tool: Platform IO upload
   * wait while the code is being built and uploaded
 
-2. Use the ESPtool to upload the prebuild binary
+2. Use the ESPtool to upload the prebuilt binary
   * download the binary here
   * read how to install and use esptool: https://github.com/espressif/esptool
   * upload the binary: esptool.py --chip esp32 blecker.bin
