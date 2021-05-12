@@ -6,6 +6,7 @@ This is a ready-to-use program, you don't need to modify the code (add your wifi
 
 ## What does it exactly
 This is a very simple tracker software which creates an MQTT topic for each scanned device mac address (without ":" ) under the base topic and send the availability as payload.
+I personally use it for presence detection of family members. Every family member has a BLE device on her/his keyring and smart home can do automations depends on the members' availability. For example: turn on the alarm system if nobody at home.
 
 The default topic is **/blecker**\
 The default payload for available device: **present**\
@@ -53,7 +54,31 @@ This function is off by default. It can be changed on a web administration UI.
   * upload the binary: esptool.py --chip esp32 blecker.bin
 
 ## First steps
+Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h
+* connect to this access point with your smartphone and call the IP address **192.168.4.1** for web administration.
+You can set your WiFi and MQTT credentials on that administration page. See the details below.
+
+Later you can find the web administration tool on the IP address which was set to the ESP32. Check it in your own router or WiFi manager tool.
 
 ## Web configuration
+Web configuration UI is available to change some parameters in the system. It can be reached in a browser. Call the IP address of the board. (See the network settings in your router or WiFi manager)
+The following settings are available:
+* WiFi name: your WiFi network name where the board should connect
+* Password: password of your WiFi network
+* MQTT server: your MQTT server address
+* MQTT port: port of the MQTT connection
+* Base topic: you can define a prefix for your messages. Example: /home/presence -> /home/presence/blecker/<device-mac> topic will be used
+* Username: MQTT server username
+* Password: MQTT server password
+* Observed devices: you can define your own devices for more accuracy, see the reason above (explanation). Use the mac address without ":" and separate them with ";" Please do not use space characters
+* Detailed report: default off. See the details in section **Status messages**
+
+If you click to the advanced text, you can find more options
+* Presence string (available): a custom payload to send an available state
+* * Presence string (not available) a custom payload to send a not available state
+
 
 ## Update
+There are two ways to update your board:
+* build and upload a new code like the first time (Upload to ESP32)
+* use web OTA. Web administration interface offers you an update mechanism. You can update your board with a new .bin update file. Browse the update file from your PC and press the upload button. Some minutes later the new firmware will run on your ESP32.
