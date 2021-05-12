@@ -10,6 +10,6 @@ for line in defFile:
         version = version.strip()
 defFile.close()
 
-program_file_name = "ble_tracker_v" + version 
+program_file_name = "blecker_v" + version 
 
 env.Replace(PROGNAME=program_file_name)
