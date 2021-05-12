@@ -5,7 +5,7 @@ This software is written for ESP32 boards to track BLE devices. It can be used f
 This is a ready-to-use program, you don't need to modify the code (add your wifi, mqtt credentials whatever). Settings can be done on a nice web interface.
 
 ## What does it exactly
-This is a very simple tracker software which creates an MQTT topic for each scanned device mac address (without ":" ) under the base topic and send the availability as payload.
+This is a very simple tracker software which creates an MQTT topic for each scanned device mac address (without ":" ) under the base topic and sends the availability as payload.
 I personally use it for presence detection of family members. Every family member has a BLE device on her/his keyring and smart home can do automations depends on the members' availability. For example: turn on the alarm system if nobody at home.
 
 The default topic is **/blecker**\
