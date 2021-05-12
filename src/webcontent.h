@@ -400,7 +400,6 @@ BLEcker
 <input type="password" class="u-full-width" name="pw" id="pw" placeholder="Password">
 </div>
 </div>
-<div style="display: none" id="networkmore">
 <div class="row">
 <div class="six columns">
 <label for="mqttserver">MQTT server</label>
@@ -425,6 +424,7 @@ BLEcker
 <input type="password" class="u-full-width" name="mqttpw" id="mqttpw" placeholder="Password">
 </div>
 </div>
+<div style="display: none" id="networkmore">
 <div class="row">
 <div class="six columns">
 <label for="present">Presence string (avalilable)</label>

@@ -2,7 +2,7 @@
 #define MAJOR_VERSION 1.00
 
 // Board specific setings
-#define BOARD_NAME "BLE_TRACKER"
+#define BOARD_NAME "blecker"
 #define LED_BUILTIN 2
 #define EEPROM_SIZE 1024
 
