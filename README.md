@@ -82,3 +82,9 @@ If you click to the advanced text, you can find more options
 There are two ways to update your board:
 * build and upload a new code like the first time (Upload to ESP32)
 * use web OTA. Web administration interface offers you an update mechanism. You can update your board with a new .bin update file. Browse the update file from your PC and press the upload button. Some minutes later the new firmware will run on your ESP32.
+
+## For developers
+HTML code in /html folder is built to the source code. It is done by PlatformIO build mechanism. (pre_build.py, pre_build_web.py)
+Python removes the trailing spaces and compile into a PROGMEM variable.
+To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
+
