@@ -93,7 +93,8 @@ Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:
 ### Settings on ESP32
 * Upload the code to your ESP32 and let it run.
 * Call the ESP32 web interface its IP address (Web frontend should appear)
-* Set the credentials of your WiFi and MQTT, let the presence strings and the base topic fields empty for now
+* Set the credentials of your WiFi and MQTT, let the base topic field empty for now
+* Click to the 'advenced' text and set the presence strings to the following -> *home* | *not_home*
 * put your BLE device address into the Observed devices input field without ":". In tis case: 123456abcdef
 * Press the submit button (device will reboot)
 
