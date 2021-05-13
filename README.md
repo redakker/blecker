@@ -88,3 +88,27 @@ HTML code in /html folder is built to the source code. It is done by PlatformIO 
 Python removes the trailing spaces and compile into a PROGMEM variable.
 To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
 
+## Example for Home Assistant
+Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:cd:ef`
+### Settings on ESP32
+* Upload the code to your ESP32 and let it run.
+* Call the ESP32 web interface its IP address (Web frontend should appear)
+* Set the credentials of your WiFi and MQTT, let the presence strings and the base topic fields empty for now
+* put your BLE device address into the Observed devices input field without ":". In tis case: 123456abcdef
+* Press the submit button (device will reboot)
+
+### Settings in Home Assistant
+* open your configuration file of  Home Assistant instance to configure the device tracker module. It is usually in the configuration.yaml file
+* complete your device tracker configuration with the MQTT presence option. Details: https://www.home-assistant.io/integrations/device_tracker.mqtt/
+* reboot/reload the HA
+* At the end of the day you should have something like this
+
+```
+device_tracker:
+     - platform: mqtt
+       devices:
+         redakker: '/blecker/123456abcdef'
+
+```
+* after restar HA you will find among states the presence of your BLE device with this name:  **device_tracker.redakker**
+
