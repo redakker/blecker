@@ -34,7 +34,7 @@ The administrator can define an observable device list in a web frontend. These 
 If the device is not available after the system start, "not available" message will be never sent out just in case the BLE device becomes available and will be gone again.
 
 ### Status messages
-System sends a detailed status message about the BLE device in every minute: **/blecker/<device-mac>/status**\
+System sends a detailed status message about the BLE device in every minute: **/blecker/[device-mac]/status**\
 The payload is a JSON object structure which contains detailed data like **name**, **rssi**, **observed**, etc. for more possibilities.
 This function is off by default. It can be changed on a web administration UI.
 
@@ -67,7 +67,7 @@ The following settings are available:
 * Password: password of your WiFi network
 * MQTT server: your MQTT server address
 * MQTT port: port of the MQTT connection
-* Base topic: you can define a prefix for your messages. Example: /home/presence -> /home/presence/blecker/<device-mac> topic will be used
+* Base topic: you can define a prefix for your messages. Example: /home/presence -> /home/presence/blecker/[device-mac] topic will be used
 * Username: MQTT server username
 * Password: MQTT server password
 * Observed devices: you can define your own devices for more accuracy, see the reason above (explanation). Use the mac address without ":" and separate them with ";" Please do not use space characters
@@ -75,7 +75,7 @@ The following settings are available:
 
 If you click to the advanced text, you can find more options
 * Presence string (available): a custom payload to send an available state
-* * Presence string (not available) a custom payload to send a not available state
+* Presence string (not available) a custom payload to send a not available state
 
 
 ## Update
