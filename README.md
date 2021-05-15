@@ -51,7 +51,7 @@ This function is off by default. It can be changed on a web administration UI.
 2. Use the ESPtool to upload the prebuilt binary
   * download the binary here
   * read how to install and use esptool: https://github.com/espressif/esptool
-  * upload the binary: esptool.py --chip esp32 blecker.bin
+  * upload the binary with something like this: esptool.py --chip esp32 image_info blecker.bin
 
 ## First steps
 Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h
