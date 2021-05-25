@@ -32,6 +32,8 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     int scanAfter = 2000;
     boolean detailedReport = false;
 
+    boolean monitorObservedOnly = false;
+
     boolean networkConnected = false; // Connected to the network (Wifi STA)
 
     LinkedList<Device> devices = LinkedList<Device>();
@@ -90,7 +92,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                 
                 Device dev = devices.get(i);
                 
-                if (millis() - dev.lastSeen > BT_DEVICE_TIMEOUT) {
+                if (millis() - dev.lastSeen > BT_DEVICE_TIMEOUT || (long) millis() - (long) dev.lastSeen < 0) {
 
                     // Give another chance to the device to appear (Device has DEVICE_DROP_OUT_COUNT lives in the beginning)
                     dev.mark--;
@@ -112,16 +114,17 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                 } 
             }
             
-            if (millis() - lastClear > BT_LIST_REBUILD_INTERVAL && devices.size() > 0) {
+            if ((millis() - lastClear > BT_LIST_REBUILD_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastClear < 0) {
                 lastClear = millis();
                 rlog -> log(log_prefix, (String) "Clear the device list. (This is normal operation. :))");
                 // Clear the list, it will be rebuilt again. Resend the (available) status should not be a problem.
                 devices.clear();
+                fillDevices(this-> database -> getValueAsString(DB_DEVICES));
                 mqttMessageSend->fire(MQTTMessage{"selfclean", "true", false});
             }
             
             if (detailedReport) {
-                if (millis() - lastSendDeviceData > BT_DEVICE_DATA_INTERVAL && devices.size() > 0) {
+                if ((millis() - lastSendDeviceData > BT_DEVICE_DATA_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastSendDeviceData < 0) {
                     lastSendDeviceData = millis();
                     rlog -> log(log_prefix, (String) "Send device data.");
                     for (int i = 0; i < this -> devices.size(); i++) {
@@ -186,12 +189,14 @@ private:
                 }
             }
 
-            if (newFound) {
-                Device dev = {deviceName, deviceRSSI, deviceMac, true, millis(), DEVICE_DROP_OUT_COUNT, false };
-                devices.add(dev);
-                rlog -> log(log_prefix, (String) "New device found. MAC: " + deviceMac);                
-                // Send an MQTT message about this device is at home
-                mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(true), true});
+            if (!monitorObservedOnly) {
+                if (newFound) {
+                    Device dev = {deviceName, deviceRSSI, deviceMac, true, millis(), DEVICE_DROP_OUT_COUNT, false };
+                    devices.add(dev);
+                    rlog -> log(log_prefix, (String) "New device found. MAC: " + deviceMac);                
+                    // Send an MQTT message about this device is at home
+                    mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(true), true});
+                }
             }
         }
 
@@ -199,6 +204,7 @@ private:
 
             if (devicesString.length() == 0) { return; }
 
+            this->monitorObservedOnly = true;
             char *devicesChar = new char[devicesString.length() + 1];
             strcpy(devicesChar, devicesString.c_str());
             String devMac = "";

@@ -442,6 +442,11 @@ BLEcker
 <div class="inputcomment">Mac of the BLE devices.</div>
 </div>
 <div class="row">
+<label for="reboot">Reboot after (hours)</label>
+<input type="text" class="u-full-width" name="reboot" id="reboot" placeholder="">
+<div class="inputcomment"></div>
+</div>
+<div class="row">
 <label for="detailed">Detailed report</label>
 <select class="u-full-width" name="detailed" id="detailed">
 <option value="0">Do not send</option>

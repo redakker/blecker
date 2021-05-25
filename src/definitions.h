@@ -1,5 +1,5 @@
 // VERSION
-#define MAJOR_VERSION 1.00
+#define MAJOR_VERSION 1.01
 
 // Board specific setings
 #define BOARD_NAME "blecker"
@@ -47,3 +47,4 @@
 #define DB_VERSION "version"
 #define DB_DEVICES "devices"
 #define DB_DETAILED_REPORT "detailed"
+#define DB_REBOOT_TIMEOUT "reboot"

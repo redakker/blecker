@@ -32,6 +32,8 @@ Signal<MQTTMessage> mqttMessageSend;
 
 String log_prefix = "[MAIN] ";
 
+int rebootAfterHours = 0;
+
 void setup() {
   // callback(s)
 
@@ -66,6 +68,9 @@ void setup() {
   mqtt.setup(database, errorCodeChanged, messageArrived);
   // Connect to WiFi
   wifi.connectWifi();
+
+  // Workaround for stuc after some days
+  rebootAfterHours = database.getValueAsInt(DB_REBOOT_TIMEOUT);
 }
 
 void loop() {  
@@ -77,4 +82,8 @@ void loop() {
   blueTooth.loop();  
   webserver.loop();
   mqtt.loop();
+
+  if (millis() > (rebootAfterHours * 60 * 60 * 1000)) {
+    ESP.restart();
+  }
 }
