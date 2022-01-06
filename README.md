@@ -88,6 +88,30 @@ HTML code in /html folder is built to the source code. It is done by PlatformIO 
 Python removes the trailing spaces and compile into a PROGMEM variable.
 To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
 
+## Build the project
+- Download the project from github
+- unzip to a folder
+- install VS Code
+- install PlatformIO IDE extension in it
+- reload VSCode
+- Open Platform IO
+- Click to the Platforms tab
+- Inside the Patforms tab click to Embedded tab
+- search for "Espressif 32"
+- install it
+- open the code folder (File -> Open folder)
+- open a terminal window in VScode and install "htmlmin", "jsmin" and "cssmin" python package 
+
+	commands: 
+                   
+                   - pip install htmlmin
+                   
+                   - pip install cssmin
+                   
+                   - pip install jsmin
+- install Git https://git-scm.com/downloads (project should be a git repository with valid commits) (or modify the pre_build.py and remove the git code part)
+- build the project
+
 ## Example for Home Assistant
 Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:cd:ef`
 ### Settings on ESP32
