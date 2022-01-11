@@ -144,3 +144,5 @@ device_tracker:
 - reboot timer introduced: it is actually a workaround. I experienced the ESP32 stuck after some days (network ping is okay, but web frontend and message sending are dead). The administrator can define a reboot time in hours (web frontend). After defined hours the ESP will reboot. It has no effect on presence detection.
 The format is a single number (integer): "1" or "2". You cannot use float numbers
 
+Buy me a coffee: https://www.buymeacoffee.com/redakker
+
