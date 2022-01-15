@@ -71,6 +71,9 @@ The following settings are available:
 * Username: MQTT server username
 * Password: MQTT server password
 * Observed devices: you can define your own devices for more accuracy, see the reason above (explanation). Use the mac address without ":" and separate them with ";" Please do not use space characters
+* Home Assistant Auto discovery: set to "Send" to enable this function
+* Auto discovery prefix: should be the same what is configured in HA. Default is: homeassistant
+* Reboot after (hours): device reboot this amount of hours (Value should be integer and greater than 0)
 * Detailed report: default off. See the details in section **Status messages**
 
 If you click to the advanced text, you can find more options
@@ -136,6 +139,13 @@ device_tracker:
 
 ```
 * after restar HA you will find among states the presence of your BLE device with this name:  **device_tracker.redakker**
+
+## Home Assistant MQTT autodiscovery (MQTT Discovery)
+Autodiscovery for Home Assistant is implemented with version 1.03. Idea was coming from [@leonardpitzu](https://github.com/leonardpitzu). Thanks!
+On the web administration page autodiscovery can be set. (See the details in Web Configuration section)
+In this case Home Assistant automatically can set up the observed deivces. To use this function "Observed devices" field must be set at least with one observed device. Observed devices appears in the state page (Developer tools / States)
+
+Home Assistant and the BLEcker should connected to the same MQTT broker.
 
 ### Release notes
 
