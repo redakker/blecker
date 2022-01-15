@@ -3,6 +3,7 @@
   author: Vörös Ákos, redman
 */
 
+#include <cstddef>
 #include "Arduino.h"
 #include "Callback.h"
 #include "definitions.h"

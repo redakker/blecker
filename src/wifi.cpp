@@ -67,7 +67,9 @@ class Wifi {
 
         void connectToAP() {
             WiFi.mode(WIFI_STA);
+            WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
             WiFi.begin(const_cast<char*>(ssid.c_str()), const_cast<char*>(password.c_str()));            
+            WiFi.setHostname(BOARD_NAME);
         }
 
         void createAP() {

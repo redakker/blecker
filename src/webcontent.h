@@ -327,8 +327,8 @@ var extension = fileName.substr(fileName.length - 4);
 var uploadBtn = document.getElementById('upload-button-id');
 var error = document.getElementById('error');
 // Small verification
-// file name should contains the 24H string and the extension should be ".bin"
-if (fileName.includes(BOARD_NAME+"_") && extension == ".bin") {
+// file name should contains the BOARD_NAME string and the extension should be ".bin"
+if (fileName.includes(BOARD_NAME + "_") && extension == ".bin") {
 uploadBtn.removeAttribute('disabled');
 error.style.display = "none";
 } else {
