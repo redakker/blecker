@@ -158,5 +158,10 @@ The format is a single number (integer): "1" or "2". You cannot use float number
 - #4 has been solved: hostname is propagated for the routers. Easier to determine the IP address in the router using the hostname "blecker"
 - typo fixes
 
+## 1.03
+- #7 feature is implemented: Home assistant auto discovery
+- typo fixes
+
+
 Buy me a coffee: https://www.buymeacoffee.com/redakker
 
