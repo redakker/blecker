@@ -30,6 +30,14 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     long lastClear = 0;
     long lastSendDeviceData = 0;
     int scanAfter = 2000;
+    
+    boolean sendAutoDiscovery = false;
+    long lastSendAutoDiscovery = 0;
+    String autoDiscoveryPrefix = "";
+    // This is not the best place here. This object should not know this, but autodiscover must use it.
+    // You mut not use any other place in the object
+    String mqttBaseTopic = "";
+
     boolean detailedReport = false;
 
     boolean monitorObservedOnly = false;
@@ -60,7 +68,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             rlog -> log(log_prefix, BOARD_NAME " is initiated");
 
             // Prefill the device list with the user's devices
-            // In case of accidentyy reboot it will send a "not_home" message if the device is gone meanwhile
+            // In case of accidently reboot it will send a "not_home" message if the device is gone meanwhile
             // Example:
             // Device is available -> system sends a "home" MQTT message as retained
             // Device is phisically gone (owner go to work) and before the microcontorller sends the "not_home" message microcontroller reboots (power outage)
@@ -68,9 +76,20 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             // Solution:
             // Owner upload the device names which must be observed, so we prefill the list and on the next scan will set them as gone if the story happens above
 
-            // Devices in thsi format: 317234b9d2d0;15172f81accc;d0e003795c50            
+            // Devices in this format: 317234b9d2d0;15172f81accc;d0e003795c50            
             fillDevices(database.getValueAsString(DB_DEVICES));
             // Parse the sting, split by ;
+
+            // Auto discovery for Home Assistant is available.
+            // Set it tru if the user enabled it
+            sendAutoDiscovery = (database.getValueAsInt(DB_HA_AUTODISCOVERY) > 0) ? true : false;
+            if (sendAutoDiscovery) {
+                autoDiscoveryPrefix = database.getValueAsString(DB_HA_AUTODISCOVERY_PREFIX);
+            }
+
+            // This is not the best place here. This object should not know this, but autodiscover must use it.
+            // You mut not use any other place in the object
+            this -> mqttBaseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
             detailedReport = (database.getValueAsInt(DB_DETAILED_REPORT) > 0) ? true : false;
             
@@ -137,6 +156,27 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                 }
             }
 
+            if (sendAutoDiscovery) {
+                if ((millis() - lastSendAutoDiscovery > HA_AUTODISCOVERY_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastSendAutoDiscovery < 0) {
+                    lastSendAutoDiscovery = millis();
+                    rlog -> log(log_prefix, (String) "Send autodicovery data.");
+                    for (int i = 0; i < this -> devices.size(); i++) {
+                        Device dev = devices.get(i);
+                        // Example
+                        // mosquitto_pub -h 127.0.0.1 -t home-assistant/device_tracker/a4567d663eaf/config -m '{"state_topic": "a4567d663eaf/state", "name": "My Tracker", "payload_home": "home", "payload_not_home": "not_home"}'
+
+                        if (dev.mac != NULL) {
+                            String payload = "{\"state_topic\": \"" + mqttBaseTopic + "/" + dev.mac + "\", \"name\": \"" + dev.mac + "\", \"payload_home\": \"" + 
+                            this -> database->getValueAsString(DB_PRECENCE) + "\", \"payload_not_home\": \"" + 
+                            this -> database->getValueAsString(DB_NO_PRECENCE) + "\", \"source_type\": \"tracker_ble\"}";
+
+                            MQTTMessage autoDiscMessage = MQTTMessage{autoDiscoveryPrefix + "/device_tracker/" + dev.mac + "/config", payload, false, true};
+                            mqttMessageSend->fire(autoDiscMessage);
+                        }
+                    }
+                }
+            }
+
         }
 
         void setConnected(boolean connected) {
@@ -168,6 +208,7 @@ private:
             
             boolean newFound = true;
             String deviceMac = advertisedDevice.getAddress().toString().c_str();
+            deviceMac.toLowerCase();
             String deviceName = advertisedDevice.getName().c_str();
             String deviceRSSI = (String) advertisedDevice.getRSSI();
             deviceMac.replace(":","");
@@ -210,6 +251,7 @@ private:
             String devMac = "";
             while ((devMac = strtok_r(devicesChar, PARSE_CHAR, &devicesChar)) != NULL) { // delimiter is the semicolon
                 if (devMac.length() > 0) {
+                    devMac.toLowerCase();
                     Device device = {
                        "", // name
                        "", // rssi

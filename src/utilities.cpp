@@ -6,6 +6,7 @@ struct MQTTMessage {
   String topic;
   String payload;
   boolean retain;
+  boolean individualTopic; // Control if we want to send an individual topic, or the device add the default prefix automatically (send device topic by default)
 };
 
 struct Device {

@@ -80,7 +80,11 @@ class Mqtt {
 
         void sendMqttMessage(MQTTMessage message) {
             if (client->connected()) {
-                sendMqttMessage(baseTopic + "/" + message.topic, message.payload, message.retain);
+                String topic = baseTopic + "/";
+                if (message.individualTopic) {
+                    topic = "";
+                }
+                sendMqttMessage(topic + message.topic, message.payload, message.retain);
             }
         }
 

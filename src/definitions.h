@@ -1,5 +1,5 @@
 // VERSION
-#define MAJOR_VERSION 1.02
+#define MAJOR_VERSION 1.03
 
 // Board specific setings
 #define BOARD_NAME "blecker"
@@ -17,11 +17,14 @@
 // Presence
 #define DEFAULT_PRESENT "present"
 #define DEFAULT_NOT_PRESENT "not_present"
-#define BT_DEVICE_TIMEOUT 1000*60 // 120 seconds in milliseconds (it is doubled because of the mark mechanism) // After this time we sent a "not home" mqtt message
+#define BT_DEVICE_TIMEOUT 1000*60 // 60 seconds in milliseconds (it is doubled because of the mark mechanism) // After this time we sent a "not_home" mqtt message
 #define BT_LIST_REBUILD_INTERVAL 1000*60*60 // Just clear the list after every hour and rebuild again, send "refresh" state time to time even if the device is not gone
 #define BT_DEVICE_DATA_INTERVAL 1000*60 // Send the BLE device data time to time
 #define DEVICE_DROP_OUT_COUNT 2 // We won't drop out in the first "not found" state, just decrease this value. Drop out when this is 0
 #define PARSE_CHAR ";"
+
+// Auto Discovery
+#define HA_AUTODISCOVERY_INTERVAL 1000*60
 
 // Network
 #define WIFI_MAX_TRY 10
@@ -47,4 +50,6 @@
 #define DB_VERSION "version"
 #define DB_DEVICES "devices"
 #define DB_DETAILED_REPORT "detailed"
+#define DB_HA_AUTODISCOVERY "hadisc"
+#define DB_HA_AUTODISCOVERY_PREFIX "hadiscpref"
 #define DB_REBOOT_TIMEOUT "reboot"

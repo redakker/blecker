@@ -115,6 +115,21 @@
 					</div>
 
 					<div class="row">
+						<label for="hadisc">Home Assistant Auto discovery</label>
+						<select class="u-full-width" name="hadisc" id="hadisc">
+							<option value="0">Do not send</option>
+							<option value="1">Send</option>							
+						</select>
+						<div class="inputcomment">Send autodiscovery message for Home Assistant (<a href="https://www.home-assistant.io/docs/mqtt/discovery/" target="_blank">details</a>)</div>
+					</div>
+
+					<div class="row">
+						<label for="devices">Auto discovery prefix</label>
+						<input type="text" class="u-full-width" name="hadiscpref" id="hadiscpref" placeholder="homeassistant">
+						<div class="inputcomment">Default for HA is homeassistant</div>
+					</div>
+
+					<div class="row">
 						<label for="reboot">Reboot after (hours)</label>
 						<input type="text" class="u-full-width" name="reboot" id="reboot" placeholder="">
 						<div class="inputcomment"></div>
