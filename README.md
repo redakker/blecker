@@ -147,6 +147,8 @@ In this case Home Assistant automatically can set up the observed deivces. To us
 
 Home Assistant and the BLEcker should connected to the same MQTT broker.
 
+Discovery message is sent out every 60 seconds.
+
 ### Release notes
 
 ## 1.01
