@@ -168,7 +168,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                         if (dev.mac != NULL) {
                             String payload = "{\"state_topic\": \"" + mqttBaseTopic + "/" + dev.mac + "\", \"name\": \"" + dev.mac + "\", \"payload_home\": \"" + 
                             this -> database->getValueAsString(DB_PRECENCE) + "\", \"payload_not_home\": \"" + 
-                            this -> database->getValueAsString(DB_NO_PRECENCE) + "\", \"source_type\": \"tracker_ble\"}";
+                            this -> database->getValueAsString(DB_NO_PRECENCE) + "\", \"source_type\": \"bluetooth_le\"}";
 
                             MQTTMessage autoDiscMessage = MQTTMessage{autoDiscoveryPrefix + "/device_tracker/" + dev.mac + "/config", payload, false, true};
                             mqttMessageSend->fire(autoDiscMessage);
