@@ -86,6 +86,22 @@ There are two ways to update your board:
 * build and upload a new code like the first time (Upload to ESP32)
 * use web OTA. Web administration interface offers you an update mechanism. You can update your board with a new .bin update file. Browse the update file from your PC and press the upload button. Some minutes later the new firmware will run on your ESP32.
 
+## Devices for usage
+Tested boards:
+ - ESP32-S
+ - ESP32-S2
+Possible suitable boards (not tested):
+ - All ESP32 board
+
+Tested BLE beacons:
+ - Nut Bluetooth Beacon https://www.amazon.com/Nut-F6-world-Smallest-Trackers/dp/B01B0WRC4I/
+ - Long Range (500m) Bluetooth Beacon https://www.amazon.com/programmable-Battery-Bluetooth-eddystone-Technology/dp/B07PT9758D
+ 
+Possible suitable beacons:
+ - any BLE beacon which can provide a mac address
+
+Please if you tested with any kind of boards/beacons and the test was successful, contact me and I'll update the list
+
 ## For developers
 HTML code in /html folder is built to the source code. It is done by PlatformIO build mechanism. (pre_build.py, pre_build_web.py)
 Python removes the trailing spaces and compile into a PROGMEM variable.
