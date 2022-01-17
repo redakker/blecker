@@ -92,7 +92,7 @@ Tested boards:
  - ESP32-S2
 
 Possible suitable boards (not tested):
- - All ESP32 board
+ - All ESP32 (BLE capable) board
 
 Tested BLE beacons:
  - Nut Bluetooth Beacon https://www.amazon.com/Nut-F6-world-Smallest-Trackers/dp/B01B0WRC4I/
