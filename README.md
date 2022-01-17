@@ -90,6 +90,7 @@ There are two ways to update your board:
 Tested boards:
  - ESP32-S
  - ESP32-S2
+
 Possible suitable boards (not tested):
  - All ESP32 board
 
