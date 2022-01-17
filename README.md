@@ -88,8 +88,8 @@ There are two ways to update your board:
 
 ## Devices for usage
 Tested boards:
- - ESP32-S
- - ESP32-S2
+ - ESP32-S (dev board)
+ - ESP32-S2 (dev board)
 
 Possible suitable boards (not tested):
  - All ESP32 (BLE capable) board
