@@ -129,7 +129,7 @@ To live edit the web UI make a symlink from /html to your webserver folder. If y
                    - pip install cssmin
                    
                    - pip install jsmin
-- install Git https://git-scm.com/downloads (project should be a git repository with valid commits) (or modify the pre_build.py and remove the git code part)
+
 - build the project
 
 ## Example for Home Assistant
