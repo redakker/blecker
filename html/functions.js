@@ -274,6 +274,18 @@ function ping(){
     });
 }
 
+function validateInteger(input){
+    var value = input.value; 
+
+    if (value == parseInt(value) && !value.includes(" ") && !value.includes(".")) {
+        return;
+    } else {
+        input.value = "";
+        return;
+    }
+
+}
+
 function collectData (){
     var form = document.getElementById('dataform');
     const values = {};
