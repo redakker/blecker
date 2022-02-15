@@ -40,7 +40,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
 
     boolean detailedReport = false;
 
-    boolean monitorObservedOnly = false;
+    boolean monitorObservedOnly = false; // Monitor devices only which are configured in the database
 
     boolean networkConnected = false; // Connected to the network (Wifi STA)
 
@@ -120,7 +120,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                     if (dev.mark == 0) {
                         rlog -> log(log_prefix, (String) "Device is gone. MAC: " + dev.mac);
                         // Send an MQTT message about this device is NOT at home
-                        mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(false), true});
+                        mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, false), true});
                         
                         // Virtually remove the device
                         dev.available = false;
@@ -149,7 +149,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                     for (int i = 0; i < this -> devices.size(); i++) {
                         Device dev = devices.get(i);
                         if (dev.mac != NULL && dev.mac.length() > 0) {
-                            String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + getPresentString(dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\"}";
+                            String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + getPresentString(*database, dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\"}";
                             mqttMessageSend->fire(MQTTMessage{dev.mac+"/status", payload, false});
                         }
                     }
@@ -183,24 +183,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             this -> networkConnected = connected;
         }
 private: 
-        // Get the name of the presence string. This is not the state, just the name which will be sent over!!!
-        String getPresentString (boolean presenceState) {
-            String presence = DEFAULT_NOT_PRESENT;
-
-            if (presenceState) {
-                presence = this -> database->getValueAsString(DB_PRECENCE);
-                if (presence == "") {                    
-                    presence = DEFAULT_PRESENT;
-                }
-            } else {
-                presence = this -> database->getValueAsString(DB_NO_PRECENCE);
-                if (presence == "") {                    
-                    presence = DEFAULT_NOT_PRESENT;
-                }                
-            }
-
-            return presence;
-        }
+        
 
         void onResult(BLEAdvertisedDevice advertisedDevice) {
             // Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
@@ -220,7 +203,7 @@ private:
                     // Device came back
                     if (!dev.available) {
                         // Send an MQTT message about this device is at home
-                        mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(true), true});
+                        mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, true), true});
                     }
                     dev.lastSeen = millis();
                     dev.mark = DEVICE_DROP_OUT_COUNT;
@@ -236,7 +219,7 @@ private:
                     devices.add(dev);
                     rlog -> log(log_prefix, (String) "New device found. MAC: " + deviceMac);                
                     // Send an MQTT message about this device is at home
-                    mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(true), true});
+                    mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, true), true});
                 }
             }
         }

@@ -1,5 +1,5 @@
 // VERSION
-#define MAJOR_VERSION 1.03
+#define MAJOR_VERSION 1.04
 
 // Board specific setings
 #define BOARD_NAME "blecker"
@@ -22,6 +22,10 @@
 #define BT_DEVICE_DATA_INTERVAL 1000*60 // Send the BLE device data time to time
 #define DEVICE_DROP_OUT_COUNT 2 // We won't drop out in the first "not found" state, just decrease this value. Drop out when this is 0
 #define PARSE_CHAR ";"
+
+// Webhook
+#define PRESENCE_WILDCARD "{presence}"
+#define DEVICE_WILDCARD "{device}"
 
 // Auto Discovery
 #define HA_AUTODISCOVERY_INTERVAL 1000*60
@@ -53,3 +57,5 @@
 #define DB_HA_AUTODISCOVERY "hadisc"
 #define DB_HA_AUTODISCOVERY_PREFIX "hadiscpref"
 #define DB_REBOOT_TIMEOUT "reboot"
+#define DB_WEBHOOK_PRESENT "webhook_on"
+#define DB_WEBHOOK_NOT_PRESENT "webhook_off"

@@ -3,7 +3,6 @@
 
 #include <WebServer.h>
 #include <ArduinoOTA.h>
-#include <ArduinoHttpClient.h>
 #include <Update.h>
 #include "database.cpp"
 #include "log.cpp"

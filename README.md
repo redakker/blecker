@@ -108,6 +108,12 @@ HTML code in /html folder is built to the source code. It is done by PlatformIO 
 Python removes the trailing spaces and compile into a PROGMEM variable.
 To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
 
+You can use the live server to edit the HTML on-the-fly.
+Install this plugin:
+https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
+
+./vscode/settings.json contains the configuration data for that.
+
 ## Build the project
 - Download the project from github
 - unzip to a folder
