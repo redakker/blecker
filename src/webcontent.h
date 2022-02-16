@@ -225,6 +225,15 @@ window.location.href = "/";
 }
 });
 }
+function validateInteger(input){
+var value = input.value; 
+if (value == parseInt(value) && !value.includes(" ") && !value.includes(".")) {
+return;
+} else {
+input.value = "";
+return;
+}
+}
 function collectData (){
 var form = document.getElementById('dataform');
 const values = {};
@@ -472,7 +481,7 @@ BLEcker
 <hr />
 <div class="row">
 <label for="reboot">Reboot after (hours)</label>
-<input type="text" class="u-full-width" name="reboot" id="reboot" placeholder="">
+<input type="text" class="u-full-width" name="reboot" id="reboot" onkeyup="validateInteger(this)" placeholder="">
 <div class="inputcomment"></div>
 </div>
 <div class="row">
