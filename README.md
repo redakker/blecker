@@ -104,15 +104,6 @@ Possible suitable beacons:
 Please if you tested with any kind of boards/beacons and the test was successful, contact me and I'll update the list
 
 ## For developers
-HTML code in /html folder is built to the source code. It is done by PlatformIO build mechanism. (pre_build.py, pre_build_web.py)
-Python removes the trailing spaces and compile into a PROGMEM variable.
-To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
-
-You can use the live server to edit the HTML on-the-fly.
-Install this plugin:
-https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
-
-./vscode/settings.json contains the configuration data for that.
 
 ## Build the project
 After some investigation the project descriptors are moade to make the development enviroment ready automatically in VSCode.
@@ -148,6 +139,18 @@ Prebuild script(s) should install the dependecies automaticaly.
                    - pip install jsmin
 
 - build the project
+
+### Complicated solution develop the Web interface
+HTML code in /html folder is built to the source code. It is done by PlatformIO build mechanism. (pre_build.py, pre_build_web.py)
+Python removes the trailing spaces and compile into a PROGMEM variable.
+To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
+
+### Easier solution develop the Web interface
+You can use the live server to edit the HTML on-the-fly.
+Install this plugin:
+https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
+
+./vscode/settings.json contains the configuration data for that.
 
 ## Example for Home Assistant
 Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:cd:ef`
