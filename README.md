@@ -115,6 +115,17 @@ https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
 ./vscode/settings.json contains the configuration data for that.
 
 ## Build the project
+After some investigation the project descriptors are moade to make the development enviroment ready automatically in VSCode.
+All you need to do is waiting till VSCode reads the settings files with recommended plugins and then install them.
+Before the build you need to have inside VSCode:
+
+- PlatformIO installed
+- Live server installed
+- Python installed
+
+Prebuild script(s) should install the dependecies automaticaly.
+
+## Build the project (if the previous step is not working)
 - Download the project from github
 - unzip to a folder
 - install VS Code
