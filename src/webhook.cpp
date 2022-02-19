@@ -14,6 +14,7 @@ class Webhook {
     Database* database;
     HTTPClient http;
     
+    boolean webhookConfigured = false;
     unsigned long lastrun = 0;
     
     public:
@@ -24,6 +25,16 @@ class Webhook {
 
         void setup (Database &database) {
             this -> database = &database;
+
+            if (
+                this->database->getValueAsString(DB_WEBHOOK)
+            ) {
+                this-> webhookConfigured = true;
+                rlog -> log(log_prefix, (String) "Webhook is configured with the following URL:" + this->database->getValueAsString(DB_WEBHOOK));
+            } else {
+                this-> webhookConfigured = true;
+                rlog -> log(log_prefix, (String) "Webhook is not configured, will be not used.");
+            }
         }
 
         void loop() {
@@ -32,14 +43,8 @@ class Webhook {
 
         void callWebhook (Device device) {
 
-            if (
-                this->database->getValueAsString(DB_WEBHOOK_PRESENT) != "" &&
-                this->database->getValueAsString(DB_WEBHOOK_NOT_PRESENT) != ""
-            ) {
-                String baseURL = this->database->getValueAsString(DB_WEBHOOK_NOT_PRESENT);
-                if (device.available) {
-                    baseURL = this->database->getValueAsString(DB_WEBHOOK_PRESENT);
-                }
+            if (webhookConfigured) {
+                String baseURL = this->database->getValueAsString(DB_WEBHOOK);
                 
                 baseURL.replace(DEVICE_WILDCARD, device.mac);
                 if (device.available) {

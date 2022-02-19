@@ -57,5 +57,4 @@
 #define DB_HA_AUTODISCOVERY "hadisc"
 #define DB_HA_AUTODISCOVERY_PREFIX "hadiscpref"
 #define DB_REBOOT_TIMEOUT "reboot"
-#define DB_WEBHOOK_PRESENT "webhook_on"
-#define DB_WEBHOOK_NOT_PRESENT "webhook_off"
+#define DB_WEBHOOK "webhook"

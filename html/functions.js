@@ -292,7 +292,7 @@ function collectData (){
     const inputs = form.elements;
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].name) {
-            values[inputs[i].name] = inputs[i].value;
+            values[inputs[i].name] = encodeURIComponent(inputs[i].value);
         }
     }
     return values;
@@ -302,7 +302,7 @@ function collectData (){
 function fillData() {
     Object.entries(boardData).forEach(([key, value]) => {
         if (getItem(key)) {
-            getItem(key).value = value;
+            getItem(key).value = decodeURIComponent(value);
         }
 
         if (key == 'version' && value != '') {

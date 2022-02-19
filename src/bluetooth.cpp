@@ -21,6 +21,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     String log_prefix = "[BLUE] ";
     Led* led;
     Signal<MQTTMessage>* mqttMessageSend;
+    Signal<Device>* deviceChanged;
     BLEScan* pBLEScan;
     Database* database;
 
@@ -53,9 +54,10 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             this -> led = &led;
         }
 
-        void setup(Database &database, Signal<MQTTMessage> &mqttMessageSend) {
+        void setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, Signal<Device> &deviceChanged) {
 
             this -> mqttMessageSend = &mqttMessageSend;
+            this -> deviceChanged = &deviceChanged;
             this -> database = &database;
            
             BLEDevice::init(BOARD_NAME);
@@ -126,6 +128,10 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                         dev.available = false;
                         dev.rssi = "0";
                         devices.set(i, dev);
+
+                        // TODO: need to refactor, send only one message for the consumers
+                        deviceChanged->fire(dev);
+
                     } else {
                         rlog -> log(log_prefix, (String) "Device marked as gone. MAC: " + dev.mac + " Current mark is: " + dev.mark);
                         devices.set(i, dev);
@@ -200,10 +206,13 @@ private:
                 Device dev = devices.get(i);
                 if (deviceMac == dev.mac) {
 
-                    // Device came back
+                    // Device came back (state changed)
                     if (!dev.available) {
                         // Send an MQTT message about this device is at home
                         mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, true), true});
+                        dev.available = true;
+                        // TODO: need to refactor, send only one message for the consumers
+                        deviceChanged->fire(dev);
                     }
                     dev.lastSeen = millis();
                     dev.mark = DEVICE_DROP_OUT_COUNT;
@@ -220,6 +229,8 @@ private:
                     rlog -> log(log_prefix, (String) "New device found. MAC: " + deviceMac);                
                     // Send an MQTT message about this device is at home
                     mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, true), true});
+                    // TODO: need to refactor, send only one message for the consumers
+                    deviceChanged->fire(dev);
                 }
             }
         }

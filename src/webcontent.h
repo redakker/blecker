@@ -240,7 +240,7 @@ const values = {};
 const inputs = form.elements;
 for (let i = 0; i < inputs.length; i++) {
 if (inputs[i].name) {
-values[inputs[i].name] = inputs[i].value;
+values[inputs[i].name] = encodeURIComponent(inputs[i].value);
 }
 }
 return values;
@@ -249,7 +249,7 @@ return values;
 function fillData() {
 Object.entries(boardData).forEach(([key, value]) => {
 if (getItem(key)) {
-getItem(key).value = value;
+getItem(key).value = decodeURIComponent(value);
 }
 if (key == 'version' && value != '') {
 if (getItem(key)) {
@@ -461,22 +461,16 @@ BLEcker
 </select>
 <div class="inputcomment">Send autodiscovery message for Home Assistant (<a href="https://www.home-assistant.io/docs/mqtt/discovery/" target="_blank">details</a>)</div>
 </div>
-<hr />
-<div class="row">
-<label for="whp">Webhook present</label>
-<input type="text" class="u-full-width" name="webhook_on" id="webhook_on" placeholder="http://example.com/{device}/{presence}">
-<div class="inputcomment">{device} and {presence} will be replaced with the actual device name and state</div>
-</div>
-<div class="row">
-<label for="whp">Webhook NOT present</label>
-<input type="text" class="u-full-width" name="webhook_off" id="webhook_off" placeholder="http://example.com/{device}/{presence}">
-<div class="inputcomment">{device} and {presence} will be replaced with the actual device name and state</div>
-</div>
-<hr />
 <div class="row">
 <label for="hadiscpref">Autodiscovery prefix</label>
 <input type="text" class="u-full-width" name="hadiscpref" id="hadiscpref" placeholder="homeassistant">
 <div class="inputcomment">Default for HA is homeassistant</div>
+</div>
+<hr />
+<div class="row">
+<label for="whp">Webhook</label>
+<input type="text" class="u-full-width" name="webhook" id="webhook" placeholder="http://example.com/{device}/{presence}">
+<div class="inputcomment">{device} and {presence} will be replaced with the actual device name and state</div>
 </div>
 <hr />
 <div class="row">

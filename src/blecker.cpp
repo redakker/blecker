@@ -32,6 +32,7 @@ Signal<boolean> wifiStatusChanged;
 Signal<int> errorCodeChanged;
 Signal<String> messageArrived;
 Signal<MQTTMessage> mqttMessageSend;
+Signal<Device> deviceChanged;
 
 String log_prefix = "[MAIN] ";
 
@@ -59,11 +60,14 @@ void setup() {
   MethodSlot<Mqtt, MQTTMessage> mqttMessageSendForMqtt(&mqtt,&Mqtt::sendMqttMessage);
   mqttMessageSend.attach(mqttMessageSendForMqtt);
 
+  MethodSlot<Webhook, Device> deviceChangedForWebhook(&webhook,&Webhook::callWebhook);
+  deviceChanged.attach(deviceChangedForWebhook);
+
   rlog.setup();
   led.setup();
   database.setup();
   wifi.setup(database, wifiStatusChanged, errorCodeChanged);
-  blueTooth.setup(database, mqttMessageSend);  
+  blueTooth.setup(database, mqttMessageSend, deviceChanged);  
   // Must be after Wifi setup
   webserver.setup(database);
   webhook.setup(database);
