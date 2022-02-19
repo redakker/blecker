@@ -1,7 +1,7 @@
 # BLEcker
 **Bluetooth low energy (BLE) tracker for ESP32**
 
-This software is written for ESP32 boards to track BLE devices. It can be used for your smart home, scan BLE devices and send their presence to your smart home hub over MQTT.
+This software is written for ESP32 boards to track BLE devices. It can be used for your smart home, scan BLE devices and send their presence to your smart home hub over MQTT. From version 1.04 webhook call is also possible.
 This is a ready-to-use program, you don't need to modify the code (add your wifi, mqtt credentials whatever). Settings can be done on a nice web interface.
 
 ## What does it exactly
@@ -37,6 +37,23 @@ If the device is not available after the system start, "not available" message w
 System sends a detailed status message about the BLE device in every minute: **/blecker/[device-mac]/status**\
 The payload is a JSON object structure which contains detailed data like **name**, **rssi**, **observed**, etc. for more possibilities.
 This function is off by default. It can be changed on a web administration UI.
+
+### Webhook
+This feature is available in and over version 1.04. It was implemented under ticket [#10](/../../issues/10).
+
+In every device state change (available -> not available and not available -> available) ESP32 calls the configured webhook url. Configuration field is available on the web administration of the software.
+
+Webhook can be configured for dinamic usage. Wildcards in the URL will be replaced.
+
+Currently available wildcards in the URL:
+ - {presence} : Presence string (available) / Presence string (not available) (See the details about presence string in the Web configuration section)
+ - {device} : name of the device
+
+Example URL:
+ - http://192.168.1.1/?p={presence}&d={device}
+
+
+
 
 
 ## Upload to ESP32
