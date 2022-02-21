@@ -1,4 +1,4 @@
-# BLEcker
+# BLEcker (dev branch)
 **Bluetooth low energy (BLE) tracker for ESP32**
 
 This software is written for ESP32 boards to track BLE devices. It can be used for your smart home, scan BLE devices and send their presence to your smart home hub over MQTT. From version 1.04 webhook call is also possible.
@@ -218,6 +218,10 @@ The format is a single number (integer): "1" or "2". You cannot use float number
 ## 1.03
 - #7 feature is implemented: Home assistant auto discovery
 - typo fixes
+
+## 1.04
+- #10 feature is implemented: Webhook
+- typo, minor issue fixes
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
