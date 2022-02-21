@@ -219,6 +219,10 @@ The format is a single number (integer): "1" or "2". You cannot use float number
 - #7 feature is implemented: Home assistant auto discovery
 - typo fixes
 
+## 1.04
+- #10 feature is implemented: Webhook
+- typo, minor issue fixes
+
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
 
