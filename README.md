@@ -1,4 +1,4 @@
-# BLEcker
+# BLEcker (dev branch)
 **Bluetooth low energy (BLE) tracker for ESP32**
 
 This software is written for ESP32 boards to track BLE devices. It can be used for your smart home, scan BLE devices and send their presence to your smart home hub over MQTT. From version 1.04 webhook call is also possible.
