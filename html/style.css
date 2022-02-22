@@ -1,3 +1,10 @@
+hr {
+  margin-top: 2rem;
+  margin-bottom: 2.5rem;
+  border-width: 0;
+  border-top: 1px solid #E1E1E1;
+}
+
 .logo {      
     margin-top: 20px;
     margin-left: 40px;

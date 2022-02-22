@@ -1,0 +1,13 @@
+{
+    "liveServer.settings.port": 4500,
+    "liveServer.settings.root": "/html",
+    "liveServer.settings.CustomBrowser" : "chrome",
+    // "liveServer.settings.AdvanceCustomBrowserCmdLine": "chrome --incognito --remote-debugging-port=9222",
+    "liveServer.settings.NoBrowser" : false,
+    "liveServer.settings.ignoreFiles" : [
+        //    ".vscode/**",
+        //    "**/*.scss",
+        //    "**/*.sass"
+    ]
+
+}

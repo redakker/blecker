@@ -225,13 +225,22 @@ window.location.href = "/";
 }
 });
 }
+function validateInteger(input){
+var value = input.value; 
+if (value == parseInt(value) && !value.includes(" ") && !value.includes(".")) {
+return;
+} else {
+input.value = "";
+return;
+}
+}
 function collectData (){
 var form = document.getElementById('dataform');
 const values = {};
 const inputs = form.elements;
 for (let i = 0; i < inputs.length; i++) {
 if (inputs[i].name) {
-values[inputs[i].name] = inputs[i].value;
+values[inputs[i].name] = encodeURIComponent(inputs[i].value);
 }
 }
 return values;
@@ -240,7 +249,7 @@ return values;
 function fillData() {
 Object.entries(boardData).forEach(([key, value]) => {
 if (getItem(key)) {
-getItem(key).value = value;
+getItem(key).value = decodeURIComponent(value);
 }
 if (key == 'version' && value != '') {
 if (getItem(key)) {
@@ -400,6 +409,7 @@ BLEcker
 <input type="password" class="u-full-width" name="pw" id="pw" placeholder="Password">
 </div>
 </div>
+<hr />
 <div class="row">
 <div class="six columns">
 <label for="mqttserver">MQTT server</label>
@@ -436,11 +446,13 @@ BLEcker
 </div>
 </div>
 </div>
+<hr />
 <div class="row">
 <label for="devices">Observed devices</label>
 <input type="text" class="u-full-width" name="devices" id="devices" placeholder="ex.: 317234b9d2d0;15172f81accc;d0e003795c50">
 <div class="inputcomment">Mac of the BLE devices.</div>
 </div>
+<hr />
 <div class="row">
 <label for="hadisc">Home Assistant Auto discovery</label>
 <select class="u-full-width" name="hadisc" id="hadisc">
@@ -450,13 +462,20 @@ BLEcker
 <div class="inputcomment">Send autodiscovery message for Home Assistant (<a href="https://www.home-assistant.io/docs/mqtt/discovery/" target="_blank">details</a>)</div>
 </div>
 <div class="row">
-<label for="devices">Auto discovery prefix</label>
+<label for="hadiscpref">Autodiscovery prefix</label>
 <input type="text" class="u-full-width" name="hadiscpref" id="hadiscpref" placeholder="homeassistant">
 <div class="inputcomment">Default for HA is homeassistant</div>
 </div>
+<hr />
+<div class="row">
+<label for="whp">Webhook</label>
+<input type="text" class="u-full-width" name="webhook" id="webhook" placeholder="http://example.com/{device}/{presence}">
+<div class="inputcomment">{device} and {presence} will be replaced with the actual device name and state</div>
+</div>
+<hr />
 <div class="row">
 <label for="reboot">Reboot after (hours)</label>
-<input type="text" class="u-full-width" name="reboot" id="reboot" placeholder="">
+<input type="text" class="u-full-width" name="reboot" id="reboot" onkeyup="validateInteger(this)" placeholder="">
 <div class="inputcomment"></div>
 </div>
 <div class="row">
@@ -1201,6 +1220,12 @@ clear: both; }
 // /style.css
 const char* const data_style_css_path PROGMEM = "/style.css";
 const char data_style_css[] PROGMEM = R"=====(
+hr {
+margin-top: 2rem;
+margin-bottom: 2.5rem;
+border-width: 0;
+border-top: 1px solid #E1E1E1;
+}
 .logo {
 margin-top: 20px;
 margin-left: 40px;

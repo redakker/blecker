@@ -15,6 +15,7 @@
 #include "wifi.cpp"
 #include "webserver.cpp"
 #include "mqtt.cpp"
+#include "webhook.cpp"
 
 Log rlog;
 Led led(rlog);
@@ -23,6 +24,7 @@ Wifi wifi(rlog);
 Webserver webserver(rlog);
 BlueTooth blueTooth(rlog, led);
 Mqtt mqtt(rlog);
+Webhook webhook(rlog);
 
 // This signal will be emitted when we process characters
 // https://github.com/tomstewart89/Callback
@@ -30,6 +32,7 @@ Signal<boolean> wifiStatusChanged;
 Signal<int> errorCodeChanged;
 Signal<String> messageArrived;
 Signal<MQTTMessage> mqttMessageSend;
+Signal<Device> deviceChanged;
 
 String log_prefix = "[MAIN] ";
 
@@ -48,23 +51,26 @@ void setup() {
   MethodSlot<Led, int> errorCodeChangedForLed(&led,&Led::setMessage);
   errorCodeChanged.attach(errorCodeChangedForLed);
 
-  // MQTT and Blutooth command handlieng
+  // MQTT and Blutooth command handleing
   // Arrive  
   MethodSlot<Database, String> messageSendForDatabase(&database,&Database::receiveCommand);
   messageArrived.attach(messageSendForDatabase);
-
 
   // Send
   MethodSlot<Mqtt, MQTTMessage> mqttMessageSendForMqtt(&mqtt,&Mqtt::sendMqttMessage);
   mqttMessageSend.attach(mqttMessageSendForMqtt);
 
+  MethodSlot<Webhook, Device> deviceChangedForWebhook(&webhook,&Webhook::callWebhook);
+  deviceChanged.attach(deviceChangedForWebhook);
+
   rlog.setup();
   led.setup();
   database.setup();
   wifi.setup(database, wifiStatusChanged, errorCodeChanged);
-  blueTooth.setup(database, mqttMessageSend);  
+  blueTooth.setup(database, mqttMessageSend, deviceChanged);  
   // Must be after Wifi setup
   webserver.setup(database);
+  webhook.setup(database);
   
   mqtt.setup(database, errorCodeChanged, messageArrived);
   // Connect to WiFi
@@ -83,6 +89,7 @@ void loop() {
   blueTooth.loop();  
   webserver.loop();
   mqtt.loop();
+  webhook.loop();
 
   if (millis() > (rebootAfterHours * 60 * 60 * 1000)) {
     ESP.restart();

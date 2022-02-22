@@ -1,7 +1,7 @@
 # BLEcker
 **Bluetooth low energy (BLE) tracker for ESP32**
 
-This software is written for ESP32 boards to track BLE devices. It can be used for your smart home, scan BLE devices and send their presence to your smart home hub over MQTT.
+This software is written for ESP32 boards to track BLE devices. It can be used for your smart home, scan BLE devices and send their presence to your smart home hub over MQTT. From version 1.04 webhook call is also possible.
 This is a ready-to-use program, you don't need to modify the code (add your wifi, mqtt credentials whatever). Settings can be done on a nice web interface.
 
 ## What does it exactly
@@ -37,6 +37,23 @@ If the device is not available after the system start, "not available" message w
 System sends a detailed status message about the BLE device in every minute: **/blecker/[device-mac]/status**\
 The payload is a JSON object structure which contains detailed data like **name**, **rssi**, **observed**, etc. for more possibilities.
 This function is off by default. It can be changed on a web administration UI.
+
+### Webhook
+This feature is available in and over version 1.04. It was implemented under ticket [#10](/../../issues/10).
+
+In every device state change (available -> not available and not available -> available) ESP32 calls the configured webhook url. Configuration field is available on the web administration of the software.
+
+Webhook can be configured for dinamic usage. Wildcards in the URL will be replaced.
+
+Currently available wildcards in the URL:
+ - {presence} : Presence string (available) / Presence string (not available) (See the details about presence string in the Web configuration section)
+ - {device} : name of the device
+
+Example URL:
+ - http://192.168.1.1/?p={presence}&d={device}
+
+
+
 
 
 ## Upload to ESP32
@@ -86,12 +103,37 @@ There are two ways to update your board:
 * build and upload a new code like the first time (Upload to ESP32)
 * use web OTA. Web administration interface offers you an update mechanism. You can update your board with a new .bin update file. Browse the update file from your PC and press the upload button. Some minutes later the new firmware will run on your ESP32.
 
+## Devices for usage
+Tested boards:
+ - ESP32-S (dev board)
+ - ESP32-S2 (dev board)
+
+Possible suitable boards (not tested):
+ - All ESP32 (BLE capable) board
+
+Tested BLE beacons:
+ - Nut Bluetooth Beacon https://www.amazon.com/Nut-F6-world-Smallest-Trackers/dp/B01B0WRC4I/
+ - Long Range (500m) Bluetooth Beacon https://www.amazon.com/programmable-Battery-Bluetooth-eddystone-Technology/dp/B07PT9758D
+ 
+Possible suitable beacons:
+ - any BLE beacon which can provide a mac address
+
+Please if you tested with any kind of boards/beacons and the test was successful, contact me and I'll update the list
+
 ## For developers
-HTML code in /html folder is built to the source code. It is done by PlatformIO build mechanism. (pre_build.py, pre_build_web.py)
-Python removes the trailing spaces and compile into a PROGMEM variable.
-To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
 
 ## Build the project
+After some investigation the project descriptors are moade to make the development enviroment ready automatically in VSCode.
+All you need to do is waiting till VSCode reads the settings files with recommended plugins and then install them.
+Before the build you need to have inside VSCode:
+
+- PlatformIO installed
+- Live server installed
+- Python installed
+
+Prebuild script(s) should install the dependecies automaticaly.
+
+## Build the project (if the previous step is not working)
 - Download the project from github
 - unzip to a folder
 - install VS Code
@@ -112,8 +154,20 @@ To live edit the web UI make a symlink from /html to your webserver folder. If y
                    - pip install cssmin
                    
                    - pip install jsmin
-- install Git https://git-scm.com/downloads (project should be a git repository with valid commits) (or modify the pre_build.py and remove the git code part)
+
 - build the project
+
+### Complicated solution develop the Web interface
+HTML code in /html folder is built to the source code. It is done by PlatformIO build mechanism. (pre_build.py, pre_build_web.py)
+Python removes the trailing spaces and compile into a PROGMEM variable.
+To live edit the web UI make a symlink from /html to your webserver folder. If you modify the code then refresh your browser by F5. You should not change the HTML code in a webcontent.h file.
+
+### Easier solution develop the Web interface
+You can use the live server to edit the HTML on-the-fly.
+Install this plugin:
+https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
+
+./vscode/settings.json contains the configuration data for that.
 
 ## Example for Home Assistant
 Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:cd:ef`
@@ -142,10 +196,13 @@ device_tracker:
 
 ## Home Assistant MQTT autodiscovery (MQTT Discovery)
 Autodiscovery for Home Assistant is implemented with version 1.03. Idea was coming from [@leonardpitzu](https://github.com/leonardpitzu). Thanks!
+Details: https://www.home-assistant.io/integrations/device_tracker.mqtt/#discovery-schema
 On the web administration page autodiscovery can be set. (See the details in Web Configuration section)
 In this case Home Assistant automatically can set up the observed deivces. To use this function "Observed devices" field must be set at least with one observed device. Observed devices appears in the state page (Developer tools / States)
 
 Home Assistant and the BLEcker should connected to the same MQTT broker.
+
+Discovery message is sent out every 60 seconds.
 
 ### Release notes
 
@@ -161,6 +218,10 @@ The format is a single number (integer): "1" or "2". You cannot use float number
 ## 1.03
 - #7 feature is implemented: Home assistant auto discovery
 - typo fixes
+
+## 1.04
+- #10 feature is implemented: Webhook
+- typo, minor issue fixes
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
