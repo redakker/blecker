@@ -32,7 +32,7 @@ class Webhook {
                 this-> webhookConfigured = true;
                 rlog -> log(log_prefix, (String) "Webhook is configured with the following URL:" + this->database->getValueAsString(DB_WEBHOOK));
             } else {
-                this-> webhookConfigured = true;
+                this-> webhookConfigured = false;
                 rlog -> log(log_prefix, (String) "Webhook is not configured, will be not used.");
             }
         }

@@ -454,7 +454,7 @@ BLEcker
 </div>
 <hr />
 <div class="row">
-<label for="hadisc">Home Assistant Auto discovery</label>
+<label for="hadisc">Home Assistant Autodiscovery</label>
 <select class="u-full-width" name="hadisc" id="hadisc">
 <option value="0">Do not send</option>
 <option value="1">Send</option>
