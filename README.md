@@ -222,6 +222,7 @@ The format is a single number (integer): "1" or "2". You cannot use float number
 ## 1.04
 - #10 feature is implemented: Webhook
 - typo, minor issue fixes
+- #14 fix
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
