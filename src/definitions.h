@@ -22,6 +22,7 @@
 #define BT_DEVICE_DATA_INTERVAL 1000*60 // Send the BLE device data time to time
 #define DEVICE_DROP_OUT_COUNT 2 // We won't drop out in the first "not found" state, just decrease this value. Drop out when this is 0
 #define PARSE_CHAR ";"
+#define BT_DEFAULT_SCAN_INTERVAL 2000 // Scan is running after this timeout time to time
 
 // Webhook
 #define PRESENCE_WILDCARD "{presence}"

@@ -30,7 +30,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     long lastRun = 0;
     long lastClear = 0;
     long lastSendDeviceData = 0;
-    int scanAfter = 2000;
+    int scanAfter = BT_DEFAULT_SCAN_INTERVAL;
     
     boolean sendAutoDiscovery = false;
     long lastSendAutoDiscovery = 0;
