@@ -105,7 +105,7 @@ class Mqtt {
         }
 
         void reconnect() {
-            if (!String("").equals(server) && !String("").equals(user)) {
+            if (!String("").equals(server)) {
                 const char* mqtt_s = const_cast<char*>(server.c_str());
                 if (!client -> connect(mqtt_s, port)) {                    
                     this -> rlog -> log(log_prefix, (String) "MQTT connection failed! Error code = " + client -> connectError());
