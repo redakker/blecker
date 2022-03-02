@@ -26,9 +26,7 @@ class Webhook {
         void setup (Database &database) {
             this -> database = &database;
 
-            if (
-                this->database->getValueAsString(DB_WEBHOOK)
-            ) {
+            if (this->database->getValueAsString(DB_WEBHOOK) != "") {
                 this-> webhookConfigured = true;
                 rlog -> log(log_prefix, (String) "Webhook is configured with the following URL:" + this->database->getValueAsString(DB_WEBHOOK));
             } else {
