@@ -237,7 +237,7 @@ The format is a single number (integer): "1" or "2". You cannot use float number
 - typo, minor issue fixes
 
 ## 1.06 (Breaking change)
-Status message now is coming with the normal presence message (availability change). MQTT message topic is also chaged
+Status message now is coming with the normal presence message (availability change). MQTT message topic is also changed
 
 Status message topic from this version is /blecker/status/[device-mac]
 
