@@ -38,7 +38,7 @@ If the device is not available after the system start, "not available" message w
 
 BREAKING CHANGE from 1.06
 
--- System sends a detailed status message about the BLE device in every minute: **/blecker/status/[device-mac]**\ --
+-- System sends a detailed status message about the BLE device: **/blecker/status/[device-mac]**\ --
 
 This message is coming together with the normal availability message.
 The payload is a JSON object structure which contains detailed data like **name**, **rssi**, **observed**, etc. for more possibilities.
