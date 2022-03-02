@@ -121,16 +121,14 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
 
                     if (dev.mark == 0) {
                         rlog -> log(log_prefix, (String) "Device is gone. MAC: " + dev.mac);
-                        // Send an MQTT message about this device is NOT at home
-                        mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, false), true});
                         
                         // Virtually remove the device
                         dev.available = false;
                         dev.rssi = "0";
                         devices.set(i, dev);
 
-                        // TODO: need to refactor, send only one message for the consumers
-                        deviceChanged->fire(dev);
+                        // Send an MQTT message about this device is NOT at home
+                        handleDeviceChange(dev);
 
                     } else {
                         rlog -> log(log_prefix, (String) "Device marked as gone. MAC: " + dev.mac + " Current mark is: " + dev.mark);
@@ -148,6 +146,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                 mqttMessageSend->fire(MQTTMessage{"selfclean", "true", false});
             }
             
+            /*
             if (detailedReport) {
                 if ((millis() - lastSendDeviceData > BT_DEVICE_DATA_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastSendDeviceData < 0) {
                     lastSendDeviceData = millis();
@@ -156,11 +155,12 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                         Device dev = devices.get(i);
                         if (dev.mac != NULL && dev.mac.length() > 0) {
                             String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + getPresentString(*database, dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\"}";
-                            mqttMessageSend->fire(MQTTMessage{dev.mac+"/status", payload, false});
+                            mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, false});
                         }
                     }
                 }
             }
+            */
 
             if (sendAutoDiscovery) {
                 if ((millis() - lastSendAutoDiscovery > HA_AUTODISCOVERY_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastSendAutoDiscovery < 0) {
@@ -209,10 +209,8 @@ private:
                     // Device came back (state changed)
                     if (!dev.available) {
                         // Send an MQTT message about this device is at home
-                        mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, true), true});
                         dev.available = true;
-                        // TODO: need to refactor, send only one message for the consumers
-                        deviceChanged->fire(dev);
+                        handleDeviceChange(dev);
                     }
                     dev.lastSeen = millis();
                     dev.mark = DEVICE_DROP_OUT_COUNT;
@@ -228,9 +226,7 @@ private:
                     devices.add(dev);
                     rlog -> log(log_prefix, (String) "New device found. MAC: " + deviceMac);                
                     // Send an MQTT message about this device is at home
-                    mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, true), true});
-                    // TODO: need to refactor, send only one message for the consumers
-                    deviceChanged->fire(dev);
+                    handleDeviceChange(dev);
                 }
             }
         }
@@ -261,6 +257,17 @@ private:
             }
 
             delete [] devicesChar;
+        }
+
+        void handleDeviceChange(Device dev) {
+            mqttMessageSend->fire(MQTTMessage{dev.mac, getPresentString(*database, dev.available), true});
+            // TODO: need to refactor, send only one message for the consumers
+            deviceChanged->fire(dev);
+
+            if (detailedReport) {
+                String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + getPresentString(*database, dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\"}";
+                mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, false});
+            }
         }
 
 };
