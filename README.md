@@ -34,7 +34,13 @@ The administrator can define an observable device list in a web frontend. These 
 If the device is not available after the system start, "not available" message will be never sent out just in case the BLE device becomes available and will be gone again.
 
 ### Status messages
-System sends a detailed status message about the BLE device in every minute: **/blecker/[device-mac]/status**\
+-- System sends a detailed status message about the BLE device in every minute: **/blecker/[device-mac]/status**\ --
+
+BREAKING CHANGE from 1.06
+
+-- System sends a detailed status message about the BLE device in every minute: **/blecker/status/[device-mac]**\ --
+
+This message is coming together with the normal availability message.
 The payload is a JSON object structure which contains detailed data like **name**, **rssi**, **observed**, etc. for more possibilities.
 This function is off by default. It can be changed on a web administration UI.
 
@@ -230,6 +236,10 @@ The format is a single number (integer): "1" or "2". You cannot use float number
 - #18 issue is fixed, now MQTT tries to connect even if the username and password not defined. Somebody uses MQTT without user and password
 - typo, minor issue fixes
 
+## 1.06 (Breaking change)
+Status message now is coming with the normal presence message (availability change). MQTT message topic is also chaged
+
+Status message topic from this version is /blecker/status/[device-mac]
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
 
