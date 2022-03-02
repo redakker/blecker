@@ -33,6 +33,9 @@
 
 // Network
 #define WIFI_MAX_TRY 10
+#define AP_IP {192, 168, 4, 1} // Change together with the string version
+#define AP_IP_STRING "192.168.4.1" // Change together with the object version
+#define AP_NETMASK {255, 255, 255, 0}
 
 // ERRORS
 #define ERROR_NO_ERROR 0

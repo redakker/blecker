@@ -18,6 +18,8 @@ class Webserver {
     //InternalStorageClass* InternalStorage;
     EspClass* ESP;
 
+    boolean networkConnected = false;
+
     public:
         Webserver (Log &log){
             this -> rlog = &log;
@@ -71,6 +73,10 @@ class Webserver {
 
         String getData() {
             return this -> database -> getSerialized();
+        }
+
+        void setConnected(boolean connected) {
+            this -> networkConnected = connected;
         }
 
     private:
@@ -187,9 +193,23 @@ class Webserver {
 
         // 404
         void handleNotFound(){
-            this->rlog->log(log_prefix, "404 is called");
-            sendHeaders();
-            server.send(404, "text/plain", "404: Not found"); // Send HTTP status 404 (Not Found) when there's no handler for the URI in the request
+            this->rlog->log(log_prefix, "Not found URL is called");
+
+            if (this -> networkConnected) {
+                sendHeaders();
+                server.send(404, "text/plain", "404: Not found"); // Send HTTP status 404 (Not Found) when there's no handler for the URI in the request
+            } else {
+                captivePortal();
+            }
+            
+        }
+
+        void captivePortal() {
+        
+            this->rlog->log(log_prefix, "Request redirected to captive portal");
+            server.sendHeader("Location", String ("http://") + String (AP_IP_STRING), true);
+            server.send(302, "text/plain", "");   // Empty content inhibits Content-length header so we have to close the socket ourselves.
+            server.client().stop(); // Stop is needed because we sent no content length
         }
 };
 

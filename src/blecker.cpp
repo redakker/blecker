@@ -44,8 +44,10 @@ void setup() {
   // Wifi status changed
   MethodSlot<Mqtt, boolean> wifiChangedForMqtt(&mqtt,&Mqtt::setConnected);
   MethodSlot<BlueTooth, boolean> wifiChangedForBluetooth(&blueTooth,&BlueTooth::setConnected);
+  MethodSlot<Webserver, boolean> wifiChangedForWebserver(&webserver,&Webserver::setConnected);
   wifiStatusChanged.attach(wifiChangedForMqtt);
   wifiStatusChanged.attach(wifiChangedForBluetooth);
+  wifiStatusChanged.attach(wifiChangedForWebserver);
   
   // Emit an error code for led
   MethodSlot<Led, int> errorCodeChangedForLed(&led,&Led::setMessage);
