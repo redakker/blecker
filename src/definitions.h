@@ -1,5 +1,5 @@
 // VERSION
-#define MAJOR_VERSION 1.04
+#define MAJOR_VERSION 1.05
 
 // Board specific setings
 #define BOARD_NAME "blecker"
