@@ -130,7 +130,8 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                         // Send an MQTT message about this device is NOT at home
                         handleDeviceChange(dev);
 
-                    } else {
+                    } 
+                    if (dev.mark > 0) {
                         rlog -> log(log_prefix, (String) "Device marked as gone. MAC: " + dev.mac + " Current mark is: " + dev.mark);
                         devices.set(i, dev);
                     }
