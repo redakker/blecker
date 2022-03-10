@@ -94,7 +94,7 @@ Discovery message is sent out every 60 seconds.
 
 Be aware the third solution works currently with chrome/chromium engine browsers (Chrome/Edge)
 
-With [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/) you can check the device logs too for debugging. Connect your device and in the modal click to "Logs @ Console". You might to click the "Reset device" to see the logs.
+With [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/) you can check the device logs too for debugging. Connect your device and in the modal click to "Logs @ Console". You might click the "Reset device" to see the logs.
 
 ## First steps
 Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h
@@ -195,6 +195,12 @@ Install this plugin:
 https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
 
 ./vscode/settings.json contains the configuration data for that.
+
+## Debug
+The code contains a lot of logs which send messages over the serial connection (for example in VS Code) and Bluetooth as well. Bluetooth Serial for Android is one of the apps which was tried in this way.
+Each part of the code has a related log prefix, so it is easy to see which part of the code sends logs.
+
+With https://redakker.github.io/blecker/ you can check the device logs too for debugging. Connect your device and in the modal click to "Logs @ Console". You might click the "Reset device" to see the logs.
 
 ## Example for Home Assistant
 Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:cd:ef`
