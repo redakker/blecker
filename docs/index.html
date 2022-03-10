@@ -1,1 +1,88 @@
-Hello world! Welcome
+<!DOCTYPE HTML><html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+	<link rel="stylesheet" href="normalize.css">
+	<link rel="stylesheet" href="skeleton.css">
+	<link rel="stylesheet" href="style.css">
+
+	<script type="module" src="https://unpkg.com/esp-web-tools@7.2.0/dist/web/install-button.js?module"></script>
+
+	<title>Blecker Upload</title>
+
+</head>
+<body>
+	<div id="main">
+		<div class="loading" id="loader" style="display: none;">
+			<div style="margin-left: -25px">Loading...</div>
+			<div>&#8230;</div>
+		</div>
+		<div class="logo">
+			BLEcker
+		</div>
+		<div id="header">
+			<div class="row">
+				<h5><strong>BLE</strong> <i>tracker</i></h5>
+			</div>
+		</div>
+		<div id="sidebar">		
+			<a class="button w100" href="/">home</a>
+			
+			<div id="footer">
+				<div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
+			</div>
+
+		</div>
+		<div id="content">
+			<div class="contaier">
+
+				<!-- The Modal -->
+				<div id="myModal" class="modal" style="display: none;">
+
+					<!-- Modal content -->
+					<div class="modal-content">
+					<span class="close">&times;</span>
+					<p>Some text in the Modal..</p>
+					</div>
+				
+				</div>
+
+				<div class="row">
+
+				<h3>BLEcker flash tool <small>(beta)</small></h3>
+				<p id="support-notice">You can upload the BLEcker binary to your board.</p>
+				<ul>
+				    <li>Connect your ESP32 board to your computer</li>
+				    <li>Choose which version do you want to flash (latest is recommended)</li>
+				    <li>Push the connect button and follow the further instructions</li>
+				</ul>
+
+				</hr>
+
+				<!-- add new builds here -->
+				<select id="ver" class="btn" onchange="setManifest()">
+				    <optgroup label="Latest">
+				      <option data-manifest="manifests/manifest_1.06.json">ver 1.06</option>
+				    </optgroup>
+				    <optgroup label="Older">
+			              <option data-manifest="manifests/manifest_1.05.json">ver 1.05</option>
+			              <option data-manifest="manifests/manifest_1.05.json">ver 1.04</option>
+				    </optgroup>
+				</select><br><br>
+
+				<esp-web-install-button id="install" manifest="manifests/manifest_1.06.json"></esp-web-install-button>
+
+				<br><br><br><br>Powered by <a href="https://esphome.github.io/esp-web-tools/" target="_blank">ESP Web Tools</a>
+
+				</div>
+			</div>		
+		</div>
+		<script type="text/javascript" src="functions.js"></script>
+	</div>
+	
+</body>
+</html>
