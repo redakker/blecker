@@ -59,7 +59,15 @@ Example URL:
  - http://192.168.1.1/?p={presence}&d={device}
 
 
+### Home Assistant MQTT autodiscovery (MQTT Discovery)
+Autodiscovery for Home Assistant is implemented with version 1.03. Idea was coming from [@leonardpitzu](https://github.com/leonardpitzu). Thanks!
+Details: https://www.home-assistant.io/integrations/device_tracker.mqtt/#discovery-schema
+On the web administration page autodiscovery can be set. (See the details in Web Configuration section)
+In this case Home Assistant automatically can set up the observed deivces. To use this function "Observed devices" field must be set at least with one observed device. Observed devices appears in the state page (Developer tools / States)
 
+Home Assistant and the BLEcker should connected to the same MQTT broker.
+
+Discovery message is sent out every 60 seconds.
 
 
 ## Upload to ESP32
@@ -200,16 +208,6 @@ device_tracker:
 
 ```
 * after restar HA you will find among states the presence of your BLE device with this name:  **device_tracker.redakker**
-
-## Home Assistant MQTT autodiscovery (MQTT Discovery)
-Autodiscovery for Home Assistant is implemented with version 1.03. Idea was coming from [@leonardpitzu](https://github.com/leonardpitzu). Thanks!
-Details: https://www.home-assistant.io/integrations/device_tracker.mqtt/#discovery-schema
-On the web administration page autodiscovery can be set. (See the details in Web Configuration section)
-In this case Home Assistant automatically can set up the observed deivces. To use this function "Observed devices" field must be set at least with one observed device. Observed devices appears in the state page (Developer tools / States)
-
-Home Assistant and the BLEcker should connected to the same MQTT broker.
-
-Discovery message is sent out every 60 seconds.
 
 ### Release notes
 
