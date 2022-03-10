@@ -84,6 +84,18 @@ Discovery message is sent out every 60 seconds.
   * read how to install and use esptool: https://github.com/espressif/esptool
   * upload the binary with something like this: esptool.py --chip esp32 image_info blecker.bin
 
+3. Use the web tool on [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/)
+  * navigate to the page above
+  * connect your device using USB
+  * choose the version you want to upload
+  * press the connect button
+  * choose your device from the list in the browser popup
+  * follow the instructions in the modal
+
+Be aware the third solution works currently with chrome/chromium engine browsers (Chrome/Edge)
+
+With [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/) you can check the device logs too for debugging. Connect your device and in the modal click to "Logs @ Console". You might to click the "Reset device" to see the logs.
+
 ## First steps
 Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h
 * connect to this access point with your smartphone and call the IP address **192.168.4.1** for web administration.
