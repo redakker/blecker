@@ -71,7 +71,7 @@ Discovery message is sent out every 60 seconds.
 
 
 ## Upload to ESP32
-1. Using VSCode and PlatformIO
+1. **Using VSCode and PlatformIO**
   * download the source and put it into a folder
   * install VSCode (https://code.visualstudio.com/download) and PlatformIO inside (https://platformio.org/install/ide?install=vscode)
   * open the folder of the source code in VSCode
@@ -79,12 +79,12 @@ Discovery message is sent out every 60 seconds.
   * on the bottom of the window there should be a PlatformIO tool: Platform IO upload
   * wait while the code is being built and uploaded
 
-2. Use the ESPtool to upload the prebuilt binary
+2. **Use the ESPtool to upload the prebuilt binary**
   * download the binary here
   * read how to install and use esptool: https://github.com/espressif/esptool
   * upload the binary with something like this: esptool.py --chip esp32 image_info blecker.bin
 
-3. Use the web tool on [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/)
+3. **Use the web tool on [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/)**
   * navigate to the page above
   * connect your device using USB
   * choose the version you want to upload
@@ -94,7 +94,7 @@ Discovery message is sent out every 60 seconds.
 
 Be aware the third solution works currently with chrome/chromium engine browsers (Chrome/Edge)
 
-With [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/) you can check the device logs too for debugging. Connect your device and in the modal click to "Logs @ Console". You might click the "Reset device" to see the logs.
+With [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/) you can check the device logs too for debugging. Connect your device and in the modal click to "Logs & Console". You might click the "Reset device" to see the logs.
 
 ## First steps
 Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h
