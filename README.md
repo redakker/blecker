@@ -97,7 +97,7 @@ Be aware the third solution works currently with chrome/chromium engine browsers
 With [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/) you can check the device logs too for debugging. Connect your device and in the modal click to "Logs & Console". You might click the "Reset device" to see the logs.
 
 ## First steps
-Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h
+Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h It is "blecker" now.
 * connect to this access point with your smartphone and call the IP address **192.168.4.1** for web administration.
 You can set your WiFi and MQTT credentials on that administration page. See the details below.
 * with the version 1.05 Captive portal is available. It means when you connect to the access point of the microcontroller then a notification pops up which brings you to the configuration page. It is easier to configure the device. Captive portal was tested in Android devices, currently behaviour is unknown on iPhone.
