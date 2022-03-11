@@ -114,7 +114,7 @@ The following settings are available:
 * Base topic: you can define a prefix for your messages. Example: /home/presence -> /home/presence/blecker/[device-mac] topic will be used
 * Username: MQTT server username
 * Password: MQTT server password
-* Observed devices: you can define your own devices for more accuracy, see the reason above (explanation). Use the mac address without ":" and separate them with ";" Please do not use space characters
+* Observed devices: you can define your own devices for more accuracy, see the reason above (explanation). Use the mac address without ":" and separate them with ";" Please do not use space characters and user lowercase letters
 * Home Assistant Auto discovery: set to "Send" to enable this function
 * Auto discovery prefix: should be the same what is configured in HA. Default is: homeassistant
 * Reboot after (hours): device reboot this amount of hours (Value should be integer and greater than 0)
@@ -200,7 +200,7 @@ https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
 The code contains a lot of logs which send messages over the serial connection (for example in VS Code) and Bluetooth as well. Bluetooth Serial for Android is one of the apps which was tried in this way.
 Each part of the code has a related log prefix, so it is easy to see which part of the code sends logs.
 
-With https://redakker.github.io/blecker/ you can check the device logs too for debugging. Connect your device and in the modal click to "Logs @ Console". You might click the "Reset device" to see the logs.
+With https://redakker.github.io/blecker/ you can check the device logs too for debugging. Connect your device and in the modal click to "Logs & Console". You might click the "Reset device" to see the logs.
 
 ## Example for Home Assistant
 Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:cd:ef`
