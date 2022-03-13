@@ -104,6 +104,10 @@ You can set your WiFi and MQTT credentials on that administration page. See the 
 
 Later you can find the web administration tool on the IP address which was set to the ESP32. Check it in your own router or WiFi manager tool.
 
+Thanks for the mDNS support, you can find your board in the local area network if you call the URL: http://blecker
+
+or chek the IP address of it with the following command in the commmand line: *nslookup blecker*
+
 ## Web configuration
 Web configuration UI is available to change some parameters in the system. It can be reached in a browser. Call the IP address of the board. (See the network settings in your router or WiFi manager)
 The following settings are available:
@@ -249,7 +253,7 @@ Status message topic from this version is /blecker/status/[device-mac]
 
 ## 1.07
 - #23 version is compiled to the HTML source directly, user always see the current version and GIT revision
-- binary file name changed. it does not affect the update process
+- binary file name changed. it does not affect the update process but contains the revision number as well
 - build code cleaning, htmlmin, jsmin, cssmin do not need anymore for the build process
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
