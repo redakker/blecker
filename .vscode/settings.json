@@ -8,6 +8,9 @@
         //    ".vscode/**",
         //    "**/*.scss",
         //    "**/*.sass"
-    ]
+    ],
+    "files.associations": {
+        "memory": "cpp"
+    }
 
 }
