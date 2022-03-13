@@ -7,7 +7,7 @@ let resetconfig = false;
 let advancedNetwork = false;
 let rebootCheck;
 
-let BOARD_NAME = "blecker";
+let BOARD_NAME = "%BOARD_NAME%";
 
 // AJAX service
 ajax.x = function () {
@@ -303,12 +303,6 @@ function fillData() {
     Object.entries(boardData).forEach(([key, value]) => {
         if (getItem(key)) {
             getItem(key).value = decodeURIComponent(value);
-        }
-
-        if (key == 'version' && value != '') {
-            if (getItem(key)) {
-                getItem(key).innerHTML='version ' + value.replace(BOARD_NAME,'').replace('.bin','').replace('x','.');
-            }
         }
     });
 }

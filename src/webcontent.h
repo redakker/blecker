@@ -251,11 +251,6 @@ Object.entries(boardData).forEach(([key, value]) => {
 if (getItem(key)) {
 getItem(key).value = decodeURIComponent(value);
 }
-if (key == 'version' && value != '') {
-if (getItem(key)) {
-getItem(key).innerHTML='version ' + value.replace(BOARD_NAME,'').replace('.bin','').replace('x','.');
-}
-}
 });
 }
 
@@ -377,7 +372,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">version v-orig</div>
+<div class="version" id="version">v1.06 - 82</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>

@@ -4,6 +4,6 @@ import sys
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-install("htmlmin");
-install("cssmin");
-install("jsmin");
+# install("htmlmin");
+# install("cssmin");
+# install("jsmin");
