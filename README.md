@@ -247,5 +247,10 @@ Status message now is coming with the normal presence message (availability chan
 
 Status message topic from this version is /blecker/status/[device-mac]
 
+## 1.07
+- #23 version is compiled to the HTML source directly, user always see the current version and GIT revision
+- binary file name changed. it does not affect the update process
+- build code cleaning, htmlmin, jsmin, cssmin do not need anymore for the build process
+
 Buy me a coffee: https://www.buymeacoffee.com/redakker
 
