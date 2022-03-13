@@ -104,6 +104,10 @@ You can set your WiFi and MQTT credentials on that administration page. See the 
 
 Later you can find the web administration tool on the IP address which was set to the ESP32. Check it in your own router or WiFi manager tool.
 
+Thanks for the mDNS support, you can find your board in the local area network if you call the URL: http://blecker
+
+or chek the IP address of it with the following command in the commmand line: *nslookup blecker*
+
 ## Web configuration
 Web configuration UI is available to change some parameters in the system. It can be reached in a browser. Call the IP address of the board. (See the network settings in your router or WiFi manager)
 The following settings are available:
