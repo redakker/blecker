@@ -172,16 +172,6 @@ Prebuild script(s) should install the dependecies automaticaly.
 - search for "Espressif 32"
 - install it
 - open the code folder (File -> Open folder)
-- open a terminal window in VScode and install "htmlmin", "jsmin" and "cssmin" python package 
-
-	commands: 
-                   
-                   - pip install htmlmin
-                   
-                   - pip install cssmin
-                   
-                   - pip install jsmin
-
 - build the project
 
 ### Complicated solution develop the Web interface
