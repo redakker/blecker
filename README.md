@@ -100,7 +100,7 @@ With [https://redakker.github.io/blecker/](https://redakker.github.io/blecker/) 
 Upload and start the code on ESP32. If there is no configuration yet then it offers an access point. The name of the accesspoint can be found in this file: definitions.h It is "blecker" now.
 * connect to this access point with your smartphone and call the IP address **192.168.4.1** for web administration.
 You can set your WiFi and MQTT credentials on that administration page. See the details below.
-* with the version 1.05 Captive portal is available. It means when you connect to the access point of the microcontroller then a notification pops up which brings you to the configuration page. It is easier to configure the device. Captive portal was tested in Android devices, currently behaviour is unknown on iPhone.
+* with the version 1.05 Captive portal is available. It means when you connect to the access point of the microcontroller then a notification pops up which brings you to the configuration page. It is easier to configure the device. Captive portal was tested in Android and iPhone devices.
 
 Later you can find the web administration tool on the IP address which was set to the ESP32. Check it in your own router or WiFi manager tool.
 
