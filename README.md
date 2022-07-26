@@ -139,6 +139,7 @@ Tested boards:
  - ESP32-S (dev board)
  - ESP32-S2 (dev board)
  - espcam32 (Tested by [@ozett](https://github.com/ozett))
+ - ESP32-D1-MINI
 
 Possible suitable boards (not tested):
  - All ESP32 (BLE capable) board
