@@ -93,7 +93,7 @@ void loop() {
   mqtt.loop();
   webhook.loop();
 
-  if (millis() > (rebootAfterHours * 60 * 60 * 1000)) {
+  if ((rebootAfterHours > 0) && (millis() > (rebootAfterHours * 60 * 60 * 1000))) {
     ESP.restart();
   }
 }
