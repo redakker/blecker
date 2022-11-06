@@ -215,11 +215,19 @@ Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:
 * At the end of the day you should have something like this
 
 ```
+!!! deprecated in newest HA !!!
 device_tracker:
      - platform: mqtt
        devices:
          redakker: '/blecker/123456abcdef'
+!!! deprecated in newest HA !!!
 
+mqtt:
+  device_tracker:
+  - name: "redakker"
+    state_topic: "/blecker/123456abcdef"
+  - name: "otheruser"
+    state_topic: "/blecker/987654fedcba"
 ```
 * after restar HA you will find among states the presence of your BLE device with this name:  **device_tracker.redakker**
 
