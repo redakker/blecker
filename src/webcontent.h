@@ -181,12 +181,14 @@ getItem("savebutton").style.display = 'block';
 }
 function advanced() {
 if (!advancedNetwork) {
-getItem("networkmore").style.display = 'block';
+getItem("networkmore_presence").style.display = 'block';
+getItem("networkmore_status").style.display = 'block';
 getItem("advancednet").style.display = 'none';
 getItem("basicnet").style.display = 'block';
 advancedNetwork = true;
 } else {
-getItem("networkmore").style.display = 'none';
+getItem("networkmore_presence").style.display = 'none';
+getItem("networkmore_status").style.display = 'none';
 getItem("advancednet").style.display = 'block';
 getItem("basicnet").style.display = 'none';
 advancedNetwork = false;
@@ -372,7 +374,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.07 - 100</div>
+<div class="version" id="version">v1.07 - 101</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>
@@ -429,7 +431,7 @@ BLEcker
 <input type="password" class="u-full-width" name="mqttpw" id="mqttpw" placeholder="Password">
 </div>
 </div>
-<div style="display: none" id="networkmore">
+<div style="display: none" id="networkmore_presence">
 <div class="row">
 <div class="six columns">
 <label for="present">Presence string (avalilable)</label>
@@ -438,6 +440,18 @@ BLEcker
 <div class="six columns">
 <label for="notpresent">Presence string (not available)</label>
 <input type="text" class="u-full-width" name="notpresent" id="notpresent" placeholder="not present">
+</div>
+</div>
+</div>
+<div style="display: none" id="networkmore_status">
+<div class="row">
+<div class="six columns">
+<label for="status_on">Device status string (on)</label>
+<input type="text" class="u-full-width" name="status_on" id="status_on" placeholder="status on">
+</div>
+<div class="six columns">
+<label for="status_off">Device status string (off)</label>
+<input type="text" class="u-full-width" name="status_off" id="status_off" placeholder="status off">
 </div>
 </div>
 </div>
@@ -1513,7 +1527,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.07 - 100</div>
+<div class="version" id="version">v1.07 - 101</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>

@@ -16,6 +16,7 @@ class Wifi {
         Log* rlog;
         Signal<boolean>* wifiStatusChanged;
         Signal<int>* errorCodeChanged;
+        Signal<String>* ipAddressChanged;
         String log_prefix = "[WIFI] ";
         bool wifi_connected = false;
         DNSServer dnsServer; 
@@ -30,7 +31,7 @@ class Wifi {
             this -> rlog = &log;
         }
 
-        void setup(Database &database, Signal<boolean> &wifiStatusChanged, Signal<int> &errorCodeChanged){
+        void setup(Database &database, Signal<boolean> &wifiStatusChanged, Signal<int> &errorCodeChanged, Signal<String> &ipAddressChanged){
 
             this -> database = &database;
 
@@ -153,6 +154,7 @@ class Wifi {
             // Emit an event about the Wifi status
             wifiStatusChanged->fire(wifi_connected);
             rlog -> log(log_prefix, "STA Connected. STA SSID: " + WiFi.SSID() + " STA IPv4: " + WiFi.localIP().toString() + ", GW: " + WiFi.gatewayIP().toString()+ ", Mask: " + WiFi.subnetMask().toString() + ", DNS: " + WiFi.dnsIP().toString());
+            ipAddressChanged->fire(WiFi.localIP().toString());
         }
 
         // when wifi disconnects

@@ -11,8 +11,9 @@
 #define MQTT_MAX_TRY 10 // give the connect up after this amount of tries
 #define MQTT_TOPIC "/blecker"
 #define MQTT_IN_POSTFIX "/in"
-#define MQTT_STATUS_ON "{\"status\": \"on\"}"
-#define MQTT_STATUS_OFF "{\"status\": \"off\"}"
+
+#define MQTT_STATUS_ON_DEFAULT_VALUE "on"
+#define MQTT_STATUS_OFF_DEFAULT_VALUE "off"
 
 // Presence
 #define DEFAULT_PRESENT "present"
@@ -62,3 +63,5 @@
 #define DB_HA_AUTODISCOVERY_PREFIX "hadiscpref"
 #define DB_REBOOT_TIMEOUT "reboot"
 #define DB_WEBHOOK "webhook"
+#define DB_DEVICE_STATUS_ON "status_on"
+#define DB_DEVICE_STATUS_OFF "status_off"

@@ -211,7 +211,8 @@ function clearconfig() {
 
 function advanced() {
     if (!advancedNetwork) {
-        getItem("networkmore").style.display = 'block';
+        getItem("networkmore_presence").style.display = 'block';
+        getItem("networkmore_status").style.display = 'block';
 
         getItem("advancednet").style.display = 'none';
         getItem("basicnet").style.display = 'block';
@@ -219,7 +220,8 @@ function advanced() {
         advancedNetwork = true;
 
     } else {
-        getItem("networkmore").style.display = 'none';
+        getItem("networkmore_presence").style.display = 'none';
+        getItem("networkmore_status").style.display = 'none';
 
         getItem("advancednet").style.display = 'block';
         getItem("basicnet").style.display = 'none';
