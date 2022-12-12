@@ -60,7 +60,7 @@ class Mqtt {
                 if (client->connected()) {
 
                     if (!subscribed) {
-                        subscribeFroBaseTopic();
+                        subscribeForBaseTopic();
                     }
 
                     int messageSize = client -> parseMessage();
@@ -68,8 +68,11 @@ class Mqtt {
                        processMessage();
                     }
                 } else {
+                    client->stop();
                     reconnect();
                 }
+            } else {
+                client->stop();
             }
         }
 
@@ -131,7 +134,7 @@ class Mqtt {
             this -> rlog -> log(log_prefix, (String) "Message: " + message);
         }
 
-        void subscribeFroBaseTopic () {
+        void subscribeForBaseTopic () {
             // subscribe to a topic and send an 'I'm alive' message
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
             client -> subscribe(subscription);
