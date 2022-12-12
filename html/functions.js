@@ -306,7 +306,7 @@ function collectData (){
 function fillData() {
     Object.entries(boardData).forEach(([key, value]) => {
         if (getItem(key)) {
-            getItem(key).value = decodeURIComponent(value);
+            getItem(key).value = value;
         }
     });
 }
