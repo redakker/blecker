@@ -14,6 +14,7 @@
 
 #define MQTT_STATUS_ON_DEFAULT_VALUE "on"
 #define MQTT_STATUS_OFF_DEFAULT_VALUE "off"
+#define MQTT_STATUS_OFF_DEFAULT_RETAIN false
 
 // Presence
 #define DEFAULT_PRESENT "present"
@@ -65,4 +66,5 @@
 #define DB_WEBHOOK "webhook"
 #define DB_DEVICE_STATUS_ON "status_on"
 #define DB_DEVICE_STATUS_OFF "status_off"
+#define DB_DEVICE_STATUS_RETAIN "status_retain"
 #define DB_DEVICE_ID "deviceid"

@@ -125,6 +125,20 @@ class Database {
             return ret;
         }
 
+        boolean getValueAsBoolean(String name, bool loadbefore, bool defaultReturn) {
+            if (loadbefore){
+                load();
+            }
+
+            if (isPropertyExists(name)) {
+                String value = jsonData[name.c_str()].as<String>();
+                return !value.isEmpty() && (strcasecmp (value.c_str (), "true") == 0 || atoi (value.c_str ()) != 0);
+            } else {
+                return defaultReturn;
+            }
+            return false;
+        }
+
         boolean isPropertyExists(String property) {
             return jsonData.containsKey(property);
         }

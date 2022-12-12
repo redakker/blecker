@@ -36,6 +36,7 @@ class Mqtt {
 
     boolean networkConnected = false; // Connected to the network (Wifi STA)
     boolean subscribed = false;
+    boolean lastWillRetain = false;
 
     public:
         Mqtt(Log &log) {
@@ -55,15 +56,19 @@ class Mqtt {
             this -> server = this -> database -> getValueAsString(String(DB_MQTT_SERVER), false);
             this -> baseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
-            String status_on = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
-            String status_off = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_OFF), false);
+            this -> lastWillRetain = this -> database -> getValueAsBoolean(String(DB_DEVICE_STATUS_RETAIN), false, MQTT_STATUS_OFF_DEFAULT_RETAIN);
+            
 
-            if (status_on == "") {
-                status_on = MQTT_STATUS_ON_DEFAULT_VALUE;
+            if (this -> database -> isPropertyExists(DB_DEVICE_STATUS_ON)) {
+                this -> statusOn = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
+            } else {
+                this -> statusOn = MQTT_STATUS_ON_DEFAULT_VALUE;               
             }
 
-            if (status_off == "") {
-                status_off = MQTT_STATUS_OFF_DEFAULT_VALUE;
+            if (this -> database -> isPropertyExists(DB_DEVICE_STATUS_OFF)) {
+                this -> statusOff = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_OFF), false);
+            } else {
+                this -> statusOff = MQTT_STATUS_OFF_DEFAULT_VALUE;
             }
 
             this -> deviceID = this -> database -> getValueAsString(String(DB_DEVICE_ID), false);
@@ -119,10 +124,13 @@ class Mqtt {
     private:
     
         void setLastWill() {
-            client -> beginWill(baseTopic, String("{\"status\": \"" + statusOff + "\"}").length(), false, 1);
-            client -> print(String("{\"status\": \"" + statusOff + "\", ip:\"" + this -> deviceIPAddress + "\"}"));            
+
+            String message = String("{\"status\": \"" + statusOff + "\", ip:\"" + this -> deviceIPAddress + "\"}");
+            
+            client -> beginWill(baseTopic, message.length(), lastWillRetain, 1);
+            client -> print(message);
             client -> endWill();
-            this -> rlog -> log(log_prefix, (String) "Last will is set.");
+            this -> rlog -> log(log_prefix, (String) "Last will is set. Retain: " + lastWillRetain);
             
         }
 

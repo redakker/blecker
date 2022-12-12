@@ -40,6 +40,7 @@ class Wifi {
 
             this -> wifiStatusChanged = &wifiStatusChanged;
             this -> errorCodeChanged = &errorCodeChanged;
+            this -> ipAddressChanged = &ipAddressChanged;
 
             WiFi.onEvent(
             [this](WiFiEvent_t event, system_event_info_t info) {
