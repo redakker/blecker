@@ -65,3 +65,4 @@
 #define DB_WEBHOOK "webhook"
 #define DB_DEVICE_STATUS_ON "status_on"
 #define DB_DEVICE_STATUS_OFF "status_off"
+#define DB_DEVICE_ID "deviceid"

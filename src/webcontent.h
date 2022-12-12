@@ -183,12 +183,14 @@ function advanced() {
 if (!advancedNetwork) {
 getItem("networkmore_presence").style.display = 'block';
 getItem("networkmore_status").style.display = 'block';
+getItem("networkmore_deviceid").style.display = 'block';
 getItem("advancednet").style.display = 'none';
 getItem("basicnet").style.display = 'block';
 advancedNetwork = true;
 } else {
 getItem("networkmore_presence").style.display = 'none';
 getItem("networkmore_status").style.display = 'none';
+getItem("networkmore_deviceid").style.display = 'none';
 getItem("advancednet").style.display = 'block';
 getItem("basicnet").style.display = 'none';
 advancedNetwork = false;
@@ -374,7 +376,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.07 - 101</div>
+<div class="version" id="version">v1.07 - 102</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>
@@ -447,11 +449,19 @@ BLEcker
 <div class="row">
 <div class="six columns">
 <label for="status_on">Device status string (on)</label>
-<input type="text" class="u-full-width" name="status_on" id="status_on" placeholder="status on">
+<input type="text" class="u-full-width" name="status_on" id="status_on" placeholder="on">
 </div>
 <div class="six columns">
 <label for="status_off">Device status string (off)</label>
-<input type="text" class="u-full-width" name="status_off" id="status_off" placeholder="status off">
+<input type="text" class="u-full-width" name="status_off" id="status_off" placeholder="off">
+</div>
+</div>
+</div>
+<div style="display: none" id="networkmore_deviceid">
+<div class="row">
+<div class="six columns">
+<label for="deviceid">Device ID</label>
+<input type="text" class="u-full-width" name="deviceid" id="deviceid" placeholder="random">
 </div>
 </div>
 </div>
@@ -1527,7 +1537,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.07 - 101</div>
+<div class="version" id="version">v1.07 - 102</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>

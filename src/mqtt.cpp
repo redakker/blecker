@@ -22,8 +22,9 @@ class Mqtt {
     String server;
     String user;
     String password;
-    String status_on;
-    String status_off;
+    String statusOn;
+    String statusOff;
+    String deviceID;
     int port;
     String baseTopic;
 
@@ -53,8 +54,6 @@ class Mqtt {
             this -> port =  this -> database -> getValueAsInt(String(DB_MQTT_PORT), false);
             this -> server = this -> database -> getValueAsString(String(DB_MQTT_SERVER), false);
             this -> baseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
-            // this -> status_on = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
-            // this -> status_off = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_OFF), false);
 
             String status_on = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
             String status_off = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_OFF), false);
@@ -66,7 +65,12 @@ class Mqtt {
             if (status_off == "") {
                 status_off = MQTT_STATUS_OFF_DEFAULT_VALUE;
             }
+
+            this -> deviceID = this -> database -> getValueAsString(String(DB_DEVICE_ID), false);
             
+            if (deviceID) {
+                client->setId(deviceID);
+            }
             this -> client -> setUsernamePassword(user, password);
             
         }
@@ -75,7 +79,7 @@ class Mqtt {
             if (networkConnected) {
                 // check for incoming messages            
                 if (client->connected()) {
-
+                    
                     if (!subscribed) {
                         subscribeForBaseTopic();
                     }
@@ -115,8 +119,8 @@ class Mqtt {
     private:
     
         void setLastWill() {
-            client -> beginWill(baseTopic, String("{\"status\": \"" + status_off + "\"}").length(), false, 1);
-            client -> print(String("{\"status\": \"" + status_off + "\", ip:\"" + this -> deviceIPAddress + "\"}"));            
+            client -> beginWill(baseTopic, String("{\"status\": \"" + statusOff + "\"}").length(), false, 1);
+            client -> print(String("{\"status\": \"" + statusOff + "\", ip:\"" + this -> deviceIPAddress + "\"}"));            
             client -> endWill();
             this -> rlog -> log(log_prefix, (String) "Last will is set.");
             
@@ -159,7 +163,7 @@ class Mqtt {
             // subscribe to a topic and send an 'I'm alive' message
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
             client -> subscribe(subscription);
-            sendMqttMessage(baseTopic, "{\"status\": \"" + status_on + "\", ip:\"" + this -> deviceIPAddress + "\"}");
+            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", ip:\"" + this -> deviceIPAddress + "\"}");
             rlog -> log(log_prefix, "Subscribed to topic " + subscription);
             
             setLastWill();

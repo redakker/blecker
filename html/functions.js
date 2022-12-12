@@ -213,6 +213,7 @@ function advanced() {
     if (!advancedNetwork) {
         getItem("networkmore_presence").style.display = 'block';
         getItem("networkmore_status").style.display = 'block';
+        getItem("networkmore_deviceid").style.display = 'block';
 
         getItem("advancednet").style.display = 'none';
         getItem("basicnet").style.display = 'block';
@@ -222,7 +223,8 @@ function advanced() {
     } else {
         getItem("networkmore_presence").style.display = 'none';
         getItem("networkmore_status").style.display = 'none';
-
+        getItem("networkmore_deviceid").style.display = 'none';
+        
         getItem("advancednet").style.display = 'block';
         getItem("basicnet").style.display = 'none';
 
