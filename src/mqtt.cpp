@@ -125,7 +125,7 @@ class Mqtt {
     
         void setLastWill() {
 
-            String message = String("{\"status\": \"" + statusOff + "\", ip:\"" + this -> deviceIPAddress + "\"}");
+            String message = String("{\"status\": \"" + statusOff + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
             
             client -> beginWill(baseTopic, message.length(), lastWillRetain, 1);
             client -> print(message);
@@ -171,7 +171,7 @@ class Mqtt {
             // subscribe to a topic and send an 'I'm alive' message
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
             client -> subscribe(subscription);
-            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", ip:\"" + this -> deviceIPAddress + "\"}");
+            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
             rlog -> log(log_prefix, "Subscribed to topic " + subscription);
             
             setLastWill();
