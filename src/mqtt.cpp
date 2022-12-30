@@ -22,8 +22,13 @@ class Mqtt {
     String server;
     String user;
     String password;
+    String statusOn;
+    String statusOff;
+    String deviceID;
     int port;
     String baseTopic;
+
+    String deviceIPAddress = "undefined";
 
     // MQTT connect try
     int lasttry = 10000;
@@ -31,6 +36,7 @@ class Mqtt {
 
     boolean networkConnected = false; // Connected to the network (Wifi STA)
     boolean subscribed = false;
+    boolean lastWillRetain = false;
 
     public:
         Mqtt(Log &log) {
@@ -49,7 +55,27 @@ class Mqtt {
             this -> port =  this -> database -> getValueAsInt(String(DB_MQTT_PORT), false);
             this -> server = this -> database -> getValueAsString(String(DB_MQTT_SERVER), false);
             this -> baseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
+
+            this -> lastWillRetain = this -> database -> getValueAsBoolean(String(DB_DEVICE_STATUS_RETAIN), false, MQTT_STATUS_OFF_DEFAULT_RETAIN);
             
+
+            if (this -> database -> isPropertyExists(DB_DEVICE_STATUS_ON)) {
+                this -> statusOn = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
+            } else {
+                this -> statusOn = MQTT_STATUS_ON_DEFAULT_VALUE;               
+            }
+
+            if (this -> database -> isPropertyExists(DB_DEVICE_STATUS_OFF)) {
+                this -> statusOff = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_OFF), false);
+            } else {
+                this -> statusOff = MQTT_STATUS_OFF_DEFAULT_VALUE;
+            }
+
+            this -> deviceID = this -> database -> getValueAsString(String(DB_DEVICE_ID), false);
+            
+            if (deviceID) {
+                client->setId(deviceID);
+            }
             this -> client -> setUsernamePassword(user, password);
             
         }
@@ -58,9 +84,9 @@ class Mqtt {
             if (networkConnected) {
                 // check for incoming messages            
                 if (client->connected()) {
-
+                    
                     if (!subscribed) {
-                        subscribeFroBaseTopic();
+                        subscribeForBaseTopic();
                     }
 
                     int messageSize = client -> parseMessage();
@@ -68,8 +94,11 @@ class Mqtt {
                        processMessage();
                     }
                 } else {
+                    client->stop();
                     reconnect();
                 }
+            } else {
+                client->stop();
             }
         }
 
@@ -88,13 +117,20 @@ class Mqtt {
             }
         }
 
+        void ipAddressChanged (String ipAddress) {
+            this -> deviceIPAddress = ipAddress;
+        }
+
     private:
     
         void setLastWill() {
-            client -> beginWill(baseTopic, String(MQTT_STATUS_OFF).length(), false, 1);
-            client -> print(String(MQTT_STATUS_OFF));            
+
+            String message = String("{\"status\": \"" + statusOff + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
+            
+            client -> beginWill(baseTopic, message.length(), lastWillRetain, 1);
+            client -> print(message);
             client -> endWill();
-            this -> rlog -> log(log_prefix, (String) "Last will is set.");
+            this -> rlog -> log(log_prefix, (String) "Last will is set. Retain: " + lastWillRetain);
             
         }
 
@@ -131,11 +167,11 @@ class Mqtt {
             this -> rlog -> log(log_prefix, (String) "Message: " + message);
         }
 
-        void subscribeFroBaseTopic () {
+        void subscribeForBaseTopic () {
             // subscribe to a topic and send an 'I'm alive' message
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
             client -> subscribe(subscription);
-            sendMqttMessage(baseTopic, MQTT_STATUS_ON);
+            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
             rlog -> log(log_prefix, "Subscribed to topic " + subscription);
             
             setLastWill();

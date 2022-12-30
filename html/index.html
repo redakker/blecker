@@ -97,7 +97,7 @@
 						</div>
 					</div>
 
-					<div style="display: none" id="networkmore">
+					<div style="display: none" id="networkmore_presence">
 						<div class="row">					
 							<div class="six columns">
 								<label for="present">Presence string (avalilable)</label>
@@ -107,6 +107,40 @@
 								<label for="notpresent">Presence string (not available)</label>
 								<input type="text" class="u-full-width" name="notpresent" id="notpresent" placeholder="not present">
 							</div>
+						</div>
+					</div>
+
+					<div style="display: none" id="networkmore_status">
+						<div class="row">					
+							<div class="six columns">
+								<label for="status_on">Device status string (on)</label>
+								<input type="text" class="u-full-width" name="status_on" id="status_on" placeholder="on">
+							</div>
+							<div class="six columns">
+								<label for="status_off">Device status string (off)</label>
+								<input type="text" class="u-full-width" name="status_off" id="status_off" placeholder="off">
+							</div>
+						</div>
+					</div>
+
+					<div style="display: none" id="networkmore_retain">
+						<div class="row">					
+							<div class="six columns">
+								<label for="status_on">Device status retian</label>								
+								<select class="u-full-width" name="status_retain" id="status_retain">
+									<option value="0">no</option>
+									<option value="1">yes</option>							
+								</select>
+							</div>							
+						</div>
+					</div>
+
+					<div style="display: none" id="networkmore_deviceid">
+						<div class="row">					
+							<div class="six columns">
+								<label for="deviceid">Device ID</label>
+								<input type="text" class="u-full-width" name="deviceid" id="deviceid" placeholder="random">
+							</div>							
 						</div>
 					</div>
 
