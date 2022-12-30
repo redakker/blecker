@@ -127,7 +127,10 @@ The following settings are available:
 If you click to the advanced text, you can find more options
 * Presence string (available): a custom payload to send an available state
 * Presence string (not available) a custom payload to send a not available state
-
+* Device status string (on) (default on): this string will be sent with the status report in case the device is becoming online
+* Device status string (off) (default off): this string will be sent with the status report in case the device is becoming offline
+* Device status retian: you can choose if the status message would be retained MQTT message
+* Device ID: MQQT device identity string. Leave it empty for default. If this is not defined or empty, MQTT broker will set it as a random string.
 
 ## Update
 There are two ways to update your board:
@@ -138,8 +141,9 @@ There are two ways to update your board:
 Tested boards:
  - ESP32-S (dev board)
  - ESP32-S2 (dev board)
- - espcam32 (Tested by [@ozett](https://github.com/ozett))
+ - espcam32 (Tested by [@maarten682](https://github.com/maarten682))
  - ESP32-D1-MINI
+ - AZDelivery ESP-32 Dev Kit C V4 (Tested by [@ozett](https://github.com/ozett))
 
 Possible suitable boards (not tested):
  - All ESP32 (BLE capable) board
@@ -265,6 +269,12 @@ Status message topic from this version is /blecker/status/[device-mac]
 - #23 version is compiled to the HTML source directly, user always see the current version and GIT revision
 - binary file name changed. it does not affect the update process but contains the revision number as well
 - build code cleaning, htmlmin, jsmin, cssmin do not need anymore for the build process
+
+## 1.08
+- #27 javascript bugfix
+- #29 MQTT reconnect bugfix
+- #30 Added feature status string customization
+- #31 Added feature custom client id
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
 
