@@ -151,6 +151,7 @@ Possible suitable boards (not tested):
 Tested BLE beacons:
  - Nut Bluetooth Beacon https://www.amazon.com/Nut-F6-world-Smallest-Trackers/dp/B01B0WRC4I/
  - Long Range (500m) Bluetooth Beacon https://www.amazon.com/programmable-Battery-Bluetooth-eddystone-Technology/dp/B07PT9758D
+ - Holyiot nRF52810 beacon (Tested by [@maarten682](https://github.com/maarten682))
  
 Possible suitable beacons:
  - any BLE beacon which can provide a mac address
