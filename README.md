@@ -141,9 +141,9 @@ There are two ways to update your board:
 Tested boards:
  - ESP32-S (dev board)
  - ESP32-S2 (dev board)
- - espcam32 (Tested by [@maarten682](https://github.com/maarten682))
+ - espcam32 (Tested by [@ozett](https://github.com/ozett))
  - ESP32-D1-MINI
- - AZDelivery ESP-32 Dev Kit C V4 (Tested by [@ozett](https://github.com/ozett))
+ - AZDelivery ESP-32 Dev Kit C V4 (Tested by [@maarten682](https://github.com/maarten682))
 
 Possible suitable boards (not tested):
  - All ESP32 (BLE capable) board
