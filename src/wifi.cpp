@@ -43,7 +43,7 @@ class Wifi {
             this -> ipAddressChanged = &ipAddressChanged;
 
             WiFi.onEvent(
-            [this](WiFiEvent_t event, system_event_info_t info) {
+            [this](WiFiEvent_t event, WiFiEventInfo_t info) {
                 this->WiFiEvent(event);
             });
 
