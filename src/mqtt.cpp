@@ -95,10 +95,12 @@ class Mqtt {
                     }
                 } else {
                     client->stop();
+                    this -> subscribed = false;
                     reconnect();
                 }
             } else {
                 client->stop();
+                this -> subscribed = false;
             }
         }
 
