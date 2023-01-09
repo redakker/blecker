@@ -277,7 +277,7 @@ Status message topic from this version is /blecker/status/[device-mac]
 - #30 Added feature status string customization
 - #31 Added feature custom client id
 
-## 1.08
+## 1.09
 - #27 fix
 
 
