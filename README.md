@@ -272,10 +272,15 @@ Status message topic from this version is /blecker/status/[device-mac]
 - build code cleaning, htmlmin, jsmin, cssmin do not need anymore for the build process
 
 ## 1.08
-- #27 javascript bugfix
+- #27 bugfix - still bug
 - #29 MQTT reconnect bugfix
 - #30 Added feature status string customization
 - #31 Added feature custom client id
+
+## 1.08
+- #27 fix
+
+
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
 
