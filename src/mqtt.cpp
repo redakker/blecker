@@ -170,13 +170,16 @@ class Mqtt {
         }
 
         void subscribeForBaseTopic () {
+
+            setLastWill();
+
             // subscribe to a topic and send an 'I'm alive' message
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
             client -> subscribe(subscription);
             sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
             rlog -> log(log_prefix, "Subscribed to topic " + subscription);
             
-            setLastWill();
+            
 
             this -> errorCodeChanged->fire(ERROR_NO_ERROR);
             subscribed = true;
