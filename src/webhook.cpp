@@ -9,8 +9,7 @@
 
 class Webhook {
 
-    Log* rlog;
-    String log_prefix = "[HTTPCLIENT] ";
+    Logger logger;
     Database* database;
     HTTPClient http;
     
@@ -18,9 +17,7 @@ class Webhook {
     unsigned long lastrun = 0;
     
     public:
-        Webhook(Log &rlog) {
-            this -> rlog = &rlog;
-            
+        Webhook(Log& rlog) : logger(rlog, "[HTTPCLIENT]") {
         }
 
         void setup (Database &database) {
@@ -28,18 +25,17 @@ class Webhook {
 
             if (this->database->getValueAsString(DB_WEBHOOK) != "") {
                 this-> webhookConfigured = true;
-                rlog -> log(log_prefix, (String) "Webhook is configured with the following URL:" + this->database->getValueAsString(DB_WEBHOOK));
+                logger << "Webhook is configured with the following URL:" << this->database->getValueAsString(DB_WEBHOOK);
             } else {
                 this-> webhookConfigured = false;
-                rlog -> log(log_prefix, (String) "Webhook is not configured, will be not used.");
+                logger << "Webhook is not configured, will be not used.";
             }
         }
 
         void loop() {
-  
         }
 
-        void callWebhook (Device device) {
+        void callWebhook(Device device) {
 
             if (webhookConfigured) {
                 String baseURL = this->database->getValueAsString(DB_WEBHOOK);
@@ -58,17 +54,16 @@ class Webhook {
             
                     String payload = http.getString();
                     
-                    rlog -> log(log_prefix, (String) "URL is called with GET method: " + baseURL);
-                    rlog -> log(log_prefix, (String) "Status code: " + (String) httpCode);
-                    rlog -> log(log_prefix, (String) "Payload: " + payload);
+                    logger << "URL is called with GET method: " << baseURL;
+                    logger << "Status code: " << (String)httpCode;
+                    logger << "Payload: " << payload;
 
                 } else {
                     Serial.println("Error on HTTP request");
-                    rlog -> log(log_prefix, (String) "Error on http request");
+                    logger << "Error on http request";
                 }
             
                 http.end(); //Free the resources
-
             }
 
             

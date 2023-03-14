@@ -16,6 +16,7 @@
 #include "webserver.cpp"
 #include "mqtt.cpp"
 #include "webhook.cpp"
+#include "esp_log.h"
 
 Log rlog;
 Led led(rlog);
@@ -35,7 +36,7 @@ Signal<MQTTMessage> mqttMessageSend;
 Signal<Device> deviceChanged;
 Signal<String> ipAddressChanged;
 
-String log_prefix = "[MAIN] ";
+String log_prefix = "[MAIN]";
 
 int rebootAfterHours = 0;
 
