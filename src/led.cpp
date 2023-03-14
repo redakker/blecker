@@ -8,17 +8,15 @@
 
 class Led {
 
-    Log* rlog;
-    String log_prefix = "[LED] ";
+    Logger logger;
     int messageCode;    
     JLed* led;
 
     unsigned long lastrun = 0;
     
     public:
-        Led(Log &rlog) {
+        Led(Log& rlog) : logger(rlog, "[LED]") {
             this -> messageCode = ERROR_NO_ERROR;
-            this -> rlog = &rlog;
             this -> led = new JLed (LED_BUILTIN);
         }
 
@@ -46,7 +44,7 @@ class Led {
         void setMessage(int messageCode) {            
             // Prevent the continuous triggers
             if (this -> messageCode != messageCode) {
-                rlog->log(log_prefix, (String) "Incoming error message: " + messageCode);
+                logger << "Incoming error message: " << (String)messageCode;
                 this -> messageCode = messageCode;
                 if (this->messageCode != ERROR_NO_ERROR) {
                     this -> led -> Breathe(300).Repeat(this -> messageCode);

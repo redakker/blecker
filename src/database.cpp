@@ -11,13 +11,11 @@
 
 class Database {
 
-    Log* rlog;
-    String log_prefix = "[STORE] ";
+    Logger logger;
     StaticJsonDocument<1000> jsonData;    
 
     public: 
-        Database(Log &log) {
-            this -> rlog = &log;                       
+        Database(Log& rlog) : logger(rlog, "[STORE]") {
         }
 
         void setup() {
@@ -26,7 +24,6 @@ class Database {
         }
 
         void loop() {
-
         }
 
         // Init EEPROM to check/set the identification
@@ -34,9 +31,9 @@ class Database {
             String name = this -> getValueAsString("name", true);
 
             if (name == BOARD_NAME) {
-                rlog -> log(log_prefix, "Init ready.");
+                logger << "Init ready.";
             } else {
-                rlog -> log(log_prefix, "Board name was not found, reinit the database.");
+                logger << "Board name was not found, reinit the database.";
                 jsonData.clear();
                 this->updateProperty("name", BOARD_NAME, true);
             }
@@ -45,14 +42,14 @@ class Database {
         // Read all from the store
         void load() {
             String data = EEPROM.readString(0);
-            rlog -> log(log_prefix, "data loaded: " + data);
+            logger << "data loaded: " << data;
             DeserializationError error = deserializeJson(jsonData, data);
 
             if (error) {
-                rlog -> log(log_prefix + "DeserializationError: " + error.c_str());
+                logger << "DeserializationError: " << error.c_str();
                 jsonData.clear();          
             } else {
-                rlog -> log(log_prefix, "Data successfully parsed");
+                logger << "Data successfully parsed";
             }
         }
 
@@ -68,7 +65,7 @@ class Database {
 
             EEPROM.writeString(0, data);
             EEPROM.commit();
-            rlog -> log(log_prefix, "data saved: " + data);
+            logger << "data saved: " << data;
         }
 
         void updateProperty(String property, String value) {            
@@ -155,9 +152,9 @@ class Database {
             DeserializationError error = deserializeJson(tempJson, json);
 
             if (error) {
-                rlog -> log(log_prefix + (String) "DeserializationError: " + error.c_str() + " (jsonToDatabase) " + json);
+                logger << "DeserializationError: " << error.c_str() << " (jsonToDatabase) " << json;
             } else {
-                rlog -> log(log_prefix, "Data successfully parsed during jsonToDatabase process. Data: " + json);
+                logger << "Data successfully parsed during jsonToDatabase process. Data: " << json;
                 // Save mechanism from hackers
                 // Data alaways have a name property, because the system initialize the EEPROM if the format is not correct.
                 // See the init() function
@@ -173,7 +170,7 @@ class Database {
                     }
                     save();
                 } else {
-                    rlog -> log(log_prefix, "Json data is not valid, database was not overwritten.");
+                    logger << "Json data is not valid, database was not overwritten.";
                 }
                 
             }
@@ -184,11 +181,11 @@ class Database {
             DeserializationError error = deserializeJson(tempJson, message);
 
             if (error) {
-                rlog -> log(log_prefix + (String) "DeserializationError: " + error.c_str() + " (receiveCommand) " + message);
+                logger << "DeserializationError: " << error.c_str() << " (receiveCommand) " << message;
             } else {               
                 String value = tempJson["command"].as<String>();                
                 if (String(COMMAND_CONFIG).equals(value)) {
-                    rlog -> log(log_prefix, (String) "Command received: " + COMMAND_CONFIG);                    
+                    logger << "Command received: " << COMMAND_CONFIG;
                     this -> jsonToDatabase(message);
                 }
                 
@@ -197,10 +194,10 @@ class Database {
 
         void reset(){
             // Reset settings
-            rlog -> log(log_prefix + "Clear EEPROM");
+            logger << "Clear EEPROM";
             for (int i = 0; i < EEPROM_SIZE; ++i) { EEPROM.write(i, 0); }
             EEPROM.commit();
-            rlog -> log(log_prefix + "EEPROM is clean.");
+            logger << "EEPROM is clean.";
         }
 
     private:
@@ -229,7 +226,6 @@ class Database {
             }
             return true;
         }
-
 };
 
 #endif

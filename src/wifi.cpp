@@ -13,11 +13,10 @@ class Wifi {
 
     public:
 
-        Log* rlog;
+        Logger logger;
         Signal<boolean>* wifiStatusChanged;
         Signal<int>* errorCodeChanged;
         Signal<String>* ipAddressChanged;
-        String log_prefix = "[WIFI] ";
         bool wifi_connected = false;
         DNSServer dnsServer; 
         Database* database;
@@ -27,8 +26,7 @@ class Wifi {
 
         int tries = 0;
 
-        Wifi(Log &log) {
-            this -> rlog = &log;
+        Wifi(Log& rlog) : logger(rlog, "[WIFI]") {
         }
 
         void setup(Database &database, Signal<boolean> &wifiStatusChanged, Signal<int> &errorCodeChanged, Signal<String> &ipAddressChanged){
@@ -57,7 +55,7 @@ class Wifi {
             if (ssid.length() > 0) {
                 this -> connectToAP();
             } else {
-                rlog -> log(log_prefix, "Cannot connect to wifi, because no SSID was defined. Create an AP.");
+                logger << "Cannot connect to wifi, because no SSID was defined. Create an AP.";
                 createAP();
             }
             
@@ -65,7 +63,7 @@ class Wifi {
 
         void disconnectWifi() {
             WiFi.disconnect();
-            rlog -> log(log_prefix, "Wifi is disconnected from a function.");
+            logger << "Wifi is disconnected from a function.";
         }
 
         void connectToAP() {
@@ -78,13 +76,13 @@ class Wifi {
         void createAP() {
             configAP();
             WiFi.mode(WIFI_AP);
-            rlog -> log(log_prefix + "AP is created from a function. Name: " + BOARD_NAME);
+            logger << "AP is created from a function. Name: " << BOARD_NAME;
         }
 
         void stopAP(){            
             WiFi.softAPdisconnect();
             WiFi.enableAP(false);
-            rlog -> log(log_prefix, "AP disconnected from a function.");           
+            logger << "AP disconnected from a function.";
         }
 
         boolean isConnected(){
@@ -113,13 +111,13 @@ class Wifi {
                     //enable ap ipv6 here
                     // WiFi.softAPenableIpV6();
 
-                    rlog -> log(log_prefix + "AP started. SSID: " + BOARD_NAME + " AP IPv4: " + WiFi.softAPIP().toString());
+                    logger << "AP started. SSID: " << BOARD_NAME << " AP IPv4: " << WiFi.softAPIP().toString();
                     break;
 
                 case SYSTEM_EVENT_STA_START:
                     //set sta hostname here
                     WiFi.setHostname(BOARD_NAME);
-                    rlog -> log(log_prefix + "Wifi hostname set to " + BOARD_NAME);
+                    logger << "Wifi hostname set to " << BOARD_NAME;
                     break;
                 case SYSTEM_EVENT_STA_CONNECTED:
                     // enable sta ipv6 here
@@ -154,13 +152,13 @@ class Wifi {
             
             // Emit an event about the Wifi status
             wifiStatusChanged->fire(wifi_connected);
-            rlog -> log(log_prefix, "STA Connected. STA SSID: " + WiFi.SSID() + " STA IPv4: " + WiFi.localIP().toString() + ", GW: " + WiFi.gatewayIP().toString()+ ", Mask: " + WiFi.subnetMask().toString() + ", DNS: " + WiFi.dnsIP().toString());
+            logger << "STA Connected. STA SSID: " << WiFi.SSID() << " STA IPv4: " << WiFi.localIP().toString() << ", GW: " << WiFi.gatewayIP().toString() << ", Mask: " << WiFi.subnetMask().toString() << ", DNS: " << WiFi.dnsIP().toString();
             ipAddressChanged->fire(WiFi.localIP().toString());
         }
 
         // when wifi disconnects
         void wifiOnDisconnect() {
-            rlog -> log(log_prefix, "Disconnected.");
+            logger << "Disconnected.";
             wifi_connected = false;
             
             // Emit an event about the Wifi status
@@ -170,7 +168,7 @@ class Wifi {
             this->tries++;
             if (this->tries > WIFI_MAX_TRY) {
                 WiFi.disconnect();
-                rlog -> log(log_prefix, "Final disconnect.");
+                logger << "Final disconnect.";
                 errorCodeChanged->fire(ERROR_WIFI);
                 this -> createAP();
             } else {
@@ -191,7 +189,7 @@ class Wifi {
 
         void setupMDNS() {
             if(!MDNS.begin( BOARD_NAME )) {
-                rlog -> log(log_prefix, "Error starting mDNS");
+                logger << "Error starting mDNS";
                 //return;
             } else {
                 MDNS.addService("http", "tcp", 80);

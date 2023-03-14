@@ -17,8 +17,7 @@
 
 class BlueTooth: public BLEAdvertisedDeviceCallbacks {
 
-    Log* rlog;
-    String log_prefix = "[BLUE] ";
+    Logger logger;
     Led* led;
     Signal<MQTTMessage>* mqttMessageSend;
     Signal<Device>* deviceChanged;
@@ -49,8 +48,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     LinkedList<int> devicesToRemove = LinkedList<int>();
 
     public:
-        BlueTooth(Log &log, Led &led) {
-            this -> rlog = &log;
+        BlueTooth(Log& rlog, Led& led) : logger(rlog, "[BLUE]") {
             this -> led = &led;
         }
 
@@ -67,7 +65,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             pBLEScan->setInterval(100);
             pBLEScan->setWindow(99);  // less or equal setInterval value
 
-            rlog -> log(log_prefix, BOARD_NAME " is initiated");
+            logger << BOARD_NAME " is initiated";
 
             // Prefill the device list with the user's devices
             // In case of accidently reboot it will send a "not_home" message if the device is gone meanwhile
@@ -120,7 +118,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
                     dev.lastSeen = millis();
 
                     if (dev.mark == 0) {
-                        rlog -> log(log_prefix, (String) "Device is gone. MAC: " + dev.mac);
+                        logger << "Device is gone. MAC: " << dev.mac;
                         
                         // Virtually remove the device
                         dev.available = false;
@@ -132,7 +130,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
 
                     } 
                     if (dev.mark > 0) {
-                        rlog -> log(log_prefix, (String) "Device marked as gone. MAC: " + dev.mac + " Current mark is: " + dev.mark);
+                        logger << "Device marked as gone. MAC: " << dev.mac << " Current mark is: " << (String)dev.mark;
                         devices.set(i, dev);
                     }
                 } 
@@ -140,7 +138,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             
             if ((millis() - lastClear > BT_LIST_REBUILD_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastClear < 0) {
                 lastClear = millis();
-                rlog -> log(log_prefix, (String) "Clear the device list. (This is normal operation. :))");
+                logger << "Clear the device list. (This is normal operation. :))";
                 // Clear the list, it will be rebuilt again. Resend the (available) status should not be a problem.
                 devices.clear();
                 fillDevices(this-> database -> getValueAsString(DB_DEVICES));
@@ -151,7 +149,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             if (detailedReport) {
                 if ((millis() - lastSendDeviceData > BT_DEVICE_DATA_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastSendDeviceData < 0) {
                     lastSendDeviceData = millis();
-                    rlog -> log(log_prefix, (String) "Send device data.");
+                    logger << "Send device data.");
                     for (int i = 0; i < this -> devices.size(); i++) {
                         Device dev = devices.get(i);
                         if (dev.mac != NULL && dev.mac.length() > 0) {
@@ -166,7 +164,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             if (sendAutoDiscovery) {
                 if ((millis() - lastSendAutoDiscovery > HA_AUTODISCOVERY_INTERVAL && devices.size() > 0) || (long) millis() - (long) lastSendAutoDiscovery < 0) {
                     lastSendAutoDiscovery = millis();
-                    rlog -> log(log_prefix, (String) "Send autodicovery data.");
+                    logger << "Send autodicovery data.";
                     for (int i = 0; i < this -> devices.size(); i++) {
                         Device dev = devices.get(i);
                         // Example
@@ -194,7 +192,7 @@ private:
 
         void onResult(BLEAdvertisedDevice advertisedDevice) {
             // Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
-            //rlog -> log(log_prefix, (String) "Found device MAC: " + advertisedDevice.getAddress().toString().c_str());
+            //logger << "Found device MAC: " + advertisedDevice.getAddress().toString().c_str());
             
             boolean newFound = true;
             String deviceMac = advertisedDevice.getAddress().toString().c_str();
@@ -225,7 +223,7 @@ private:
                 if (newFound) {
                     Device dev = {deviceName, deviceRSSI, deviceMac, true, millis(), DEVICE_DROP_OUT_COUNT, false };
                     devices.add(dev);
-                    rlog -> log(log_prefix, (String) "New device found. MAC: " + deviceMac);                
+                    logger << "New device found. MAC: " << deviceMac;
                     // Send an MQTT message about this device is at home
                     handleDeviceChange(dev);
                 }
@@ -253,7 +251,7 @@ private:
                        true //observed
                     };
                     this -> devices.add(device);
-                    rlog -> log(log_prefix, (String) "Device added as observed device. MAC: " + devMac);
+                    logger << "Device added as observed device. MAC: " << devMac;
                 }
             }
 
@@ -270,7 +268,6 @@ private:
                 mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, false});
             }
         }
-
 };
 
 #endif

@@ -10,9 +10,8 @@
 
 class Webserver {
     
-    Log* rlog;
+    Logger logger;
     Database* database;
-    String log_prefix = "[WEB] ";
     WebServer server;
     WiFiClient* transport;
     //InternalStorageClass* InternalStorage;
@@ -21,8 +20,7 @@ class Webserver {
     boolean networkConnected = false;
 
     public:
-        Webserver (Log &log){
-            this -> rlog = &log;
+        Webserver(Log& rlog) : logger(rlog, "[WEB]") {
             WebServer server(80);
 
             WiFiClient transport;
@@ -64,10 +62,10 @@ class Webserver {
 
             
             server.begin();
-            this->rlog->log(log_prefix, "Webserver is ready.");
+            logger << "Webserver is ready.";
         }
 
-        void loop(){
+        void loop() {
             server.handleClient();
         }
 
@@ -90,52 +88,52 @@ class Webserver {
         }
 
         void handleRoot(){            
-            this->rlog->log(log_prefix, "/ is called");
+            logger << "/ is called";
             server.sendHeader("Access-Control-Allow-Origin", "*");
             sendHeaders();
             server.send(200, "text/html", data_index_html);
         }
 
         void handleJavaScript(){
-            this->rlog->log(log_prefix, "/function.js is called");            
+            logger << "/function.js is called";
             server.send(200, "text/javascript", data_functions_js);
         }
 
         void handleStyle(){
-            this->rlog->log(log_prefix, "/style.css is called");
+            logger << "/style.css is called";
             server.send(200, "text/css", data_style_css);
         }
 
         void handleNormalize(){
-            this->rlog->log(log_prefix, "/normalize.css is called");
+            logger << "/normalize.css is called";
             server.send(200, "text/css", data_normalize_css);
         }
 
         void handleSkeleton(){
-            this->rlog->log(log_prefix, "/skeleton.css is called");
+            logger << "/skeleton.css is called";
             server.send(200, "text/css", data_skeleton_css);
         }
 
         void handleLogo(){
-            this->rlog->log(log_prefix, "/logo.jpg is called");
+            logger << "/logo.jpg is called";
             //server.sendContent_P(data_logo_jpg);
         }
 
         void handleData(){
-            this->rlog->log(log_prefix, "/data is called");
+            logger << "/data is called";
             sendHeaders();
             server.send(200, "application/json", getData());
         }
 
         void handleFavicon(){
-            this->rlog->log(log_prefix, "/favicon is called");
+            logger << "/favicon is called";
             sendHeaders();
             server.send(200, "image/webp", "0");
         }
 
          // POST handle methods
         void handleSaveData(){
-            this->rlog->log(log_prefix, (String) "/savedata is called. args: " + server.args());
+            logger << "/savedata is called. args: " << (String)server.args();
             String postBody = server.arg("data");
             database->jsonToDatabase(postBody);
             sendHeaders();
@@ -146,68 +144,65 @@ class Webserver {
         }
 
         void handleReset() {
-            this->rlog->log(log_prefix, "/reset is called");            
+            logger << "/reset is called";
             String resetData = "{\"name\":\"" + (String) BOARD_NAME + "\"}";
             database->jsonToDatabase(resetData);
             server.send(200, "text/html", "Board has been reset.");
         }
 
         void handleUpdate() {
-            this->rlog->log(log_prefix, "/update is called");
+            logger << "/update is called";
             server.send(200, "text/html", data_update_html);
         }
 
         void handleUpgradeFn() {
-            this->rlog->log(log_prefix, "/upgrade (fn) is called");
+            logger << "/upgrade (fn) is called";
             server.sendHeader("Connection", "close");
             server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
             ESP -> restart();
         }
 
         void handleUpgradeUFn() {
-            //this->rlog->log(log_prefix, "/upgrade (ufn) is called");
+            //logger << "/upgrade (ufn) is called");
             HTTPUpload& upload = server.upload();            
             if (upload.status == UPLOAD_FILE_START) {
-                this->rlog->log(log_prefix, (String) "Upload started. Upload filename: " + upload.filename.c_str());
+                logger << "Upload started. Upload filename: " << upload.filename.c_str();
                 if (!Update.begin()) { //start with max available size
-                    this->rlog->log(log_prefix, (String) "Error in update: " + Update.getError() + " -> " + Update.errorString() + " Upload status: " + upload.status);
+                    logger << "Error in update: " << (String)Update.getError() << " -> " << Update.errorString() << " Upload status: " << (String)upload.status;
                 }
             } else if (upload.status == UPLOAD_FILE_WRITE) {
                 if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
-                    this->rlog->log(log_prefix, (String) "Error in update: " + Update.getError() + " -> " + Update.errorString() + " Upload status: " + upload.status);
+                    logger << "Error in update: " << (String)Update.getError() << " -> " << Update.errorString() << " Upload status: " << (String)upload.status;
                 }
             } else if (upload.status == UPLOAD_FILE_END) {
                 if (Update.end(true)) { //true to set the size to the current progress                    
-                    this->rlog->log(log_prefix, (String) "Update Success. Upload size: " + upload.totalSize + " Rebooting... ");
+                    logger << "Update Success. Upload size: " << (String)upload.totalSize << " Rebooting... ";
                     // Save the uploaded filename
                     // It contains the version
                     this -> database -> updateProperty(DB_VERSION, upload.filename.c_str(), true);
                 } else {
-                    this->rlog->log(log_prefix, (String) "Error in update: " + Update.getError() + " -> " + Update.errorString() + " Upload status: " + upload.status);
+                    logger << "Error in update: " << Update.getError() + " -> " << Update.errorString() << " Upload status: " << (String)upload.status;
                 }
                 
             } else {                
-                this->rlog->log(log_prefix, (String) "Update Failed Unexpectedly (likely broken connection): " + upload.status);
+                logger << "Update Failed Unexpectedly (likely broken connection): " << (String)upload.status;
             }
         }
 
         // 404
         void handleNotFound(){
-            this->rlog->log(log_prefix, "Not found URL is called");
-
+            logger << "Not found URL is called";
             if (this -> networkConnected) {
                 sendHeaders();
                 server.send(404, "text/plain", "404: Not found"); // Send HTTP status 404 (Not Found) when there's no handler for the URI in the request
             } else {
                 captivePortal();
             }
-            
         }
 
         void captivePortal() {
-        
-            this->rlog->log(log_prefix, "Request redirected to captive portal");
-            server.sendHeader("Location", String ("http://") + String (AP_IP_STRING), true);
+            logger << "Request redirected to captive portal";
+            server.sendHeader("Location", String("http://") + String(AP_IP_STRING), true);
             server.send(302, "text/plain", "");   // Empty content inhibits Content-length header so we have to close the socket ourselves.
             server.client().stop(); // Stop is needed because we sent no content length
         }

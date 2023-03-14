@@ -12,8 +12,7 @@
 
 class Mqtt {
 
-    Log* rlog;
-    String log_prefix = "[MQTT] ";
+    Logger logger;
     WiFiClient wifiClient;
     MqttClient* client;
     Database* database;
@@ -39,8 +38,7 @@ class Mqtt {
     boolean lastWillRetain = false;
 
     public:
-        Mqtt(Log &log) {
-            this -> rlog = &log;
+        Mqtt(Log& rlog) : logger(rlog, "[MQTT]") {
             this -> client = new MqttClient(wifiClient);
         }
 
@@ -105,7 +103,7 @@ class Mqtt {
         }
 
         void setConnected (boolean networkConnected) {
-            this -> rlog -> log(log_prefix, (String) " Wifi connection is " + networkConnected);
+            this->logger << "Wifi connection is " << (String)networkConnected;
             this->networkConnected = networkConnected;            
         }
 
@@ -132,7 +130,7 @@ class Mqtt {
             client -> beginWill(baseTopic, message.length(), lastWillRetain, 1);
             client -> print(message);
             client -> endWill();
-            this -> rlog -> log(log_prefix, (String) "Last will is set. Retain: " + lastWillRetain);
+            logger << "Last will is set. Retain: " << (String)lastWillRetain;
             
         }
 
@@ -146,19 +144,19 @@ class Mqtt {
             if (!String("").equals(server)) {
                 const char* mqtt_s = const_cast<char*>(server.c_str());
                 if (!client -> connect(mqtt_s, port)) {                    
-                    this -> rlog -> log(log_prefix, (String) "MQTT connection failed! Error code = " + client -> connectError());
+                    logger << "MQTT connection failed! Error code = " << (String)client -> connectError();
                     this -> errorCodeChanged->fire(ERROR_MQTT);
                 } else {
-                    rlog -> log(log_prefix, "Connection started.");
+                    logger << "Connection started.";
                 }
             } else {
-                // rlog -> log(log_prefix, "MQTT connection info is missing.");
+                // logger << "MQTT connection info is missing.");
             }
         }
 
         void processMessage() {
              // we received a message, print out the topic and contents
-            this -> rlog -> log(log_prefix, (String) "Message received on topic: " + client -> messageTopic());
+            logger << "Message received on topic: " << client -> messageTopic();
             
             String message = "";
             while (client -> available()) {
@@ -166,7 +164,7 @@ class Mqtt {
             }
             // Broadcast MQTT message
             this -> mqttMessageArrived->fire(message);
-            this -> rlog -> log(log_prefix, (String) "Message: " + message);
+            logger << "Message: " << message;
         }
 
         void subscribeForBaseTopic () {
@@ -177,15 +175,11 @@ class Mqtt {
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
             client -> subscribe(subscription);
             sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
-            rlog -> log(log_prefix, "Subscribed to topic " + subscription);
-            
-            
+            logger << "Subscribed to topic " << subscription;
 
             this -> errorCodeChanged->fire(ERROR_NO_ERROR);
             subscribed = true;
         }
-        
-        
 };
 
 #endif
