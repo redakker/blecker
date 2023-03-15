@@ -13,7 +13,6 @@ class Webserver {
     Logger logger;
     Database* database;
     WebServer server;
-    EspClass* ESP;
 
     boolean networkConnected = false;
 
@@ -134,7 +133,7 @@ class Webserver {
             server.send(200, "application/json", getData());
             
             delay(500);
-            ESP -> restart();
+            ESP.restart();
         }
 
         void handleReset() {
@@ -153,7 +152,7 @@ class Webserver {
             logger << "/upgrade (fn) is called";
             server.sendHeader("Connection", "close");
             server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
-            ESP -> restart();
+            ESP.restart();
         }
 
         void handleUpgradeUFn() {
