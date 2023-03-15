@@ -13,17 +13,12 @@ class Webserver {
     Logger logger;
     Database* database;
     WebServer server;
-    WiFiClient* transport;
-    //InternalStorageClass* InternalStorage;
     EspClass* ESP;
 
     boolean networkConnected = false;
 
     public:
-        Webserver(Log& rlog) : logger(rlog, "[WEB]") {
-            WebServer server(80);
-
-            WiFiClient transport;
+        Webserver(Log& rlog) : logger(rlog, "[WEB]"), server(80) {
         }
 
         void setup(Database &database) {
@@ -59,7 +54,6 @@ class Webserver {
 
             // Favicon
             server.on("/favicon.ico", std::bind(&Webserver::handleFavicon, this));
-
             
             server.begin();
             logger << "Webserver is ready.";
@@ -79,7 +73,7 @@ class Webserver {
 
     private:
 
-        void sendHeaders(){
+        void sendHeaders() {
             server.enableCORS();
             server.enableCrossOrigin();
             server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -87,52 +81,52 @@ class Webserver {
             server.sendHeader("Expires","-1");
         }
 
-        void handleRoot(){            
+        void handleRoot() {            
             logger << "/ is called";
             server.sendHeader("Access-Control-Allow-Origin", "*");
             sendHeaders();
             server.send(200, "text/html", data_index_html);
         }
 
-        void handleJavaScript(){
+        void handleJavaScript() {
             logger << "/function.js is called";
             server.send(200, "text/javascript", data_functions_js);
         }
 
-        void handleStyle(){
+        void handleStyle() {
             logger << "/style.css is called";
             server.send(200, "text/css", data_style_css);
         }
 
-        void handleNormalize(){
+        void handleNormalize() {
             logger << "/normalize.css is called";
             server.send(200, "text/css", data_normalize_css);
         }
 
-        void handleSkeleton(){
+        void handleSkeleton() {
             logger << "/skeleton.css is called";
             server.send(200, "text/css", data_skeleton_css);
         }
 
-        void handleLogo(){
+        void handleLogo() {
             logger << "/logo.jpg is called";
             //server.sendContent_P(data_logo_jpg);
         }
 
-        void handleData(){
+        void handleData() {
             logger << "/data is called";
             sendHeaders();
             server.send(200, "application/json", getData());
         }
 
-        void handleFavicon(){
+        void handleFavicon() {
             logger << "/favicon is called";
             sendHeaders();
             server.send(200, "image/webp", "0");
         }
 
          // POST handle methods
-        void handleSaveData(){
+        void handleSaveData() {
             logger << "/savedata is called. args: " << (String)server.args();
             String postBody = server.arg("data");
             database->jsonToDatabase(postBody);
@@ -190,7 +184,7 @@ class Webserver {
         }
 
         // 404
-        void handleNotFound(){
+        void handleNotFound() {
             logger << "Not found URL is called";
             if (this -> networkConnected) {
                 sendHeaders();
