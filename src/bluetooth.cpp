@@ -5,7 +5,7 @@
 #include "utilities.cpp"
 #include "BluetoothSerial.h" // Header File for Serial Bluetooth
 #include "LinkedList.h"
-#include "log.cpp"
+#include "log.hpp"
 #include "led.cpp"
 #include "database.cpp"
 #include <Callback.h>

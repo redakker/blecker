@@ -5,7 +5,7 @@
 #include "utilities.cpp"
 #include <WiFi.h>
 #include <MqttClient.h>
-#include "log.cpp"
+#include "log.hpp"
 #include "utilities.cpp"
 #include "database.cpp"
 #include <Callback.h>

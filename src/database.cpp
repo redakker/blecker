@@ -7,7 +7,7 @@
 #include "definitions.h"
 #include <EEPROM.h>
 #include <ArduinoJson.h> // version 6
-#include "log.cpp"
+#include "log.hpp"
 
 class Database {
 

@@ -4,7 +4,7 @@
 #include "definitions.h"
 #include <Arduino.h>
 #include <jled.h>
-#include "log.cpp"
+#include "log.hpp"
 
 class Led {
 

@@ -5,7 +5,7 @@
 #include "utilities.cpp"
 #include <Arduino.h>
 #include <HTTPClient.h>
-#include "log.cpp"
+#include "log.hpp"
 
 class Webhook {
 

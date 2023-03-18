@@ -6,7 +6,7 @@
 #include <Callback.h>
 #include <ESPmDNS.h>
 #include <DNSServer.h>
-#include "log.cpp"
+#include "log.hpp"
 #include "database.cpp"
 
 class Wifi {
@@ -79,30 +79,28 @@ class Wifi {
             logger << "AP is created from a function. Name: " << BOARD_NAME;
         }
 
-        void stopAP(){            
+        void stopAP() {            
             WiFi.softAPdisconnect();
             WiFi.enableAP(false);
             logger << "AP disconnected from a function.";
         }
 
-        boolean isConnected(){
+        boolean isConnected() {
             return wifi_connected;
         }     
 
-        void loop(){
-            if(wifi_connected){
+        void loop() {
+            if(wifi_connected) {
                 wifiConnectedLoop();
             } else {
                 wifiDisconnectedLoop();
                 dnsServer.processNextRequest();
             }
-            
         }
-
 
     private:
 
-        void WiFiEvent(WiFiEvent_t event){
+        void WiFiEvent(WiFiEvent_t event) {
             switch(event) {
 
                 case SYSTEM_EVENT_AP_START:
@@ -188,7 +186,7 @@ class Wifi {
         }
 
         void setupMDNS() {
-            if(!MDNS.begin( BOARD_NAME )) {
+            if(!MDNS.begin(BOARD_NAME)) {
                 logger << "Error starting mDNS";
                 //return;
             } else {
@@ -205,7 +203,6 @@ class Wifi {
 
             WiFi.softAPConfig(AP_IP, AP_IP, AP_NETMASK);
         }
-
 };
 
 #endif

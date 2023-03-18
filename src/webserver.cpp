@@ -5,7 +5,7 @@
 #include <ArduinoOTA.h>
 #include <Update.h>
 #include "database.cpp"
-#include "log.cpp"
+#include "log.hpp"
 #include "webcontent.h"
 
 class Webserver {
@@ -138,7 +138,7 @@ class Webserver {
 
         void handleReset() {
             logger << "/reset is called";
-            String resetData = "{\"name\":\"" + (String) BOARD_NAME + "\"}";
+            String resetData = "{\"name\":\"" + (String)BOARD_NAME + "\"}";
             database->jsonToDatabase(resetData);
             server.send(200, "text/html", "Board has been reset.");
         }

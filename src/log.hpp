@@ -1,5 +1,5 @@
-#ifndef LOG
-#define LOG
+#ifndef LOG_HPP_INCLUDED
+#define LOG_HPP_INCLUDED
 
 #include "definitions.h"
 #include <HardwareSerial.h>
@@ -80,8 +80,8 @@ class Log {
 class LogEntry {
 
     public:
-        LogEntry(Log& log_, const char* prefix) : l(log_) {
-            l.logPrefix(prefix);
+        LogEntry(Log& log_, const char* prefix_) : l(log_) {
+            l.logPrefix(prefix_);
         }
 
         ~LogEntry() {
