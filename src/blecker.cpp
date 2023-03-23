@@ -8,7 +8,7 @@
 #include "Callback.h"
 #include "definitions.h"
 #include "utilities.cpp"
-#include "log.cpp"
+#include "log.hpp"
 #include "bluetooth.cpp"
 #include "led.cpp"
 #include "database.cpp"
@@ -55,7 +55,7 @@ void setup() {
   MethodSlot<Led, int> errorCodeChangedForLed(&led,&Led::setMessage);
   errorCodeChanged.attach(errorCodeChangedForLed);
 
-  // MQTT and Blutooth command handleing
+  // MQTT and Bluetooth command handling
   // Arrive  
   MethodSlot<Database, String> messageSendForDatabase(&database,&Database::receiveCommand);
   messageArrived.attach(messageSendForDatabase);
