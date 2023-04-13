@@ -280,6 +280,12 @@ Status message topic from this version is /blecker/status/[device-mac]
 ## 1.09
 - #27 fix
 
+## 1.10 (no release yet)
+- Logging bugfix and improvements (thanks to [@BalazsM](https://github.com/BalazsM))
+- Webserver initialization cleanup (thanks to [@BalazsM](https://github.com/BalazsM))
+- Some logging improvements for less dynamic string construction and destruction in runtime (thanks to [@BalazsM](https://github.com/BalazsM))
+- Bugfixes and enhancements
+
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
