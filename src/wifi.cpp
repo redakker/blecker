@@ -148,10 +148,12 @@ class Wifi {
             // Emit a NO_ERROR event about the Wifi status
             errorCodeChanged->fire(ERROR_NO_ERROR);
             
-            // Emit an event about the Wifi status
-            wifiStatusChanged->fire(wifi_connected);
-            logger << "STA Connected. STA SSID: " << WiFi.SSID() << " STA IPv4: " << WiFi.localIP().toString() << ", GW: " << WiFi.gatewayIP().toString() << ", Mask: " << WiFi.subnetMask().toString() << ", DNS: " << WiFi.dnsIP().toString();
+            // Emit the IP address. This first, to have it in the last will message in the MQTT. If the wifi status emitted first, the ip address change signal will be late to set
             ipAddressChanged->fire(WiFi.localIP().toString());
+            // Emit an event about the Wifi status
+            wifiStatusChanged->fire(wifi_connected);            
+            logger << "STA Connected. STA SSID: " << WiFi.SSID() << " STA IPv4: " << WiFi.localIP().toString() << ", GW: " << WiFi.gatewayIP().toString() << ", Mask: " << WiFi.subnetMask().toString() << ", DNS: " << WiFi.dnsIP().toString();
+            
         }
 
         // when wifi disconnects
