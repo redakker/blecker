@@ -286,6 +286,9 @@ Status message topic from this version is /blecker/status/[device-mac]
 - Some logging improvements for less dynamic string construction and destruction in runtime (thanks to [@BalazsM](https://github.com/BalazsM))
 - Bugfixes and enhancements
 
+## 1.11 (not released yet)
+- #37 MQTT last will fix (it was not sent before)
+- #35 On admin page user can choose if the last will should be retained or not
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker

@@ -36,6 +36,7 @@ class Mqtt {
     boolean networkConnected = false; // Connected to the network (Wifi STA)
     boolean subscribed = false;
     boolean lastWillRetain = false;
+    boolean lastiWillSet = false;
 
     public:
         Mqtt(Log& rlog) : logger(rlog, "[MQTT]") {
@@ -74,13 +75,19 @@ class Mqtt {
             if (deviceID) {
                 client->setId(deviceID);
             }
-            this -> client -> setUsernamePassword(user, password);
-            
+            this -> client -> setUsernamePassword(user, password);            
         }
 
         void loop() {
             if (networkConnected) {
-                // check for incoming messages            
+
+                // Last will should be set after network is connected, but before MQTT is connected
+                if (!lastiWillSet) {
+                    setLastWill();
+                    lastiWillSet = true;
+                }
+
+                // check for incoming messages
                 if (client->connected()) {
                     
                     if (!subscribed) {
@@ -97,8 +104,10 @@ class Mqtt {
                     reconnect();
                 }
             } else {
-                client->stop();
+                client->stop();                
+                lastiWillSet = false;
                 this -> subscribed = false;
+                
             }
         }
 
@@ -169,7 +178,7 @@ class Mqtt {
 
         void subscribeForBaseTopic () {
 
-            setLastWill();
+            //setLastWill();
 
             // subscribe to a topic and send an 'I'm alive' message
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
