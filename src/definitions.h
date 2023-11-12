@@ -16,6 +16,8 @@
 #define MQTT_STATUS_OFF_DEFAULT_VALUE "off"
 #define MQTT_STATUS_OFF_DEFAULT_RETAIN false
 
+#define MQTT_KEEPALILIVE_TIME 30000 // in milliseconds
+
 // Presence
 #define DEFAULT_PRESENT "present"
 #define DEFAULT_NOT_PRESENT "not_present"

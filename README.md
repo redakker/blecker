@@ -289,6 +289,8 @@ Status message topic from this version is /blecker/status/[device-mac]
 ## 1.11 (not released yet)
 - #37 MQTT last will fix (it was not sent before)
 - #35 On admin page user can choose if the last will should be retained or not
+- restart fix, disconnect wifi before restart
+- #54 send periodic MQTT status message
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker

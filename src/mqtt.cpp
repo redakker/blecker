@@ -33,6 +33,9 @@ class Mqtt {
     int lasttry = 10000;
     int maxtry = 10;
 
+    // Keepalive timeout
+    int lastKeepAliveTime = 0;
+
     boolean networkConnected = false; // Connected to the network (Wifi STA)
     boolean subscribed = false;
     boolean lastWillRetain = false;
@@ -97,6 +100,12 @@ class Mqtt {
                     int messageSize = client -> parseMessage();
                     if (messageSize) {
                        processMessage();
+                    }
+
+                    int now = millis();
+                    if (now - lastKeepAliveTime > MQTT_KEEPALILIVE_TIME ) {
+                        lastKeepAliveTime = now;
+                        sendStatus();
                     }
                 } else {
                     client->stop();
@@ -182,12 +191,15 @@ class Mqtt {
 
             // subscribe to a topic and send an 'I'm alive' message
             String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
-            client -> subscribe(subscription);
-            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
+            client -> subscribe(subscription);            
             logger << "Subscribed to topic " << subscription;
 
             this -> errorCodeChanged->fire(ERROR_NO_ERROR);
             subscribed = true;
+        }
+
+        void sendStatus () {
+            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
         }
 };
 
