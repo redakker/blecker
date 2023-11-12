@@ -99,6 +99,9 @@ void loop() {
   webhook.loop();
 
   if ((rebootAfterHours > 0) && (millis() > (rebootAfterHours * 60 * 60 * 1000))) {
+    wifi.disconnectWifi();
+    // Delay for a specified time (in seconds) before restarting
+    vTaskDelay(pdMS_TO_TICKS(10000)); // 10 second
     ESP.restart();
   }
 }
