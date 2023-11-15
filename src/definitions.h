@@ -21,12 +21,12 @@
 // Presence
 #define DEFAULT_PRESENT "present"
 #define DEFAULT_NOT_PRESENT "not_present"
-#define BT_DEVICE_TIMEOUT 2500*60 // 60 seconds in milliseconds (it is doubled because of the mark mechanism) // After this time we sent a "not_home" mqtt message
+#define BT_DEVICE_TIMEOUT 1500*60 // 60 seconds in milliseconds (it is doubled because of the mark mechanism) // After this time we sent a "not_home" mqtt message
 #define BT_LIST_REBUILD_INTERVAL 1000*60*60 // Just clear the list after every hour and rebuild again, send "refresh" state time to time even if the device is not gone
 #define BT_DEVICE_DATA_INTERVAL 1000*60 // Send the BLE device data time to time
 #define DEVICE_DROP_OUT_COUNT 2 // We won't drop out in the first "not found" state, just decrease this value. Drop out when this is 0
 #define PARSE_CHAR ";"
-#define BT_DEFAULT_SCAN_INTERVAL 1500 // Scan is running after this timeout time to time
+#define BT_DEFAULT_SCAN_INTERVAL 2000 // Scan is running after this timeout time to time
 
 // Webhook
 #define PRESENCE_WILDCARD "{presence}"
