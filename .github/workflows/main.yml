@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: blecker-update-package
-          path: .pio/build/esp32dev/*.bin
+          path: .pio/build/esp32dev/blecker*.bin
