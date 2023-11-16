@@ -23,13 +23,9 @@ jobs:
         run: pip install --upgrade platformio
       - name: Build PlatformIO Project
         run: pio run
-
-      - name: Build and Create a test File
-        run: |         
-          echo "Hello, world!" > output-file.txt
   
-      - name: Upload File
+      - name: Create artifact
         uses: actions/upload-artifact@v2
         with:
-          name: latest-artifact
-          path: output-file.txt
+          name: blecker-update-package
+          path: .pio/build/esp32dev/*.bin
