@@ -11,7 +11,7 @@ class Webhook {
 
     Logger logger;
     Database* database;
-    HTTPClient http;
+    HTTPClient http;    
     
     boolean webhookConfigured = false;
     unsigned long lastrun = 0;
@@ -39,6 +39,7 @@ class Webhook {
 
             if (webhookConfigured) {
                 String baseURL = this->database->getValueAsString(DB_WEBHOOK);
+                baseURL.toLowerCase();
                 
                 baseURL.replace(DEVICE_WILDCARD, device.mac);
                 if (device.available) {
@@ -46,9 +47,10 @@ class Webhook {
                 } else {
                     baseURL.replace(PRESENCE_WILDCARD, getPresentString(*database, false));
                 }
-
-                http.begin(baseURL); //Specify the URL
-                int httpCode = http.GET();                                        //Make the request
+               
+                http.begin(baseURL); //Specify the URL               
+                
+                int httpCode = http.GET(); //Make the request
             
                 if (httpCode > 0) { //Check for the returning code
             

@@ -28,8 +28,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     String command;
     long lastRun = 0;
     long lastClear = 0;
-    long lastSendDeviceData = 0;
-    int scanAfter = BT_DEFAULT_SCAN_INTERVAL;
+    long lastSendDeviceData = 0;    
     
     boolean sendAutoDiscovery = false;
     long lastSendAutoDiscovery = 0;
@@ -81,7 +80,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
             // Parse the sting, split by ;
 
             // Auto discovery for Home Assistant is available.
-            // Set it tru if the user enabled it
+            // Set it tre if the user enabled it
             sendAutoDiscovery = (database.getValueAsInt(DB_HA_AUTODISCOVERY) > 0) ? true : false;
             if (sendAutoDiscovery) {
                 autoDiscoveryPrefix = database.getValueAsString(DB_HA_AUTODISCOVERY_PREFIX);
@@ -97,10 +96,10 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
 
         void loop() {
 
-            if (millis() - lastRun > scanAfter) {
+            if (millis() - lastRun > BT_DEFAULT_SCAN_INTERVAL) {
                 // Otherwise makes no sens to scan and sent it over
                 if (networkConnected) {
-                    BLEScanResults foundDevices = pBLEScan->start(5, false);            
+                    BLEScanResults foundDevices = pBLEScan->start(10, false);            
                     pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
                     lastRun = millis();
                 }

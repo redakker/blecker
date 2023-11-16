@@ -199,7 +199,7 @@ class Mqtt {
         }
 
         void sendStatus () {
-            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
+            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", true);
         }
 };
 
