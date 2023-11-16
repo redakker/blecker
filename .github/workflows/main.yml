@@ -17,8 +17,10 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Install Git
-        run: apt install git
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: git
+          version: 1.0
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
       - name: Build PlatformIO Project
