@@ -1,4 +1,4 @@
-name: PlatformIO CI
+name: Blecker build (PlatformIO CI)
 
 on: [push]
 
