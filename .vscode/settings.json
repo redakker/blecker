@@ -11,7 +11,15 @@
     ],
     "files.associations": {
         "memory": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "optional": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
     }
 
 }

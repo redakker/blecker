@@ -1,78 +1,65 @@
-#ifndef WEB
-#define WEB
+#include "webservice.h"
 
-#include <WebServer.h>
-#include <ArduinoOTA.h>
-#include <Update.h>
-#include "database.cpp"
-#include "log.hpp"
-#include "webcontent.h"
 
-class Webserver {
+
+
     
-    Logger logger;
-    Database* database;
-    WebServer server;
-
-    boolean networkConnected = false;
-
-    public:
-        Webserver(Log& rlog) : logger(rlog, "[WEB]"), server(80) {
+        Webservice::Webservice(Log& rlog) : logger(rlog, "[WEB]"), server(80) {
+            networkConnected = false;
         }
 
-        void setup(Database &database) {
+        void Webservice::setup(Database &database) {
 
             this->database = &database;
 
             // -- Set up required URL handlers on the web server.
             // We should bind the member function in this way to able to pass to the request function.
             // https://stackoverflow.com/questions/43479328/how-to-pass-class-member-function-as-handler-function
-            server.on("/", std::bind(&Webserver::handleRoot, this));
+            server.on("/", std::bind(&Webservice::handleRoot, this));
 
-            server.on(data_functions_js_path, HTTP_GET, std::bind(&Webserver::handleJavaScript, this));
-            server.on(data_style_css_path, HTTP_GET, std::bind(&Webserver::handleStyle, this));
-            server.on(data_normalize_css_path, HTTP_GET, std::bind(&Webserver::handleNormalize, this));
-            server.on(data_skeleton_css_path, HTTP_GET, std::bind(&Webserver::handleSkeleton, this));
-            //server.on("/logo.jpg", HTTP_GET, std::bind(&Webserver::handleLogo, this));
+            server.on(data_functions_js_path, HTTP_GET, std::bind(&Webservice::handleJavaScript, this));
+            server.on(data_style_css_path, HTTP_GET, std::bind(&Webservice::handleStyle, this));
+            server.on(data_normalize_css_path, HTTP_GET, std::bind(&Webservice::handleNormalize, this));
+            server.on(data_skeleton_css_path, HTTP_GET, std::bind(&Webservice::handleSkeleton, this));
+            //server.on("/logo.jpg", HTTP_GET, std::bind(&Webservice::handleLogo, this));
 
-            server.on("/data", std::bind(&Webserver::handleData, this));
+            server.on("/data", std::bind(&Webservice::handleData, this));
 
             // POST
-            server.on("/savedata", std::bind(&Webserver::handleSaveData, this));
+            server.on("/savedata", std::bind(&Webservice::handleSaveData, this));
             
             // update
-            server.on("/update", std::bind(&Webserver::handleUpdate, this));
+            server.on("/update", std::bind(&Webservice::handleUpdate, this));
             // upgrade
-            server.on("/upgrade", HTTP_POST, std::bind(&Webserver::handleUpgradeFn, this), std::bind(&Webserver::handleUpgradeUFn, this));
+            server.on("/upgrade", HTTP_POST, std::bind(&Webservice::handleUpgradeFn, this), std::bind(&Webservice::handleUpgradeUFn, this));
 
             // reset
-            server.on("/reset", std::bind(&Webserver::handleReset, this));
+            server.on("/reset", std::bind(&Webservice::handleReset, this));
             
             // Error handling
-            server.onNotFound(std::bind(&Webserver::handleNotFound, this));
+            server.onNotFound(std::bind(&Webservice::handleNotFound, this));
 
             // Favicon
-            server.on("/favicon.ico", std::bind(&Webserver::handleFavicon, this));
+            server.on("/favicon.ico", std::bind(&Webservice::handleFavicon, this));
             
             server.begin();
             logger << "Webserver is ready.";
         }
 
-        void loop() {
+        void Webservice::loop() {
             server.handleClient();
         }
 
-        String getData() {
+        String Webservice::getData() {
             return this -> database -> getSerialized();
         }
 
-        void setConnected(boolean connected) {
+        void Webservice::setConnected(boolean connected) {
             this -> networkConnected = connected;
         }
 
-    private:
 
-        void sendHeaders() {
+        void Webservice::sendHeaders() {
             server.enableCORS();
             server.enableCrossOrigin();
             server.sendHeader("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -80,52 +67,52 @@ class Webserver {
             server.sendHeader("Expires","-1");
         }
 
-        void handleRoot() {            
+        void Webservice::handleRoot() {            
             logger << "/ is called";
             server.sendHeader("Access-Control-Allow-Origin", "*");
             sendHeaders();
             server.send(200, "text/html", data_index_html);
         }
 
-        void handleJavaScript() {
+        void Webservice::handleJavaScript() {
             logger << "/function.js is called";
             server.send(200, "text/javascript", data_functions_js);
         }
 
-        void handleStyle() {
+        void Webservice::handleStyle() {
             logger << "/style.css is called";
             server.send(200, "text/css", data_style_css);
         }
 
-        void handleNormalize() {
+        void Webservice::handleNormalize() {
             logger << "/normalize.css is called";
             server.send(200, "text/css", data_normalize_css);
         }
 
-        void handleSkeleton() {
+        void Webservice::handleSkeleton() {
             logger << "/skeleton.css is called";
             server.send(200, "text/css", data_skeleton_css);
         }
 
-        void handleLogo() {
+        void Webservice::handleLogo() {
             logger << "/logo.jpg is called";
             //server.sendContent_P(data_logo_jpg);
         }
 
-        void handleData() {
+        void Webservice::handleData() {
             logger << "/data is called";
             sendHeaders();
             server.send(200, "application/json", getData());
         }
 
-        void handleFavicon() {
+        void Webservice::handleFavicon() {
             logger << "/favicon is called";
             sendHeaders();
             server.send(200, "image/webp", "0");
         }
 
          // POST handle methods
-        void handleSaveData() {
+        void Webservice::handleSaveData() {
             logger << "/savedata is called. args: " << (String)server.args();
             String postBody = server.arg("data");
             database->jsonToDatabase(postBody);
@@ -136,26 +123,26 @@ class Webserver {
             ESP.restart();
         }
 
-        void handleReset() {
+        void Webservice::handleReset() {
             logger << "/reset is called";
             String resetData = "{\"name\":\"" + (String)BOARD_NAME + "\"}";
             database->jsonToDatabase(resetData);
             server.send(200, "text/html", "Board has been reset.");
         }
 
-        void handleUpdate() {
+        void Webservice::handleUpdate() {
             logger << "/update is called";
             server.send(200, "text/html", data_update_html);
         }
 
-        void handleUpgradeFn() {
+        void Webservice::handleUpgradeFn() {
             logger << "/upgrade (fn) is called";
             server.sendHeader("Connection", "close");
             server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
             ESP.restart();
         }
 
-        void handleUpgradeUFn() {
+        void Webservice::handleUpgradeUFn() {
             //logger << "/upgrade (ufn) is called");
             HTTPUpload& upload = server.upload();            
             if (upload.status == UPLOAD_FILE_START) {
@@ -183,7 +170,7 @@ class Webserver {
         }
 
         // 404
-        void handleNotFound() {
+        void Webservice::handleNotFound() {
             logger << "Not found URL is called";
             if (this -> networkConnected) {
                 sendHeaders();
@@ -193,12 +180,9 @@ class Webserver {
             }
         }
 
-        void captivePortal() {
+        void Webservice::captivePortal() {
             logger << "Request redirected to captive portal";
             server.sendHeader("Location", String("http://") + String(AP_IP_STRING), true);
             server.send(302, "text/plain", "");   // Empty content inhibits Content-length header so we have to close the socket ourselves.
             server.client().stop(); // Stop is needed because we sent no content length
         }
-};
-
-#endif

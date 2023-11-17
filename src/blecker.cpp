@@ -7,22 +7,22 @@
 #include "Arduino.h"
 #include "Callback.h"
 #include "definitions.h"
-#include "utilities.cpp"
-#include "log.hpp"
-#include "bluetooth.cpp"
-#include "led.cpp"
-#include "database.cpp"
-#include "wifi.cpp"
-#include "webserver.cpp"
-#include "mqtt.cpp"
-#include "webhook.cpp"
+#include "utilities.h"
+#include "log.h"
+#include "bluetooth.h"
+#include "led.h"
+#include "database.h"
+#include "wifinetwork.h"
+#include "webservice.h"
+#include "mqtt.h"
+#include "webhook.h"
 #include "esp_log.h"
 
 Log rlog;
 Led led(rlog);
 Database database(rlog);
-Wifi wifi(rlog);
-Webserver webserver(rlog);
+WifiNetwork wifi(rlog);
+Webservice webservice(rlog);
 BlueTooth blueTooth(rlog, led);
 Mqtt mqtt(rlog);
 Webhook webhook(rlog);
@@ -46,10 +46,10 @@ void setup() {
   // Wifi status changed
   MethodSlot<Mqtt, boolean> wifiChangedForMqtt(&mqtt,&Mqtt::setConnected);
   MethodSlot<BlueTooth, boolean> wifiChangedForBluetooth(&blueTooth,&BlueTooth::setConnected);
-  MethodSlot<Webserver, boolean> wifiChangedForWebserver(&webserver,&Webserver::setConnected);
+  MethodSlot<Webservice, boolean> wifiChangedForWebservice(&webservice,&Webservice::setConnected);
   wifiStatusChanged.attach(wifiChangedForMqtt);
   wifiStatusChanged.attach(wifiChangedForBluetooth);
-  wifiStatusChanged.attach(wifiChangedForWebserver);
+  wifiStatusChanged.attach(wifiChangedForWebservice);
   
   // Emit an error code for led
   MethodSlot<Led, int> errorCodeChangedForLed(&led,&Led::setMessage);
@@ -76,7 +76,7 @@ void setup() {
   wifi.setup(database, wifiStatusChanged, errorCodeChanged, ipAddressChanged);
   blueTooth.setup(database, mqttMessageSend, deviceChanged);  
   // Must be after Wifi setup
-  webserver.setup(database);
+  webservice.setup(database);
   webhook.setup(database);
   
   mqtt.setup(database, errorCodeChanged, messageArrived);
@@ -94,7 +94,7 @@ void loop() {
   database.loop();
   wifi.loop();
   blueTooth.loop();  
-  webserver.loop();
+  webservice.loop();
   mqtt.loop();
   webhook.loop();
 
