@@ -160,6 +160,14 @@ Please if you tested with any kind of boards/beacons and the test was successful
 
 ## For developers
 
+## Latest build
+Under #55 a Github action has been implemented. This action creates a build after each commit to the master branch. With this, you can try the latest and the greatest version of BLEcker.
+Go the the [Actions tab](https://github.com/redakker/blecker/actions) and find the latest successful build with Blecker build (PlatformIO CI). Open it and you can find the build artifact which can be used for updating your ESP32 board.
+
+${{\color{red}\Huge{\textsf{  !!!\ Important\ !!!\ \}}}}\$
+
+Be aware these builds could contain not stable solutions.
+
 ## Build the project
 After some investigation the project descriptors are moade to make the development enviroment ready automatically in VSCode.
 All you need to do is waiting till VSCode reads the settings files with recommended plugins and then install them.
