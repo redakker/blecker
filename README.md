@@ -299,6 +299,7 @@ Status message topic from this version is /blecker/status/[device-mac]
 - #35 On admin page user can choose if the last will should be retained or not
 - restart fix, disconnect wifi before restart
 - #54 send periodic MQTT status message
+- #52 Last will retain status cannot be set back to default
 
 Not product logic related
 - #55 Create an action to create a new build from master
