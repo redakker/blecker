@@ -303,6 +303,7 @@ Status message topic from this version is /blecker/status/[device-mac]
 
 Not product logic related
 - #55 Create an action to create a new build from master
+- #56 Code restructure
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
