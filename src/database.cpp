@@ -140,6 +140,13 @@ class Database {
             return jsonData.containsKey(property);
         }
 
+        boolean isPropertyExistsAndNonEmpty(String property) {
+            if (isPropertyExists(property)) {
+                return !getValueAsString(property).isEmpty();
+            }
+            return false;
+        }
+
         String getSerialized() {
             String output;
             serializeJson(jsonData, output);

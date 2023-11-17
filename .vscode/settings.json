@@ -10,7 +10,8 @@
         //    "**/*.sass"
     ],
     "files.associations": {
-        "memory": "cpp"
+        "memory": "cpp",
+        "system_error": "cpp"
     }
 
 }

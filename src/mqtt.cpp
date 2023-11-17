@@ -38,7 +38,7 @@ class Mqtt {
 
     boolean networkConnected = false; // Connected to the network (Wifi STA)
     boolean subscribed = false;
-    boolean lastWillRetain = false;
+    boolean deviceStatusRetain = false;
     boolean lastiWillSet = false;
 
     public:
@@ -58,16 +58,16 @@ class Mqtt {
             this -> server = this -> database -> getValueAsString(String(DB_MQTT_SERVER), false);
             this -> baseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
-            this -> lastWillRetain = this -> database -> getValueAsBoolean(String(DB_DEVICE_STATUS_RETAIN), false, MQTT_STATUS_OFF_DEFAULT_RETAIN);
+            this -> deviceStatusRetain = this -> database -> getValueAsBoolean(String(DB_DEVICE_STATUS_RETAIN), false, MQTT_STATUS_OFF_DEFAULT_RETAIN);
             
 
-            if (this -> database -> isPropertyExists(DB_DEVICE_STATUS_ON)) {
+            if (this -> database -> isPropertyExistsAndNonEmpty(DB_DEVICE_STATUS_ON)) {
                 this -> statusOn = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
             } else {
                 this -> statusOn = MQTT_STATUS_ON_DEFAULT_VALUE;               
             }
 
-            if (this -> database -> isPropertyExists(DB_DEVICE_STATUS_OFF)) {
+            if (this -> database -> isPropertyExistsAndNonEmpty(DB_DEVICE_STATUS_OFF)) {
                 this -> statusOff = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_OFF), false);
             } else {
                 this -> statusOff = MQTT_STATUS_OFF_DEFAULT_VALUE;
@@ -145,10 +145,10 @@ class Mqtt {
 
             String message = String("{\"status\": \"" + statusOff + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
             
-            client -> beginWill(baseTopic, message.length(), lastWillRetain, 1);
+            client -> beginWill(baseTopic, message.length(), deviceStatusRetain, 1);
             client -> print(message);
             client -> endWill();
-            logger << "Last will is set. Retain: " << (String)lastWillRetain;
+            logger << "Last will is set. Retain: " << (String)deviceStatusRetain;
             
         }
 
@@ -199,7 +199,7 @@ class Mqtt {
         }
 
         void sendStatus () {
-            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", true);
+            sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", deviceStatusRetain);
         }
 };
 
