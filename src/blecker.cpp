@@ -41,6 +41,11 @@ String log_prefix = "[MAIN]";
 int rebootAfterHours = 0;
 
 void setup() {
+
+  // Set the chip info
+  // Info can be found later in a chip_info global variable
+  setChipInfo();
+
   // callback(s)
 
   // Wifi status changed

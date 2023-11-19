@@ -136,6 +136,7 @@ void Mqtt::reconnect() {
             logger << "MQTT connection failed! Error code = " << (String)client -> connectError();
             this -> errorCodeChanged->fire(ERROR_MQTT);
         } else {
+            sendChipInfo();
             logger << "Connection started.";
         }
     } else {
@@ -171,4 +172,9 @@ void Mqtt::subscribeForBaseTopic () {
 
 void Mqtt::sendStatus () {
     sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", deviceStatusRetain);
+    
+}
+
+void Mqtt::sendChipInfo() {    
+    sendMqttMessage(baseTopic + "/chipinfo", "{\"model\": \"" + (String) getChipModelString(chip_info.model) + "\", \"cores\":\"" + chip_info.cores + "\", \"revision\":\"" + chip_info.revision + "\"}", true);
 }

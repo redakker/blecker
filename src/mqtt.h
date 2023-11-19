@@ -55,6 +55,7 @@ class Mqtt {
         void processMessage();
         void subscribeForBaseTopic();
         void sendStatus();
+        void sendChipInfo();
 };
 
 #endif
