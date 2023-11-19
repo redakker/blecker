@@ -4,6 +4,7 @@
 #include <WebServer.h>
 #include <ArduinoOTA.h>
 #include <Update.h>
+#include "utilities.h"
 #include "database.h"
 #include "log.h"
 #include "webcontent.h"
@@ -32,6 +33,7 @@ class Webservice {
         void handleSkeleton();
         void handleLogo();
         void handleData();
+        void handleChipInfo();
         void handleFavicon();         
         void handleSaveData();
         void handleReset();

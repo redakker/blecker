@@ -25,6 +25,8 @@
 
             server.on("/data", std::bind(&Webservice::handleData, this));
 
+            server.on("/chipinfo", std::bind(&Webservice::handleChipInfo, this));
+
             // POST
             server.on("/savedata", std::bind(&Webservice::handleSaveData, this));
             
@@ -103,6 +105,12 @@
             logger << "/data is called";
             sendHeaders();
             server.send(200, "application/json", getData());
+        }
+
+        void Webservice::handleChipInfo() {
+            logger << "/chipinfo is called";
+            sendHeaders();
+            server.send(200, "application/json", "{\"model\": \"" + (String) getChipModelString(chip_info.model) + "\", \"cores\":\"" + chip_info.cores + "\", \"revision\":\"" + chip_info.revision + "\"}");
         }
 
         void Webservice::handleFavicon() {

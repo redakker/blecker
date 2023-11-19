@@ -341,6 +341,17 @@ function loadCSS(cssName){
         "<link rel=\"stylesheet\" href=\"" + cssName + "\" />");
 }
 
+function getChipInfo() {
+    ajax.get('/chipinfo', {}, function(response) {        
+        if (response) {
+            var chipInfo = JSON.parse(response);            
+            document.getElementById("chip").innerHTML = chipInfo.model + " - V" + chipInfo.revision + "<br /> Cores: " + chipInfo.cores;
+        } else {
+            console.log("Response was empty.");
+        }
+    });
+}
+
 // Modal
 
 var modal = document.getElementById("myModal");
@@ -382,7 +393,9 @@ setTimeout(function() {
 setTimeout(function() {
     loadCSS('/style.css');
 }, 1200);
-
+setTimeout(function() {
+    getChipInfo();
+}, 1500);
  // Actually confirm support
  // initialize the ajax upload in the update page
  if (window.location.href.includes("update") && supportAjaxUploadWithProgress()) {
