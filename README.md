@@ -300,6 +300,7 @@ Status message topic from this version is /blecker/status/[device-mac]
 - restart fix, disconnect wifi before restart
 - #54 send periodic MQTT status message
 - #52 Last will retain status cannot be set back to default
+- #24 Display the chip info
 
 Not product logic related
 - #55 Create an action to create a new build from master
