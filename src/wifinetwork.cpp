@@ -16,6 +16,10 @@ void WifiNetwork::setup(Database &database, Signal<boolean> &wifiStatusChanged, 
     this -> errorCodeChanged = &errorCodeChanged;
     this -> ipAddressChanged = &ipAddressChanged;
 
+    uniqueBoardname = BOARD_NAME "_" + WiFi.macAddress();
+    uniqueBoardname.replace(":","");
+    logger << "Unique board name (hostname) is: " << uniqueBoardname;
+
     WiFi.onEvent(
     [this](WiFiEvent_t event, WiFiEventInfo_t info) {
         this->WiFiEvent(event);
@@ -46,7 +50,7 @@ void WifiNetwork::connectToAP() {
     WiFi.mode(WIFI_STA);
     WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
     WiFi.begin(const_cast<char*>(ssid.c_str()), const_cast<char*>(password.c_str()));            
-    WiFi.setHostname(BOARD_NAME);
+    WiFi.setHostname(uniqueBoardname.c_str());
 }
 
 void WifiNetwork::createAP() {
@@ -79,7 +83,7 @@ void WifiNetwork::WiFiEvent(WiFiEvent_t event) {
 
         case SYSTEM_EVENT_AP_START:
             //can set ap hostname here
-            WiFi.softAPsetHostname(BOARD_NAME);
+            WiFi.softAPsetHostname(uniqueBoardname.c_str());
             //enable ap ipv6 here
             // WiFi.softAPenableIpV6();
 
@@ -88,8 +92,8 @@ void WifiNetwork::WiFiEvent(WiFiEvent_t event) {
 
         case SYSTEM_EVENT_STA_START:
             //set sta hostname here
-            WiFi.setHostname(BOARD_NAME);
-            logger << "Wifi hostname set to " << BOARD_NAME;
+            WiFi.setHostname(uniqueBoardname.c_str());
+            logger << "Wifi hostname set to " << uniqueBoardname;
             break;
         case SYSTEM_EVENT_STA_CONNECTED:
             // enable sta ipv6 here

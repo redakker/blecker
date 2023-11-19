@@ -25,6 +25,7 @@ class WifiNetwork {
         String password;
 
         int tries;
+        String uniqueBoardname;
 
         WifiNetwork(Log& rlog);
         void setup(Database &database, Signal<boolean> &wifiStatusChanged, Signal<int> &errorCodeChanged, Signal<String> &ipAddressChanged);
