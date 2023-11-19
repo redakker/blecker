@@ -53,7 +53,7 @@ void Database::save() {
     logger << "data saved: " << data;
 }
 
-void Database::updateProperty(String property, String value) {            
+void Database::updateProperty(String property, String value) {
     updateProperty(property, value, false);
 }
 
@@ -150,11 +150,11 @@ void Database::jsonToDatabase(String json) {
         // Save mechanism from hackers
         // Data alaways have a name property, because the system initialize the EEPROM if the format is not correct.
         // See the init() function
-        // Check the if name is available and it is the same az a board name. In case of matching, save the data
+        // Check if the name is available and it is the same az a board name. In case of matching, save the data
         String value = tempJson["name"].as<String>();
         
         if (String(BOARD_NAME).equals(value)) {
-            // update/add properties individually, overwrite the wole database remove some other properties from other settings source (MQTT ledstrip)
+            // update/add properties individually, overwrite the wole database skip some properties which
             JsonObject documentRoot = tempJson.as<JsonObject>();
             for (JsonPair keyValue : documentRoot) {
                 if (strcmp(keyValue.key().c_str(),"command") != 0)
