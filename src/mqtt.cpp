@@ -124,9 +124,11 @@ void Mqtt::setLastWill() {
 }
 
 void Mqtt::sendMqttMessage(String topic, String message, boolean retain = false) {
-    client -> beginMessage(topic, retain);            
-    client -> print(message);            
-    client -> endMessage();
+    if (networkConnected) {
+        client -> beginMessage(topic, retain);            
+        client -> print(message);            
+        client -> endMessage();
+    }
 }
 
 void Mqtt::reconnect() {
