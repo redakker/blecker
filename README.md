@@ -34,14 +34,17 @@ The administrator can define an observable device list in a web frontend. These 
 If the device is not available after the system start, "not available" message will be never sent out just in case the BLE device becomes available and will be gone again.
 
 ### Status messages
--- System sends a detailed status message about the BLE device in every minute: **/blecker/[device-mac]/status**\ --
+-- System sends a detailed status message about the BLE device periodically: **/blecker/[device-mac]/status**\ --
 
 BREAKING CHANGE from 1.06
 
 -- System sends a detailed status message about the BLE device: **/blecker/status/[device-mac]**\ --
+```
+{"name":"", "rssi":"", "mac":"123456abcdef", "presence":"present", "observed":"true", "lastSeenMs":"18023"}
+```
 
 This message is coming together with the normal availability message.
-The payload is a JSON object structure which contains detailed data like **name**, **rssi**, **observed**, etc. for more possibilities.
+The payload is a JSON object structure which contains detailed data like **name**, **rssi**, **observed**, **lastSeenMs**, etc. for more possibilities.
 This function is off by default. It can be changed on a web administration UI.
 
 ### Webhook
@@ -302,6 +305,8 @@ Status message topic from this version is /blecker/status/[device-mac]
 - #52 Last will retain status cannot be set back to default
 - #24 Display the chip info
 - #57 Add unique hostname
+- adjust scan time
+- adjust status message (lastSeenMs is added)
 
 Not product logic related
 - #55 Create an action to create a new build from master

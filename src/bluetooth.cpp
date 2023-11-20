@@ -66,14 +66,16 @@ void BlueTooth::setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, 
 
 void BlueTooth::loop() {
 
-    if (millis() - lastRun > BT_DEFAULT_SCAN_INTERVAL) {
+    // Need to pause between scan intervals, because the scan stuck the process. Leave 2 seconds to sevre the web and any other services
+    if (millis() - lastRun > (BT_DEFAULT_SCAN_DURATION_IN_SECONDS * 1000) + 2000) {
         // Otherwise makes no sens to scan and sent it over
         if (networkConnected) {
-            BLEScanResults foundDevices = pBLEScan->start(10, false);            
+            BLEScanResults foundDevices = pBLEScan->start(BT_DEFAULT_SCAN_DURATION_IN_SECONDS, false);            
             pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
             lastRun = millis();
         }
     }
+    
 
     // Find the expired devices
     for (int i = 0; i < this -> devices.size(); i++) {
@@ -144,9 +146,7 @@ void BlueTooth::setConnected(boolean connected) {
 
 
 void BlueTooth::onResult(BLEAdvertisedDevice advertisedDevice) {
-    // Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());
-    //logger << "Found device MAC: " + advertisedDevice.getAddress().toString().c_str());
-    
+
     boolean newFound = true;
     String deviceMac = advertisedDevice.getAddress().toString().c_str();
     deviceMac.toLowerCase();
@@ -158,17 +158,14 @@ void BlueTooth::onResult(BLEAdvertisedDevice advertisedDevice) {
         Device dev = devices.get(i);
         if (deviceMac == dev.mac) {
 
-            // Device came back (state changed)
-            if (!dev.available) {
-                // Send an MQTT message about this device is at home
-                dev.available = true;
-                handleDeviceChange(dev);
-            }
+            handleDeviceChange(dev);
+
             dev.lastSeen = millis();
             dev.mark = DEVICE_DROP_OUT_COUNT;
             dev.available = true;
             devices.set(i, dev);                   
             newFound = false;
+            
         }
     }
 
@@ -217,7 +214,7 @@ void BlueTooth::handleDeviceChange(Device dev) {
     deviceChanged->fire(dev);
 
     if (detailedReport) {
-        String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + database -> getPresentString(dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\"}";
+        String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + database -> getPresentString(dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\", \"lastSeenMs\":\"" + (millis() - dev.lastSeen) + "\"}";
         mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, false});
     }
 }
