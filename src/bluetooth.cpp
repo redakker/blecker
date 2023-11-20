@@ -57,7 +57,7 @@ void BlueTooth::setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, 
     }
 
     // This is not the best place here. This object should not know this, but autodiscover must use it.
-    // You mut not use any other place in the object
+    // You must not use any other place in the object
     this -> mqttBaseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
     detailedReport = (database.getValueAsInt(DB_DETAILED_REPORT) > 0) ? true : false;
