@@ -391,7 +391,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.11 - 160</div>
+<div class="version" id="version">v1.11 - 161</div>
 <div class="version" id="chip"></div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
@@ -1564,7 +1564,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.11 - 160</div>
+<div class="version" id="version">v1.11 - 161</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>

@@ -163,11 +163,11 @@ void BlueTooth::onResult(BLEAdvertisedDevice advertisedDevice) {
         Device dev = devices.get(i);
         if (deviceMac == dev.mac) {
 
+            dev.available = true;
             handleDeviceChange(dev);
-
             dev.lastSeen = millis();
             dev.mark = DEVICE_DROP_OUT_COUNT;
-            dev.available = true;
+            
             devices.set(i, dev);                   
             newFound = false;
             
