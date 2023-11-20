@@ -70,8 +70,13 @@ void BlueTooth::loop() {
     if (millis() - lastRun > (BT_DEFAULT_SCAN_DURATION_IN_SECONDS * 1000) + 2000) {
         // Otherwise makes no sens to scan and sent it over
         if (networkConnected) {
-            BLEScanResults foundDevices = pBLEScan->start(BT_DEFAULT_SCAN_DURATION_IN_SECONDS, false);            
+            // Clear result is before the scan, because there is an assumption that the clear result makes an issue right after the scan
+            // Details:     - https://github.com/redakker/blecker/issues/58
+            //              - https://github.com/espressif/arduino-esp32/issues/5860
+            // 
             pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
+            
+            BLEScanResults foundDevices = pBLEScan->start(BT_DEFAULT_SCAN_DURATION_IN_SECONDS, false);                        
             lastRun = millis();
         }
     }
