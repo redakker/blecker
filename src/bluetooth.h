@@ -40,6 +40,8 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     boolean detailedReport;
     boolean monitorObservedOnly; // Monitor devices only which are configured in the database
     boolean networkConnected; // Connected to the network (Wifi STA)
+    boolean mqttConnected; // Connected to MQTT server
+
 
     LinkedList<Device> devices;
     LinkedList<int> devicesToRemove;
@@ -49,6 +51,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
         void setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, Signal<Device> &deviceChanged);
         void loop();
         void setConnected(boolean connected);
+        void setMqttConnected(boolean connected);
     
     private: 
         void onResult(BLEAdvertisedDevice advertisedDevice);
