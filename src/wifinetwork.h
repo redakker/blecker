@@ -25,6 +25,7 @@ class WifiNetwork {
         String password;
 
         int tries;
+        int APstart;
         String uniqueBoardname;
 
         WifiNetwork(Log& rlog);

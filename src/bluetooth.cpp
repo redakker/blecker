@@ -18,6 +18,7 @@ BlueTooth::BlueTooth(Log& rlog, Led& led) : logger(rlog, "[BLUE]") {
     devices = LinkedList<Device>();
     devicesToRemove = LinkedList<int>();
 
+    boolean mqttConnected = false; // Connected to MQTT server
     this -> led = &led;
 }
 
@@ -57,7 +58,7 @@ void BlueTooth::setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, 
     }
 
     // This is not the best place here. This object should not know this, but autodiscover must use it.
-    // You must not use any other place in the object
+    // You mut not use any other place in the object
     this -> mqttBaseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
     detailedReport = (database.getValueAsInt(DB_DETAILED_REPORT) > 0) ? true : false;
@@ -66,10 +67,10 @@ void BlueTooth::setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, 
 
 void BlueTooth::loop() {
 
-    // Need to pause between scan intervals, because the scan stuck the process. Leave 2 seconds to sevre the web and any other services
+ // Need to pause between scan intervals, because the scan stuck the process. Leave 2 seconds to sevre the web and any other services
     if (millis() - lastRun > (BT_DEFAULT_SCAN_DURATION_IN_SECONDS * 1000) + 2000) {
         // Otherwise makes no sens to scan and sent it over
-        if (networkConnected) {
+        if (networkConnected && mqttConnected) {
             // Clear result is before the scan, because there is an assumption that the clear result makes an issue right after the scan
             // Details:     - https://github.com/redakker/blecker/issues/58
             //              - https://github.com/espressif/arduino-esp32/issues/5860
@@ -80,8 +81,6 @@ void BlueTooth::loop() {
             lastRun = millis();
         }
     }
-    
-
     // Find the expired devices
     for (int i = 0; i < this -> devices.size(); i++) {
         
@@ -148,8 +147,10 @@ void BlueTooth::setConnected(boolean connected) {
     this -> networkConnected = connected;
 }
 
-
-
+void BlueTooth::setMqttConnected(boolean connected) {
+    this -> mqttConnected = connected;
+}
+        
 void BlueTooth::onResult(BLEAdvertisedDevice advertisedDevice) {
 
     boolean newFound = true;

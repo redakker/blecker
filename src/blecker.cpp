@@ -30,6 +30,7 @@ Webhook webhook(rlog);
 // This signal will be emitted when we process characters
 // https://github.com/tomstewart89/Callback
 Signal<boolean> wifiStatusChanged;
+Signal<boolean> mqttStatusChanged;
 Signal<int> errorCodeChanged;
 Signal<String> messageArrived;
 Signal<MQTTMessage> mqttMessageSend;
@@ -52,9 +53,11 @@ void setup() {
   MethodSlot<Mqtt, boolean> wifiChangedForMqtt(&mqtt,&Mqtt::setConnected);
   MethodSlot<BlueTooth, boolean> wifiChangedForBluetooth(&blueTooth,&BlueTooth::setConnected);
   MethodSlot<Webservice, boolean> wifiChangedForWebservice(&webservice,&Webservice::setConnected);
+  MethodSlot<BlueTooth, boolean> mqttChangedForBluetooth(&blueTooth,&BlueTooth::setMqttConnected);
   wifiStatusChanged.attach(wifiChangedForMqtt);
   wifiStatusChanged.attach(wifiChangedForBluetooth);
   wifiStatusChanged.attach(wifiChangedForWebservice);
+  mqttStatusChanged.attach(mqttChangedForBluetooth);
   
   // Emit an error code for led
   MethodSlot<Led, int> errorCodeChangedForLed(&led,&Led::setMessage);
@@ -84,7 +87,7 @@ void setup() {
   webservice.setup(database);
   webhook.setup(database);
   
-  mqtt.setup(database, errorCodeChanged, messageArrived);
+  mqtt.setup(database, mqttStatusChanged, errorCodeChanged, messageArrived);
   // Connect to WiFi
   wifi.connectWifi();
 

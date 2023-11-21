@@ -3,6 +3,7 @@
 WifiNetwork::WifiNetwork(Log& rlog) : logger(rlog, "[WIFI]") {
     wifi_connected = false;
     tries = 0;
+    APstart = 0;
 }
 
 void WifiNetwork::setup(Database &database, Signal<boolean> &wifiStatusChanged, Signal<int> &errorCodeChanged, Signal<String> &ipAddressChanged){
@@ -56,6 +57,7 @@ void WifiNetwork::connectToAP() {
 void WifiNetwork::createAP() {
     configAP();
     WiFi.mode(WIFI_AP);
+    APstart = millis();
     logger << "AP is created from a function. Name: " << BOARD_NAME;
 }
 
@@ -163,6 +165,12 @@ void WifiNetwork::wifiConnectedLoop() {
 void WifiNetwork::wifiDisconnectedLoop() {
     // Try to reconnect time to time
     // TODO
+    if ((millis() - APstart) > (5 * 60 * 1000)) { // 5 min               
+        if (ssid.length() > 0) {
+           //this -> connectToAP();
+           ESP.restart();
+        }
+    }
 }
 
 void WifiNetwork::setupMDNS() {

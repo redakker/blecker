@@ -7,6 +7,7 @@ Mqtt::Mqtt(Log& rlog) : logger(rlog, "[MQTT]") {
     // MQTT connect try
     lasttry = 10000;
     maxtry = 10;
+    MQTTconnectTime = 0;
 
     // Keepalive timeout
     lastKeepAliveTime = 0;
@@ -15,13 +16,15 @@ Mqtt::Mqtt(Log& rlog) : logger(rlog, "[MQTT]") {
     subscribed = false;
     deviceStatusRetain = false;
     lastiWillSet = false;
+    mqtt_connected = false;
 
     this -> client = new MqttClient(wifiClient);
 }
 
-void Mqtt::setup(Database &database, Signal<int> &errorCodeChanged, Signal<String> &mqttMessageArrived) {
+void Mqtt::setup(Database &database, Signal<boolean> &mqttStatusChanged, Signal<int> &errorCodeChanged, Signal<String> &mqttMessageArrived) {
 
     this -> database = &database;
+    this -> mqttStatusChanged = &mqttStatusChanged;
     this -> errorCodeChanged = &errorCodeChanged;
     this -> mqttMessageArrived = &mqttMessageArrived;
     
@@ -56,16 +59,9 @@ void Mqtt::setup(Database &database, Signal<int> &errorCodeChanged, Signal<Strin
 
 void Mqtt::loop() {
     if (networkConnected) {
-
-        // Last will should be set after network is connected, but before MQTT is connected
-        if (!lastiWillSet) {
-            setLastWill();
-            lastiWillSet = true;
-        }
-
-        // check for incoming messages
+        // check for incoming messages            
         if (client->connected()) {
-            
+                    
             if (!subscribed) {
                 subscribeForBaseTopic();
             }
@@ -74,23 +70,26 @@ void Mqtt::loop() {
             if (messageSize) {
                 processMessage();
             }
-
+            
             int now = millis();
             if (now - lastKeepAliveTime > MQTT_KEEPALILIVE_TIME ) {
                 lastKeepAliveTime = now;
                 sendStatus();
             }
+
         } else {
             client->stop();
-            this -> subscribed = false;
+            this -> subscribed = false;                    
             reconnect();
         }
     } else {
-        client->stop();                
-        lastiWillSet = false;
+        client->stop();
         this -> subscribed = false;
-        
+        mqtt_connected = false;
+        // Emit an event about the MQTT status
+        mqttStatusChanged->fire(mqtt_connected);
     }
+
 }
 
 void Mqtt::setConnected (boolean networkConnected) {
@@ -134,12 +133,29 @@ void Mqtt::sendMqttMessage(String topic, String message, boolean retain = false)
 void Mqtt::reconnect() {
     if (!String("").equals(server)) {
         const char* mqtt_s = const_cast<char*>(server.c_str());
-        if (!client -> connect(mqtt_s, port)) {                    
-            logger << "MQTT connection failed! Error code = " << (String)client -> connectError();
-            this -> errorCodeChanged->fire(ERROR_MQTT);
-        } else {
-            sendChipInfo();
-            logger << "Connection started.";
+        
+        if (millis() - MQTTconnectTime > 15 * 1000) // 15 sec
+        { 
+            logger << "Connecting to MQTT server...";
+            setLastWill();
+            if (!client->connect(mqtt_s, port))
+            {
+               logger << "MQTT connection failed! Error code = " << (String)client -> connectError();
+               this->errorCodeChanged->fire(ERROR_MQTT);
+               mqtt_connected = false;
+               // Emit an event about the MQTT status
+               mqttStatusChanged->fire(mqtt_connected);
+            }
+            else
+            {
+               sendChipInfo();
+               logger << "MQTT Connection started.";
+               mqtt_connected = true;
+               // Emit an event about the MQTT status
+               mqttStatusChanged->fire(mqtt_connected);
+            }
+
+            MQTTconnectTime = millis();
         }
     } else {
         // logger << "MQTT connection info is missing.");
@@ -173,7 +189,7 @@ void Mqtt::subscribeForBaseTopic () {
 }
 
 void Mqtt::sendStatus () {
-    sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", deviceStatusRetain);
+    sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", true);
     
 }
 

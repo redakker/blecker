@@ -17,6 +17,7 @@ class Mqtt {
     Database* database;
     Signal<int>* errorCodeChanged;
     Signal<String>* mqttMessageArrived;
+    Signal<boolean>* mqttStatusChanged;
     String server;
     String user;
     String password;
@@ -31,6 +32,7 @@ class Mqtt {
     // MQTT connect try
     int lasttry;
     int maxtry;
+    int MQTTconnectTime;
 
     // Keepalive timeout
     int lastKeepAliveTime;
@@ -39,10 +41,11 @@ class Mqtt {
     boolean subscribed;
     boolean deviceStatusRetain;
     boolean lastiWillSet;
+    boolean mqtt_connected;
 
     public:
         Mqtt(Log& rlog);
-        void setup(Database &database, Signal<int> &errorCodeChanged, Signal<String> &mqttMessageArrived);
+        void setup(Database &database, Signal<boolean> &mqttStatusChanged, Signal<int> &errorCodeChanged, Signal<String> &mqttMessageArrived);
         void loop();
         void setConnected (boolean networkConnected);
         void sendMqttMessage(MQTTMessage message);
