@@ -163,11 +163,9 @@ void WifiNetwork::wifiConnectedLoop() {
 
 // while wifi is not connected
 void WifiNetwork::wifiDisconnectedLoop() {
-    // Try to reconnect time to time
-    // TODO
-    if ((millis() - APstart) > (5 * 60 * 1000)) { // 5 min               
-        if (ssid.length() > 0) {
-           //this -> connectToAP();
+    // Try to reconnect time to time    
+    if ((millis() - APstart) > WIFI_OFF_REBOOT_TIME) {
+        if (ssid.length() > 0) {           
            ESP.restart();
         }
     }

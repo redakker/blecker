@@ -39,6 +39,7 @@
 
 // Network
 #define WIFI_MAX_TRY 10
+#define WIFI_OFF_REBOOT_TIME 5*60*1000 // If SSID is configured, but still AP is created restart after this time. Ex: Wifi router is gone -> device goes to AP mode. Without this it never tries to connect again. Just after a reboot
 #define AP_IP {192, 168, 4, 1} // Change together with the string version
 #define AP_IP_STRING "192.168.4.1" // Change together with the object version
 #define AP_NETMASK {255, 255, 255, 0}
