@@ -308,6 +308,7 @@ Status message topic from this version is /blecker/status/[device-mac]
 - adjust scan time
 - adjust status message (lastSeenMs is added)
 - wifi reconnect changes (thanks to [@Goodwillson](https://github.com/Goodwillson)) https://github.com/redakker/blecker/pull/59
+- run the BLE scanner on another core of the ESP32 CPU, it probably eliminates the bug #58 (thanks for the idea to [@dpnebert](https://github.com/dpnebert))
 
 Not product logic related
 - #55 Create an action to create a new build from master

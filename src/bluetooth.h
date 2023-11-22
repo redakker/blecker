@@ -46,6 +46,9 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     LinkedList<Device> devices;
     LinkedList<int> devicesToRemove;
 
+    // For Bluetooth scan task
+    TaskHandle_t scan_handle;
+
     public:
         BlueTooth(Log& rlog, Led& led);
         void setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, Signal<Device> &deviceChanged);
@@ -56,7 +59,7 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     private: 
         void onResult(BLEAdvertisedDevice advertisedDevice);
         void fillDevices(String devicesString);
-        void handleDeviceChange(Device dev);
+        void handleDeviceChange(Device dev);        
 };
 
 #endif

@@ -1,6 +1,5 @@
 #include "bluetooth.h"
 
-
 BlueTooth::BlueTooth(Log& rlog, Led& led) : logger(rlog, "[BLUE]") {
 
     lastRun = 0;
@@ -62,25 +61,20 @@ void BlueTooth::setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, 
     this -> mqttBaseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
     detailedReport = (database.getValueAsInt(DB_DETAILED_REPORT) > 0) ? true : false;
+
+    // Run the BLE scanner on another core as a separated task
+    xTaskCreatePinnedToCore(bluetoothScanner,       // Method name
+                            "BLE Scan Task",        // Only for humans for debug
+                            1024*2,                 // How many bytes should be alloted.
+                            pBLEScan,               // Pass in variable reference here (or NULL)
+                            8,                      // Priority of task
+                            &scan_handle,           // Reference to Task handle.  Ex: to delete the scan task, it would look like: "vTaskDelete(scan_handle);"
+                            0);
     
 }
 
 void BlueTooth::loop() {
 
- // Need to pause between scan intervals, because the scan stuck the process. Leave 2 seconds to sevre the web and any other services
-    if (millis() - lastRun > (BT_DEFAULT_SCAN_DURATION_IN_SECONDS * 1000) + 2000) {
-        // Otherwise makes no sens to scan and sent it over
-        if (networkConnected && mqttConnected) {
-            // Clear result is before the scan, because there is an assumption that the clear result makes an issue right after the scan
-            // Details:     - https://github.com/redakker/blecker/issues/58
-            //              - https://github.com/espressif/arduino-esp32/issues/5860
-            // 
-            pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
-            
-            BLEScanResults foundDevices = pBLEScan->start(BT_DEFAULT_SCAN_DURATION_IN_SECONDS, false);                        
-            lastRun = millis();
-        }
-    }
     // Find the expired devices
     for (int i = 0; i < this -> devices.size(); i++) {
         
@@ -224,4 +218,6 @@ void BlueTooth::handleDeviceChange(Device dev) {
         mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, false});
     }
 }
+
+
 
