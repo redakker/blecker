@@ -1,9 +1,7 @@
 #include "utilities.h"
 #include "definitions.h"
-#include <BLEDevice.h>
-#include <BLEUtils.h>
 #include <BLEScan.h>
-#include <BLEAdvertisedDevice.h>
+
 
 esp_chip_info_t chip_info;
 
