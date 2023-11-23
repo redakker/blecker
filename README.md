@@ -247,6 +247,14 @@ mqtt:
 ```
 * after restar HA you will find among states the presence of your BLE device with this name:  **device_tracker.redakker**
 
+### Contributors
+
+## Thank you for
+- [@BalazsM](https://github.com/BalazsM))
+- [@Goodwillson](https://github.com/Goodwillson)
+
+And a big thanks and thumbs up to [@Seinuh](https://github.com/Seinuh) for beta tests!
+
 ### Release notes
 
 ## 1.01
@@ -313,6 +321,7 @@ Status message topic from this version is /blecker/status/[device-mac]
 Not product logic related
 - #55 Create an action to create a new build from master
 - #56 Code restructure
+
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
