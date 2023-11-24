@@ -30,7 +30,8 @@ void BlueTooth::setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, 
     BLEDevice::init(BOARD_NAME);
     pBLEScan = BLEDevice::getScan(); //create new scan            
     pBLEScan->setAdvertisedDeviceCallbacks(this);
-    pBLEScan->setActiveScan(true); //active scan uses more power, but get results faster
+    //pBLEScan->setActiveScan(true); //active scan uses more power, but get results faster
+    pBLEScan->setActiveScan(false); //set to passive mode because of bug #58
     pBLEScan->setInterval(100);
     pBLEScan->setWindow(99);  // less or equal setInterval value
 
