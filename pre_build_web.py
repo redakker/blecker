@@ -26,7 +26,7 @@ try:
         .decode("utf-8")
     )
 except:
-    print ("No Git installed. Version number will be skipped in a filename")
+    print ("No Git installed. Version number will be skipped in a version display")
 
 defFile = open("src/definitions.h")
 for line in defFile:
