@@ -14,7 +14,7 @@ Mqtt::Mqtt(Log& rlog) : logger(rlog, "[MQTT]") {
 
     networkConnected = false; // Connected to the network (Wifi STA)
     subscribed = false;
-    deviceStatusRetain = false;
+    deviceStatusRetain = MQTT_STATUS_DEFAULT_RETAIN;
     lastiWillSet = false;
     mqtt_connected = false;
 
@@ -34,8 +34,8 @@ void Mqtt::setup(Database &database, Signal<boolean> &mqttStatusChanged, Signal<
     this -> server = this -> database -> getValueAsString(String(DB_MQTT_SERVER), false);
     this -> baseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
-    this -> deviceStatusRetain = this -> database -> getValueAsBoolean(String(DB_DEVICE_STATUS_RETAIN), false, MQTT_STATUS_OFF_DEFAULT_RETAIN);
-    
+    this -> deviceStatusRetain = this -> database -> getValueAsBoolean(String(DB_DEVICE_STATUS_RETAIN), false, MQTT_STATUS_DEFAULT_RETAIN);
+       
 
     if (this -> database -> isPropertyExistsAndNonEmpty(DB_DEVICE_STATUS_ON)) {
         this -> statusOn = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
@@ -189,7 +189,7 @@ void Mqtt::subscribeForBaseTopic () {
 }
 
 void Mqtt::sendStatus () {
-    sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", true);
+    sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", deviceStatusRetain);
     
 }
 

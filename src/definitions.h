@@ -17,7 +17,11 @@
 
 #define MQTT_STATUS_ON_DEFAULT_VALUE "on"
 #define MQTT_STATUS_OFF_DEFAULT_VALUE "off"
-#define MQTT_STATUS_OFF_DEFAULT_RETAIN false
+#define MQTT_STATUS_DEFAULT_RETAIN false
+
+#define MQTT_BEACON_PRESENCE_ON_DEFAULT_VALUE "on"
+#define MQTT_BEACON_PRESENCE_OFF_DEFAULT_VALUE "off"
+#define MQTT_BEACON_PRESENCE_DEFAULT_RETAIN false
 
 #define MQTT_KEEPALILIVE_TIME 30000 // in milliseconds
 
@@ -73,5 +77,6 @@
 #define DB_DEVICE_STATUS_OFF "status_off"
 #define DB_DEVICE_STATUS_RETAIN "status_retain"
 #define DB_DEVICE_ID "deviceid"
+#define DB_BEACON_PRESENCE_RETAIN "presence_retain"
 
 #endif

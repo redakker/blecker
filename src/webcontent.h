@@ -185,6 +185,8 @@ getItem("networkmore_presence").style.display = 'block';
 getItem("networkmore_status").style.display = 'block';
 getItem("networkmore_deviceid").style.display = 'block';
 getItem("networkmore_retain").style.display = 'block';
+getItem("networkmore_presence_retain").style.display = 'block';
+
 getItem("advancednet").style.display = 'none';
 getItem("basicnet").style.display = 'block';
 advancedNetwork = true;
@@ -193,6 +195,7 @@ getItem("networkmore_presence").style.display = 'none';
 getItem("networkmore_status").style.display = 'none';
 getItem("networkmore_deviceid").style.display = 'none';
 getItem("networkmore_retain").style.display = 'none';
+getItem("networkmore_presence_retain").style.display = 'none';
 getItem("advancednet").style.display = 'block';
 getItem("basicnet").style.display = 'none';
 advancedNetwork = false;
@@ -391,7 +394,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.11 - 184</div>
+<div class="version" id="version">v1.11 - 186</div>
 <div class="version" id="chip"></div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
@@ -461,6 +464,18 @@ BLEcker
 </div>
 </div>
 </div>
+<div style="display: none" id="networkmore_presence_retain">
+<div class="row">
+<div class="six columns">
+<label for="status_on">Presence status retian</label>
+<select class="u-full-width" name="presence_retain" id="presence_retain">
+<option value="0">no</option>
+<option value="1">yes</option>
+</select>
+<div class="inputcomment">Beacon presence status report and detailed report message retain flag </div>
+</div>
+</div>
+</div>
 <div style="display: none" id="networkmore_status">
 <div class="row">
 <div class="six columns">
@@ -481,6 +496,7 @@ BLEcker
 <option value="0">no</option>
 <option value="1">yes</option>
 </select>
+<div class="inputcomment">BLEcker device status report and last will message retain flag </div>
 </div>
 </div>
 </div>
@@ -1564,7 +1580,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.11 - 184</div>
+<div class="version" id="version">v1.11 - 186</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>

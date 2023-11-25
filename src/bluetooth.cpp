@@ -8,6 +8,7 @@ BlueTooth::BlueTooth(Log& rlog, Led& led) : logger(rlog, "[BLUE]") {
     sendAutoDiscovery = false;
     lastSendAutoDiscovery = 0;
     autoDiscoveryPrefix = "";
+    beaconPresenceRetain = MQTT_BEACON_PRESENCE_DEFAULT_RETAIN;
     // This is not the best place here. This object should not know this, but autodiscover must use it.
     // You mut not use any other place in the object
     mqttBaseTopic = "";
@@ -35,7 +36,10 @@ void BlueTooth::setup(Database &database, Signal<MQTTMessage> &mqttMessageSend, 
     pBLEScan->setInterval(100);
     pBLEScan->setWindow(99);  // less or equal setInterval value
 
-    logger << BOARD_NAME " is initiated";
+    this -> beaconPresenceRetain = this -> database -> getValueAsBoolean(String(DB_BEACON_PRESENCE_RETAIN), false, MQTT_BEACON_PRESENCE_DEFAULT_RETAIN);
+    logger << "Beacon presence retain is set to " << (String) this -> beaconPresenceRetain;
+
+    logger << "Bluetooth is initialized with name:" << BOARD_NAME;
 
     // Prefill the device list with the user's devices
     // In case of accidently reboot it will send a "not_home" message if the device is gone meanwhile
@@ -210,13 +214,14 @@ void BlueTooth::fillDevices(String devicesString) {
 }
 
 void BlueTooth::handleDeviceChange(Device dev) {
-    mqttMessageSend->fire(MQTTMessage{dev.mac, database -> getPresentString(dev.available), true});
+    mqttMessageSend->fire(MQTTMessage{dev.mac, database -> getPresentString(dev.available), beaconPresenceRetain});
     // TODO: need to refactor, send only one message for the consumers
+    // This will call the webhook
     deviceChanged->fire(dev);
 
     if (detailedReport) {
         String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + database -> getPresentString(dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\", \"lastSeenMs\":\"" + (millis() - dev.lastSeen) + "\"}";
-        mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, false});
+        mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, beaconPresenceRetain});
     }
 }
 

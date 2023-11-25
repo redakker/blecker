@@ -1,1 +1,1 @@
-{"ssid":"myssid","pw":"password1234","name":"BLECKER","mqttserver":"example.com","version":"ble_tracker_v0.9-27.bin","detailed":"1", "status_on":"on", "status_off":"off", "mqttuser":"user_mqtt", "mqttpw":"gHxe~Q%!THu$1yW$gjA"}
+{"ssid":"myssid","pw":"password1234","name":"BLECKER","mqttserver":"example.com","version":"ble_tracker_v0.9-27.bin","detailed":"1","presence_retain":"1", "status_on":"on", "status_off":"off", "mqttuser":"user_mqtt", "mqttpw":"gHxe~Q%!THu$1yW$gjA"}

@@ -42,6 +42,8 @@ class BlueTooth: public BLEAdvertisedDeviceCallbacks {
     boolean networkConnected; // Connected to the network (Wifi STA)
     boolean mqttConnected; // Connected to MQTT server
 
+    boolean beaconPresenceRetain;
+
 
     LinkedList<Device> devices;
     LinkedList<int> devicesToRemove;
