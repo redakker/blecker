@@ -5,7 +5,7 @@ Log::Log() : blueToothSerial(NULL) {}
 
 void Log::setup () {
     // Init serial
-    Serial.begin(115200);
+    Serial.begin(SERIAL_SPEED);
 }
 
 void Log::loop () {}

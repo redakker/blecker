@@ -8,6 +8,7 @@
 #define BOARD_NAME "blecker"
 #define LED_BUILTIN 2
 #define EEPROM_SIZE 1024
+#define SERIAL_SPEED 115200
 
 // Software settings
 #define SERVER_PORT 80
