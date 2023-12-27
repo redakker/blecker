@@ -221,7 +221,8 @@ void BlueTooth::handleDeviceChange(Device dev) {
 
     if (detailedReport) {
         String payload = "{\"name\":\"" + ((dev.name == NULL) ? "" : dev.name) + "\", \"rssi\":\"" + ((dev.rssi == NULL) ? "" : dev.rssi) + "\", \"mac\":\"" + ((dev.mac == NULL) ? "" : dev.mac) + "\", \"presence\":\"" + database -> getPresentString(dev.available) + "\", \"observed\":\"" + ((dev.observed) ? "true" : "false") + "\", \"lastSeenMs\":\"" + (millis() - dev.lastSeen) + "\"}";
-        mqttMessageSend->fire(MQTTMessage{"status/" + dev.mac, payload, beaconPresenceRetain});
+        MQTTMessage message = MQTTMessage{ String ("status/" + dev.mac), payload, beaconPresenceRetain };
+        mqttMessageSend->fire(message);
     }
 }
 
