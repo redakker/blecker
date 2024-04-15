@@ -39,13 +39,6 @@ for line in defFile:
 defFile.close()
 
 
-defFile = open("src/definitions.h")
-for line in defFile:
-    if line.startswith("#define MAJOR_VERSION"):
-        version = line.replace("#define MAJOR_VERSION ", "")
-        version = version.strip()
-defFile.close()
-
 ##############################################
 
 f_output = open(output_file, "w")
@@ -113,7 +106,8 @@ def minify_css(input_file):
     return data
 
 for root, dirs, files in os.walk(input_dir, topdown=False):
-    for name in files:   # for files
+    for name in sorted(files):   # for files
+        print("Processing %s" % (name))
         if name.endswith(".js"):
             print(os.path.join(root, name))
             minified = minify_js(os.path.join(root, name))          # minify javascript

@@ -394,7 +394,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.11 - 192</div>
+<div class="version" id="version">v1.11 - 196</div>
 <div class="version" id="chip"></div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
@@ -455,7 +455,7 @@ BLEcker
 <div style="display: none" id="networkmore_presence">
 <div class="row">
 <div class="six columns">
-<label for="present">Presence string (avalilable)</label>
+<label for="present">Presence string (available)</label>
 <input type="text" class="u-full-width" name="present" id="present" placeholder="present">
 </div>
 <div class="six columns">
@@ -467,7 +467,7 @@ BLEcker
 <div style="display: none" id="networkmore_presence_retain">
 <div class="row">
 <div class="six columns">
-<label for="status_on">Presence status retian</label>
+<label for="status_on">Presence status retain</label>
 <select class="u-full-width" name="presence_retain" id="presence_retain">
 <option value="0">no</option>
 <option value="1">yes</option>
@@ -491,7 +491,7 @@ BLEcker
 <div style="display: none" id="networkmore_retain">
 <div class="row">
 <div class="six columns">
-<label for="status_on">Device status retian</label>
+<label for="status_on">Device status retain</label>
 <select class="u-full-width" name="status_retain" id="status_retain">
 <option value="0">no</option>
 <option value="1">yes</option>
@@ -1580,7 +1580,7 @@ BLEcker
 <a class="button w100" href="/">home</a>
 <a class="button w100" href="/update">update</a>
 <!--<a class="button w100 button-danger" id="reset" href="#">reset</a>-->
-<div class="version" id="version">v1.11 - 192</div>
+<div class="version" id="version">v1.11 - 196</div>
 <div id="footer">
 <div><a href="https://github.com/redakker/blecker" target="_blank">blecker</a></div>
 </div>
