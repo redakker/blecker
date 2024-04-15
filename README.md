@@ -172,8 +172,8 @@ ${{\color{red}\Huge{\textsf{  !!!\ Important\ !!!\ \}}}}\$
 Be aware these builds could contain not stable solutions.
 
 ## Build the project
-After some investigation the project descriptors are moade to make the development enviroment ready automatically in VSCode.
-All you need to do is waiting till VSCode reads the settings files with recommended plugins and then install them.
+After some investigation, the project descriptors are made to make the development environment ready automatically in VSCode.
+All you need to do is wait till VSCode reads the settings files with recommended plugins and then install them.
 Before the build you need to have inside VSCode:
 
 - PlatformIO installed
@@ -183,14 +183,14 @@ Before the build you need to have inside VSCode:
 Prebuild script(s) should install the dependecies automaticaly.
 
 ## Build the project (if the previous step is not working)
-- Download the project from github
+- Download the project from GitHub
 - unzip to a folder
 - install VS Code
 - install PlatformIO IDE extension in it
 - reload VSCode
 - Open Platform IO
 - Click to the Platforms tab
-- Inside the Patforms tab click to Embedded tab
+- Inside the Platforms tab click on the Embedded tab
 - search for "Espressif 32"
 - install it
 - open the code folder (File -> Open folder)
@@ -220,7 +220,7 @@ Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:
 * Upload the code to your ESP32 and let it run.
 * Call the ESP32 web interface its IP address (Web frontend should appear)
 * Set the credentials of your WiFi and MQTT, let the base topic field empty for now
-* Click to the 'advenced' text and set the presence strings to the following -> *home* | *not_home*
+* Click to the 'advanced' text and set the presence strings to the following -> *home* | *not_home*
 * put your BLE device address into the Observed devices input field without ":". In tis case: 123456abcdef
 * Press the submit button (device will reboot)
 
@@ -231,12 +231,12 @@ Let's say you have a BLE beacon with this device id (mac address): `12:34:56:ab:
 * At the end of the day you should have something like this
 
 ```
-!!! deprecated in newest HA !!!
+!!! deprecated in the newest HA !!!
 device_tracker:
      - platform: mqtt
        devices:
          redakker: '/blecker/123456abcdef'
-!!! deprecated in newest HA !!!
+!!! deprecated in the newest HA !!!
 
 mqtt:
   device_tracker:
@@ -245,13 +245,14 @@ mqtt:
   - name: "otheruser"
     state_topic: "/blecker/987654fedcba"
 ```
-* after restar HA you will find among states the presence of your BLE device with this name:  **device_tracker.redakker**
+* after restarting HA you will find among states the presence of your BLE device with this name:  **device_tracker.redakker**
 
 ### Contributors
 
 ## Thank you for
-- [@BalazsM](https://github.com/BalazsM))
+- [@BalazsM](https://github.com/BalazsM)
 - [@Goodwillson](https://github.com/Goodwillson)
+- [@YogoGit](https://github.com/YogoGit)
 
 And a big thanks and thumbs up to [@Seinuh](https://github.com/Seinuh) for beta tests!
 
@@ -317,10 +318,10 @@ Status message topic from this version is /blecker/status/[device-mac]
 - adjust status message (lastSeenMs is added)
 - wifi reconnect changes (thanks to [@Goodwillson](https://github.com/Goodwillson)) https://github.com/redakker/blecker/pull/59
 - run the BLE scanner on another core of the ESP32 CPU, it probably eliminates the bug #58 (thanks for the idea to [@dpnebert](https://github.com/dpnebert))
-- #61 Make the beacon presence reatin changable
+- #61 Make the beacon presence retain changeable
 
-Not product logic related
-- #55 Create an action to create a new build from master
+Not product logic-related
+- #55 Create an action to create a new build from the master
 - #56 Code restructure
 
 ## 1.12 (Not released yet)
