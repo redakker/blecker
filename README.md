@@ -323,6 +323,9 @@ Not product logic related
 - #55 Create an action to create a new build from master
 - #56 Code restructure
 
+## 1.12 (Not released yet)
+- Merge pull request #66 from YogoGit/main
+
 
 
 Buy me a coffee: https://www.buymeacoffee.com/redakker
