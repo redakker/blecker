@@ -12,9 +12,9 @@
 class Database {
 
     Logger logger;
-    StaticJsonDocument<1000> jsonData;    
+    JsonDocument jsonData;
 
-    public: 
+    public:
         Database(Log& rlog);
         void setup();
         void loop();

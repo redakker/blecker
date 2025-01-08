@@ -58,13 +58,13 @@ void setup() {
   wifiStatusChanged.attach(wifiChangedForBluetooth);
   wifiStatusChanged.attach(wifiChangedForWebservice);
   mqttStatusChanged.attach(mqttChangedForBluetooth);
-  
+
   // Emit an error code for led
   MethodSlot<Led, int> errorCodeChangedForLed(&led,&Led::setMessage);
   errorCodeChanged.attach(errorCodeChangedForLed);
 
   // MQTT and Bluetooth command handling
-  // Arrive  
+  // Arrive
   MethodSlot<Database, String> messageSendForDatabase(&database,&Database::receiveCommand);
   messageArrived.attach(messageSendForDatabase);
 
@@ -82,11 +82,11 @@ void setup() {
   led.setup();
   database.setup();
   wifi.setup(database, wifiStatusChanged, errorCodeChanged, ipAddressChanged);
-  blueTooth.setup(database, mqttMessageSend, deviceChanged);  
+  blueTooth.setup(database, mqttMessageSend, deviceChanged);
   // Must be after Wifi setup
   webservice.setup(database);
   webhook.setup(database);
-  
+
   mqtt.setup(database, mqttStatusChanged, errorCodeChanged, messageArrived);
   // Connect to WiFi
   wifi.connectWifi();
@@ -95,21 +95,22 @@ void setup() {
   rebootAfterHours = database.getValueAsInt(DB_REBOOT_TIMEOUT);
 }
 
-void loop() {  
+void loop() {
   // Object loops
   rlog.loop();
   led.loop();
   database.loop();
   wifi.loop();
-  blueTooth.loop();  
+  blueTooth.loop();
   webservice.loop();
   mqtt.loop();
   webhook.loop();
-
+/*
   if ((rebootAfterHours > 0) && (millis() > (rebootAfterHours * 60 * 60 * 1000))) {
     wifi.disconnectWifi();
     // Delay for a specified time (in seconds) before restarting
     vTaskDelay(pdMS_TO_TICKS(10000)); // 10 second
     ESP.restart();
   }
+  */
 }

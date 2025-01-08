@@ -7,16 +7,17 @@
 #include <HTTPClient.h>
 #include "log.h"
 #include "database.h"
+#include <WiFiClientSecure.h>
 
 class Webhook {
 
     Logger logger;
     Database* database;
-    HTTPClient http;    
-    
+    HTTPClient http;
+
     boolean webhookConfigured;
     unsigned long lastrun;
-    
+
     public:
         Webhook(Log& rlog);
         void setup (Database &database);
@@ -24,7 +25,7 @@ class Webhook {
         void callWebhook(Device device);
 
     private:
-     
+
 };
 
 #endif

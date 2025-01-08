@@ -32,7 +32,7 @@ void Database::load() {
 
     if (error) {
         logger << "DeserializationError: " << error.c_str();
-        jsonData.clear();          
+        jsonData.clear();
     } else {
         logger << "Data successfully parsed";
     }
@@ -44,7 +44,7 @@ void Database::save() {
 
     String data = "";
     serializeJson(jsonData, data);
-    
+
     // Clean the store first
     reset();
 
@@ -59,14 +59,14 @@ void Database::updateProperty(String property, String value) {
 
 // Update a property in a json data strucure.
 // Save to the store if saveValues is true
-void Database::updateProperty(String property, String value, boolean saveValues) {            
+void Database::updateProperty(String property, String value, boolean saveValues) {
     int str_len = property.length() + 1;
     char prop[str_len];
     property.toCharArray(prop, str_len);
 
     this->jsonData[prop] = value;
     if (saveValues) {
-        save();             
+        save();
     }
 }
 
@@ -77,9 +77,9 @@ String Database::getValueAsString(String name) {
 String Database::getValueAsString(String name, bool loadbefore) {
     if (loadbefore){
         load();
-    }            
+    }
 
-    if (jsonData.containsKey(name)){
+    if (jsonData[name].is<const char*>()){
         return jsonData[name.c_str()].as<String>();
     } else {
         return (String) "";
@@ -94,11 +94,11 @@ int Database::getValueAsInt(String name, bool loadbefore) {
     if (loadbefore){
         load();
     }
-    
+
     int ret = -1;
-    if (jsonData.containsKey(name)) {
-        String value = jsonData[name.c_str()].as<String>();            
-        
+    if (jsonData[name].is<const char*>()) {
+        String value = jsonData[name.c_str()].as<String>();
+
         if (isNumeric(value)) {
             ret = value.toInt();
         }
@@ -122,7 +122,7 @@ boolean Database::getValueAsBoolean(String name, bool loadbefore, bool defaultRe
 }
 
 boolean Database::isPropertyExists(String property) {
-    return jsonData.containsKey(property);
+    return jsonData[property].is<const char*>();
 }
 
 boolean Database::isPropertyExistsAndNonEmpty(String property) {
@@ -139,8 +139,8 @@ String Database::getSerialized() {
 }
 
 void Database::jsonToDatabase(String json) {
-    
-    StaticJsonDocument<1000> tempJson; 
+
+    JsonDocument tempJson;
     DeserializationError error = deserializeJson(tempJson, json);
 
     if (error) {
@@ -152,7 +152,7 @@ void Database::jsonToDatabase(String json) {
         // See the init() function
         // Check if the name is available and it is the same az a board name. In case of matching, save the data
         String value = tempJson["name"].as<String>();
-        
+
         if (String(BOARD_NAME).equals(value)) {
             // update/add properties individually, overwrite the wole database skip some properties which
             JsonObject documentRoot = tempJson.as<JsonObject>();
@@ -164,23 +164,23 @@ void Database::jsonToDatabase(String json) {
         } else {
             logger << "Json data is not valid, database was not overwritten.";
         }
-        
+
     }
 }
 
 void Database::receiveCommand(String message) {
-    StaticJsonDocument<1000> tempJson; 
+    JsonDocument tempJson;
     DeserializationError error = deserializeJson(tempJson, message);
 
     if (error) {
         logger << "DeserializationError: " << error.c_str() << " (receiveCommand) " << message;
-    } else {               
-        String value = tempJson["command"].as<String>();                
+    } else {
+        String value = tempJson["command"].as<String>();
         if (String(COMMAND_CONFIG).equals(value)) {
             logger << "Command received: " << COMMAND_CONFIG;
             this -> jsonToDatabase(message);
         }
-        
+
     }
 }
 
@@ -199,14 +199,14 @@ String Database::getPresentString (boolean presenceState) {
 
     if (presenceState) {
         presence = getValueAsString(DB_PRECENCE);
-        if (presence == "") {                    
+        if (presence == "") {
             presence = DEFAULT_PRESENT;
         }
     } else {
         presence = getValueAsString(DB_NO_PRECENCE);
-        if (presence == "") {                    
+        if (presence == "") {
             presence = DEFAULT_NOT_PRESENT;
-        }                
+        }
     }
 
     return presence;
@@ -237,4 +237,3 @@ boolean Database::isNumeric(String str) {
     }
     return true;
 }
-
