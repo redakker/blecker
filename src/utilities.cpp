@@ -6,7 +6,7 @@
 esp_chip_info_t chip_info;
 
 void setChipInfo() {
-    // Get ESP32 chip information    
+    // Get ESP32 chip information
     esp_chip_info(&chip_info);
 }
 
@@ -27,16 +27,16 @@ const char* getChipModelString(esp_chip_model_t model) {
 }
 
 void bluetoothScanner(void *parameters) {
-  
+
   BLEScan *pBLEScan = static_cast<BLEScan*>(parameters);
 
   for( ;; ) {
     pBLEScan -> start(BT_DEFAULT_SCAN_DURATION_IN_SECONDS, false);
-    
+
     // Tell the task how long to delay for:
-    vTaskDelay(2000 / portTICK_PERIOD_MS );    
-    
+    vTaskDelay(2000 / portTICK_PERIOD_MS );
+
     pBLEScan -> clearResults();   // delete results fromBLEScan buffer to release memory
-    vTaskDelay(20 / portTICK_PERIOD_MS ); 
+    vTaskDelay(20 / portTICK_PERIOD_MS );
   }
 }

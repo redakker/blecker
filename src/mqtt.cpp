@@ -27,7 +27,7 @@ void Mqtt::setup(Database &database, Signal<boolean> &mqttStatusChanged, Signal<
     this -> mqttStatusChanged = &mqttStatusChanged;
     this -> errorCodeChanged = &errorCodeChanged;
     this -> mqttMessageArrived = &mqttMessageArrived;
-    
+
     this -> user = this -> database -> getValueAsString(String(DB_MQTT_USER), false);
     this -> password = this -> database -> getValueAsString(String(DB_MQTT_PW), false);
     this -> port =  this -> database -> getValueAsInt(String(DB_MQTT_PORT), false);
@@ -35,12 +35,12 @@ void Mqtt::setup(Database &database, Signal<boolean> &mqttStatusChanged, Signal<
     this -> baseTopic = this -> database -> getValueAsString(String(DB_MQTT_TOPIC_PREFIX), false) + MQTT_TOPIC;
 
     this -> deviceStatusRetain = this -> database -> getValueAsBoolean(String(DB_DEVICE_STATUS_RETAIN), false, MQTT_STATUS_DEFAULT_RETAIN);
-       
+
 
     if (this -> database -> isPropertyExistsAndNonEmpty(DB_DEVICE_STATUS_ON)) {
         this -> statusOn = this -> database -> getValueAsString(String(DB_DEVICE_STATUS_ON), false);
     } else {
-        this -> statusOn = MQTT_STATUS_ON_DEFAULT_VALUE;               
+        this -> statusOn = MQTT_STATUS_ON_DEFAULT_VALUE;
     }
 
     if (this -> database -> isPropertyExistsAndNonEmpty(DB_DEVICE_STATUS_OFF)) {
@@ -50,18 +50,18 @@ void Mqtt::setup(Database &database, Signal<boolean> &mqttStatusChanged, Signal<
     }
 
     this -> deviceID = this -> database -> getValueAsString(String(DB_DEVICE_ID), false);
-    
+
     if (deviceID) {
         client->setId(deviceID);
     }
-    this -> client -> setUsernamePassword(user, password);            
+    this -> client -> setUsernamePassword(user, password);
 }
 
 void Mqtt::loop() {
     if (networkConnected) {
-        // check for incoming messages            
+        // check for incoming messages
         if (client->connected()) {
-                    
+
             if (!subscribed) {
                 subscribeForBaseTopic();
             }
@@ -70,7 +70,7 @@ void Mqtt::loop() {
             if (messageSize) {
                 processMessage();
             }
-            
+
             int now = millis();
             if (now - lastKeepAliveTime > MQTT_KEEPALILIVE_TIME ) {
                 lastKeepAliveTime = now;
@@ -79,7 +79,7 @@ void Mqtt::loop() {
 
         } else {
             client->stop();
-            this -> subscribed = false;                    
+            this -> subscribed = false;
             reconnect();
         }
     } else {
@@ -94,7 +94,7 @@ void Mqtt::loop() {
 
 void Mqtt::setConnected (boolean networkConnected) {
     this->logger << "Wifi connection is " << (String)networkConnected;
-    this->networkConnected = networkConnected;            
+    this->networkConnected = networkConnected;
 }
 
 void Mqtt::sendMqttMessage(MQTTMessage message) {
@@ -114,18 +114,18 @@ void Mqtt::ipAddressChanged (String ipAddress) {
 void Mqtt::setLastWill() {
 
     String message = String("{\"status\": \"" + statusOff + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}");
-    
+
     client -> beginWill(baseTopic, message.length(), deviceStatusRetain, 1);
     client -> print(message);
     client -> endWill();
     logger << "Last will is set. Retain: " << (String)deviceStatusRetain;
-    
+
 }
 
 void Mqtt::sendMqttMessage(String topic, String message, boolean retain = false) {
     if (networkConnected) {
-        client -> beginMessage(topic, retain);            
-        client -> print(message);            
+        client -> beginMessage(topic, retain);
+        client -> print(message);
         client -> endMessage();
     }
 }
@@ -133,9 +133,9 @@ void Mqtt::sendMqttMessage(String topic, String message, boolean retain = false)
 void Mqtt::reconnect() {
     if (!String("").equals(server)) {
         const char* mqtt_s = const_cast<char*>(server.c_str());
-        
+
         if (millis() - MQTTconnectTime > 15 * 1000) // 15 sec
-        { 
+        {
             logger << "Connecting to MQTT server...";
             setLastWill();
             if (!client->connect(mqtt_s, port))
@@ -149,7 +149,7 @@ void Mqtt::reconnect() {
             else
             {
                sendChipInfo();
-               logger << "MQTT Connection started.";
+               logger << "MQTT Connection started/checked.";
                mqtt_connected = true;
                // Emit an event about the MQTT status
                mqttStatusChanged->fire(mqtt_connected);
@@ -165,7 +165,7 @@ void Mqtt::reconnect() {
 void Mqtt::processMessage() {
         // we received a message, print out the topic and contents
     logger << "Message received on topic: " << client -> messageTopic();
-    
+
     String message = "";
     while (client -> available()) {
         message += (char) client -> read();
@@ -181,7 +181,7 @@ void Mqtt::subscribeForBaseTopic () {
 
     // subscribe to a topic and send an 'I'm alive' message
     String subscription = baseTopic + MQTT_IN_POSTFIX + "/#";
-    client -> subscribe(subscription);            
+    client -> subscribe(subscription);
     logger << "Subscribed to topic " << subscription;
 
     this -> errorCodeChanged->fire(ERROR_NO_ERROR);
@@ -190,9 +190,9 @@ void Mqtt::subscribeForBaseTopic () {
 
 void Mqtt::sendStatus () {
     sendMqttMessage(baseTopic, "{\"status\": \"" + statusOn + "\", \"ip\":\"" + this -> deviceIPAddress + "\"}", deviceStatusRetain);
-    
+
 }
 
-void Mqtt::sendChipInfo() {    
+void Mqtt::sendChipInfo() {
     sendMqttMessage(baseTopic + "/chipinfo", "{\"model\": \"" + (String) getChipModelString(chip_info.model) + "\", \"cores\":\"" + chip_info.cores + "\", \"revision\":\"" + chip_info.revision + "\"}", true);
 }
