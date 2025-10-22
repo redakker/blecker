@@ -40,6 +40,11 @@ void Webhook::callWebhook(Device device) {
             // HTTPS handling
             WiFiClientSecure client;
             client.setInsecure(); // Disable certificate verification (use only if you trust the server)
+            client.setNoDelay(true);
+            // Additional SSL/TLS configuration to fully disable certificate checking
+            client.setCACert(NULL);
+            client.setCertificate(NULL);
+            client.setPrivateKey(NULL);
 
             if (http.begin(client, baseURL)) { // Initialize HTTPS connection
                 int httpCode = http.GET(); // Make the request
