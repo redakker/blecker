@@ -24,9 +24,10 @@ void Webhook::loop() {
 
 
 void Webhook::callWebhook(Device device) {
+    logger << "callWebhook triggered for device: " << device.mac << " available: " << (device.available ? "true" : "false");
+
     if (webhookConfigured) {
         String baseURL = this->database->getValueAsString(DB_WEBHOOK);
-        baseURL.toLowerCase();
 
         baseURL.replace(DEVICE_WILDCARD, device.mac);
         if (device.available) {
@@ -36,7 +37,9 @@ void Webhook::callWebhook(Device device) {
         }
 
         HTTPClient http;
-        if (baseURL.startsWith("https://")) {
+        String lowerURL = baseURL;
+        lowerURL.toLowerCase();
+        if (lowerURL.startsWith("https://")) {
             // HTTPS handling
             WiFiClientSecure client;
             client.setInsecure(); // Disable certificate verification (use only if you trust the server)
@@ -64,7 +67,7 @@ void Webhook::callWebhook(Device device) {
                 Serial.println("Unable to connect to the HTTPS server");
                 logger << "Unable to connect to the HTTPS server: " << baseURL;
             }
-        } else if (baseURL.startsWith("http://")) {
+        } else if (lowerURL.startsWith("http://")) {
             // HTTP handling
             WiFiClient client;
 
@@ -90,5 +93,7 @@ void Webhook::callWebhook(Device device) {
             Serial.println("Invalid URL protocol");
             logger << "Invalid URL protocol: " << baseURL;
         }
+    } else {
+        logger << "Webhook not configured, skipping call";
     }
 }

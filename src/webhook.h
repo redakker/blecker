@@ -5,9 +5,10 @@
 #include "utilities.h"
 #include <Arduino.h>
 #include <HTTPClient.h>
+#include <WiFiClient.h>
+#include <WiFiClientSecure.h>
 #include "log.h"
 #include "database.h"
-#include <WiFiClientSecure.h>
 
 class Webhook {
 
